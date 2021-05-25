@@ -11,7 +11,7 @@ std::shared_ptr<OdomChassisController> chassis =
         .withSensors(leftEncoder, rightEncoder, backEncoder)
         // specify the tracking wheels diameter (2.75 in), track (8 in),
         // specify the middle encoder distance (0.375 in) and diameter (2.75 in)
-        .withDimensions(AbstractMotor::gearset::green, {{2.75_in, 8_in, 0.375_in, 2.75_in}, imev5GreenTPR})
+        .withDimensions(AbstractMotor::gearset::green, {{2.75_in, 8_in, 0.375_in, 2.75_in}, 360})
         .withOdometry(StateMode::CARTESIAN)
         .buildOdometry();
 
