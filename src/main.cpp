@@ -46,6 +46,8 @@ void opcontrol() {
 										controller.getAnalog(ControllerAnalog::leftY),
 										controller.getAnalog(ControllerAnalog::rightX));
 
+		printf("%s\n", chassis->getState().str().c_str());
+
 		pros::delay(10);
 	}
 }
