@@ -1,9 +1,5 @@
 #include "chassis.hpp"
 
-ADIEncoder leftEncoder('E', 'F', true);
-ADIEncoder rightEncoder('G', 'H');
-ADIEncoder backEncoder('A', 'B');
-
 // Chassis Controller - lets us drive the robot around with open- or closed-loop control
 std::shared_ptr<OdomChassisController> chassis =
     ChassisControllerBuilder()
