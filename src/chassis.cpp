@@ -1,7 +1,7 @@
 #include "chassis.hpp"
 
-ADIEncoder leftEncoder('G', 'H');
-ADIEncoder rightEncoder('E', 'F');
+ADIEncoder leftEncoder('E', 'F');
+ADIEncoder rightEncoder('G', 'H');
 ADIEncoder backEncoder('A', 'B');
 
 // Chassis Controller - lets us drive the robot around with open- or closed-loop control
