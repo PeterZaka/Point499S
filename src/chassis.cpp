@@ -1,6 +1,6 @@
 #include "chassis.hpp"
 
-ADIEncoder leftEncoder('E', 'F');
+ADIEncoder leftEncoder('E', 'F', true);
 ADIEncoder rightEncoder('G', 'H');
 ADIEncoder backEncoder('A', 'B');
 

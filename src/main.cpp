@@ -35,8 +35,14 @@ void autonomous() {
 	chassis->moveDistance(12_in);
 }
 
-void printOdom()
-{
+void printEncoders(){
+	printf("------\n");
+	printf("left encoder =\t %.2lf\n", leftEncoder.get());
+	printf("right encoder =\t %.2lf\n", rightEncoder.get());
+	printf("back encoder =\t %.2lf\n", backEncoder.get());
+}
+
+void printOdom(){
 	OdomState odom = chassis->getState();
 	printf("------\n");
 	printf("x =\t %.2lf\n", odom.x.convert(inch));
@@ -46,11 +52,11 @@ void printOdom()
 
 void opcontrol() {
 
-	pros::Task printOdomTask([]()
+	pros::Task printTask([]()
 		{
 		while(1){
-			printOdom();
-			pros::delay(250);
+			printEncoders();
+			pros::delay(1000);
 		}
 		});
 
