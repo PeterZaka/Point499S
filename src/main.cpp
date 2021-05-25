@@ -37,12 +37,7 @@ void autonomous() {
 		}
 		});
 
-	// set the state to zero
-	chassis->setState({0_in, 0_in, 0_deg});
-
-	chassis->turnToAngle(90_deg);
-
-	chassis->turnToAngle(0_deg);
+		testingAuton();
 }
 
 void opcontrol() {

@@ -74,6 +74,7 @@ void opcontrol(void);
 #ifdef __cplusplus
 
 
+#include "autonomous.hpp"
 #include "chassis.hpp"
 #include "debug.hpp"
 #include "robot-config.hpp"
