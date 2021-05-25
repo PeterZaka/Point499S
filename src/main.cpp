@@ -26,9 +26,6 @@ void disabled() {}
 void competition_initialize() {}
 
 
-void autonomous() {}
-
-
 // Chassis Controller - lets us drive the robot around with open- or closed-loop control
 std::shared_ptr<ChassisController> chassis =
     ChassisControllerBuilder()
@@ -38,6 +35,15 @@ std::shared_ptr<ChassisController> chassis =
         .build();
 				
 auto drive = std::dynamic_pointer_cast<XDriveModel>(chassis->getModel());
+
+void autonomous() {
+	// Move 1 meter to the first goal
+	chassis->moveDistance(12_in);
+	// Turn 90 degrees to face second goal
+	chassis->turnAngle(90_deg);
+	// Drive 1 and a half feet toward second goal
+	chassis->moveDistance(12_in);
+}
 
 // Master controller by default
 Controller controller;
