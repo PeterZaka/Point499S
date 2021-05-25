@@ -35,18 +35,33 @@ void autonomous() {
 	chassis->moveDistance(12_in);
 }
 
-// Master controller by default
-Controller controller;
+void printOdom()
+{
+	OdomState odom = chassis->getState();
+	printf("------\n");
+	printf("x =\t %.2lf\n", odom.x.convert(inch));
+	printf("y =\t %.2lf\n", odom.y.convert(inch));
+	printf("rot =\t %.2lf\n", odom.theta.convert(degree));
+}
 
 void opcontrol() {
+
+	pros::Task printOdomTask([]()
+		{
+		while(1){
+			printOdom();
+			pros::delay(250);
+		}
+		});
+
+	// Master controller by default
+	Controller controller;
 
 	while (true) {
 		// Arcade drive with the left stick
 		drive->xArcade(	controller.getAnalog(ControllerAnalog::leftX),
 										controller.getAnalog(ControllerAnalog::leftY),
 										controller.getAnalog(ControllerAnalog::rightX));
-
-		printf("%s\n", chassis->getState().str().c_str());
 
 		pros::delay(10);
 	}
