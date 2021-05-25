@@ -74,19 +74,22 @@ void autonomous() {}
  * task, not resume it from where it left off.
  */
 void opcontrol() {
-	pros::Controller master(pros::E_CONTROLLER_MASTER);
-	pros::Motor left_mtr(1);
-	pros::Motor right_mtr(2);
+	// Chassis Controller - lets us drive the robot around with open- or closed-loop control
+	std::shared_ptr<ChassisController> drive =
+	    ChassisControllerBuilder()
+	        .withMotors(11, 19, 20, 9)
+					// Green gearset, 2.75 in wheel diam, 8 in wheel track
+	        .withDimensions(AbstractMotor::gearset::green, {{2.75_in, 8_in}, imev5GreenTPR})
+	        .build();
+
+	// Master controller by default
+  Controller controller;
 
 	while (true) {
-		pros::lcd::print(0, "%d %d %d", (pros::lcd::read_buttons() & LCD_BTN_LEFT) >> 2,
-		                 (pros::lcd::read_buttons() & LCD_BTN_CENTER) >> 1,
-		                 (pros::lcd::read_buttons() & LCD_BTN_RIGHT) >> 0);
-		int left = master.get_analog(ANALOG_LEFT_Y);
-		int right = master.get_analog(ANALOG_RIGHT_Y);
+		// Arcade drive with the left stick
+		drive->getModel()->arcade(controller.getAnalog(ControllerAnalog::leftY),
+															controller.getAnalog(ControllerAnalog::leftX));
 
-		left_mtr = left;
-		right_mtr = right;
-		pros::delay(20);
+		pros::delay(10);
 	}
 }
