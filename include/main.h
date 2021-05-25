@@ -75,6 +75,7 @@ void opcontrol(void);
 
 
 #include "chassis.hpp"
+#include "debug.hpp"
 #include "robot-config.hpp"
 
 
