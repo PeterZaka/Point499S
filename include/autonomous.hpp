@@ -2,4 +2,8 @@
 
 #include "main.h"
 
-void testingAuton();
+void fullTestAuton();
+
+void turnTestAuton();
+
+void driveTestAuton();

@@ -37,7 +37,7 @@ void autonomous() {
 		}
 		});
 
-		testingAuton();
+		fullTestAuton();
 }
 
 void opcontrol() {
@@ -54,11 +54,22 @@ void opcontrol() {
 	// Master controller by default
 	Controller controller;
 
+	ControllerButton fullTestButton(ControllerDigital::A);
+	ControllerButton turnTestButton(ControllerDigital::Y);
+	ControllerButton driveTestButton(ControllerDigital::X);
+
 	while (true) {
 		// Arcade drive with the left stick
 		drive->xArcade(	controller.getAnalog(ControllerAnalog::leftX),
 										controller.getAnalog(ControllerAnalog::leftY),
 										controller.getAnalog(ControllerAnalog::rightX));
+
+		if (fullTestButton.changedToPressed())
+			fullTestAuton();
+		else if (turnTestButton.changedToPressed())
+			turnTestAuton();
+		else if (driveTestButton.changedToPressed())
+			driveTestAuton();
 
 		pros::delay(10);
 	}
