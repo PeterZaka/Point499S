@@ -102,11 +102,6 @@ void opcontrol() {
 	    tr -= (maxPower - fabs(tr)) * clockwise;
 	    br -= (maxPower - fabs(br)) * clockwise;
 
-			Motor topLeftMotor(10);
-			Motor topRightMotor(-19);
-			Motor backLeftMotor(-20);
-			Motor backRightMotor(9);
-
 			topLeftMotor.moveVoltage(tl * 120);
 			backLeftMotor.moveVoltage(bl * 120);
 			topRightMotor.moveVoltage(tr * 120);

@@ -1,5 +1,10 @@
 #include "chassis.hpp"
 
+Motor topLeftMotor(10);
+Motor topRightMotor(-19);
+Motor backLeftMotor(-20);
+Motor backRightMotor(9);
+
 // Chassis Controller - lets us drive the robot around with open- or closed-loop control
 std::shared_ptr<OdomChassisController> chassis =
   ChassisControllerBuilder()
