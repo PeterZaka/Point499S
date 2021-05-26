@@ -13,6 +13,14 @@ void on_center_button() {
 
 
 void initialize() {
+	Logger::setDefaultLogger(
+    std::make_shared<Logger>(
+        TimeUtilFactory::createDefault().getTimer(), // It needs a Timer
+        "/ser/sout", // Output to the PROS terminal
+        Logger::LogLevel::warn // Show errors and warnings
+    )
+);
+
 	pros::lcd::initialize();
 	pros::lcd::set_text(1, "Hello PROS User!");
 
@@ -49,7 +57,7 @@ void opcontrol() {
 		while(1){
 			printf("\n");
 			printOdom();
-			pros::delay(1000);
+			pros::delay(3000);
 		}
 		});
 
