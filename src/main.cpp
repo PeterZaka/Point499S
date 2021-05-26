@@ -70,44 +70,36 @@ void opcontrol() {
 	ControllerButton fieldCentricButton(ControllerDigital::B);
 
 	while (true) {
-		if (fieldCentric == false){
-			// Arcade drive with the left stick
-			drive->xArcade(	controller.getAnalog(ControllerAnalog::leftX),
-											controller.getAnalog(ControllerAnalog::leftY),
-											controller.getAnalog(ControllerAnalog::rightX));
-		} else {
 
-			double yAxis = controller.getAnalog(ControllerAnalog::leftY) * 100;
-			double xAxis = controller.getAnalog(ControllerAnalog::leftX) * 100;
+		double yAxis = controller.getAnalog(ControllerAnalog::leftY);
+		double xAxis = controller.getAnalog(ControllerAnalog::leftX);
 
-			double joystickDirection = std::atan2(yAxis, xAxis);
+		double joystickDirection = std::atan2(yAxis, xAxis);
+		if (fieldCentric)
 			joystickDirection += chassis->getState().theta.convert(radian);
 
-	    double maxPower = std::min(sqrt(pow(xAxis,2) + pow(yAxis,2)), 100.0) * 0.9;
-	    double motorPower = maxPower / (fabs(sin(joystickDirection)) + fabs(cos(joystickDirection)));
+    double maxPower = std::min(sqrt(pow(xAxis,2) + pow(yAxis,2)), 1.0) * 0.9;
+    double motorPower = maxPower / (fabs(sin(joystickDirection)) + fabs(cos(joystickDirection)));
 
-	    // move
-	    double tl = (sin(joystickDirection) + cos(joystickDirection)) * motorPower;
-	    double bl = (sin(joystickDirection) - cos(joystickDirection)) * motorPower;
-	    double tr = (sin(joystickDirection) - cos(joystickDirection)) * motorPower;
-	    double br = (sin(joystickDirection) + cos(joystickDirection)) * motorPower;
+    // move
+    double tl = (sin(joystickDirection) + cos(joystickDirection)) * motorPower;
+    double bl = (sin(joystickDirection) - cos(joystickDirection)) * motorPower;
+    double tr = (sin(joystickDirection) - cos(joystickDirection)) * motorPower;
+    double br = (sin(joystickDirection) + cos(joystickDirection)) * motorPower;
 
-	    // rotate
-	    double clockwise = controller.getAnalog(ControllerAnalog::rightX);
-	    if(fabs(clockwise) < 1) clockwise = 0;
+    // rotate
+    double clockwise = controller.getAnalog(ControllerAnalog::rightX);
 
-	    maxPower = std::max(fabs(clockwise*100.0), maxPower);
-	    tl += (maxPower - fabs(tl)) * clockwise;
-	    bl += (maxPower - fabs(br)) * clockwise;
-	    tr -= (maxPower - fabs(tr)) * clockwise;
-	    br -= (maxPower - fabs(br)) * clockwise;
+    maxPower = std::max(fabs(clockwise), maxPower);
+    tl += (maxPower - fabs(tl)) * clockwise;
+    bl += (maxPower - fabs(br)) * clockwise;
+    tr -= (maxPower - fabs(tr)) * clockwise;
+    br -= (maxPower - fabs(br)) * clockwise;
 
-			topLeftMotor.moveVoltage(tl * 120);
-			backLeftMotor.moveVoltage(bl * 120);
-			topRightMotor.moveVoltage(tr * 120);
-			backRightMotor.moveVoltage(br * 120);
-
-		}
+		topLeftMotor.moveVoltage(tl * 12000);
+		backLeftMotor.moveVoltage(bl * 12000);
+		topRightMotor.moveVoltage(tr * 12000);
+		backRightMotor.moveVoltage(br * 12000);
 
 
 		if (fullTestButton.changedToPressed())
