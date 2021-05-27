@@ -1,4 +1,4 @@
-#include "autonomous.hpp"
+#include "auto/autonomous.hpp"
 
 void fullTestAuton(){
   chassis->setState({0_in, 0_in, 0_deg});
