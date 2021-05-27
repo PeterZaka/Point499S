@@ -1,6 +1,7 @@
 #pragma once
 
-#include "main.h"
+#include "robot-config.hpp"
+#include "chassis.hpp"
 
 void printEncoders();
 

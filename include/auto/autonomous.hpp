@@ -1,6 +1,6 @@
 #pragma once
 
-#include "main.h"
+#include "auto/autoMovement.hpp"
 
 void fullTestAuton();
 

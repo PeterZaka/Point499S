@@ -73,12 +73,15 @@ void opcontrol(void);
 
 #ifdef __cplusplus
 
-#include "auto/autoMovement.hpp"
-#include "auto/autonomous.hpp"
+
 #include "auto/pid.hpp"
-#include "chassis.hpp"
 #include "debug.hpp"
+
+#include "auto/autonomous.hpp"
+
 #include "robot-config.hpp"
+#include "chassis.hpp"
+#include "auto/autoMovement.hpp"
 
 
 #endif

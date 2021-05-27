@@ -1,6 +1,7 @@
 #pragma once
 
-#include "main.h"
+#include <math.h>
+#include <algorithm>
 
 class PID{
   double Value;
