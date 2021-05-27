@@ -29,5 +29,5 @@ void PID::update(double current){
   prevError = error;
 
   Value = (error * Kp) + (integral * Ki) + (derivative * Kd);
-  Value = std::clamp(Value, -12000.0, 12000.0);
+  Value = std::clamp(Value, -100.0, 100.0);
 }
