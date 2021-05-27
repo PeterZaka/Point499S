@@ -2,6 +2,8 @@
 
 int driveTargetTime = 500;
 double driveTargetError = 50;
+int turnTargetTime = 500;
+double turnTargetError = 3;
 
 void goToPoint(double x, double y){
   drivePID.value();
@@ -14,7 +16,7 @@ void driveForward(double distance){
   double startY = position.y.convert(inch);
   drivePID.setTarget(distance);
 
-  while(timeOnTarget < driveTargetTime){
+  while (timeOnTarget < driveTargetTime){
     position = chassis->getState();
     double distanceFromStart = sqrtf(
       pow( ( startX - position.x.convert(inch) ), 2.0) +
@@ -25,7 +27,7 @@ void driveForward(double distance){
     leftSide.moveVoltage(drivePID.value() * 120.0);
     rightSide.moveVoltage(drivePID.value() * 120.0);
 
-    if(abs(drivePID.error) < driveTargetError)
+    if (abs(drivePID.error) < driveTargetError)
       timeOnTarget++;
     else
       timeOnTarget = 0;
@@ -36,5 +38,25 @@ void driveForward(double distance){
 }
 
 void turnTo(double angle){
+  // add get rotation with inertial sensor
+  int timeOnTarget = 0;
+  double rotation = chassis->getState().theta.convert(degree);
+  angle = findShortestRotation(rotation, angle);
+  turnPID.setTarget(angle);
 
+  while (timeOnTarget < turnTargetTime){
+    rotation = chassis->getState().theta.convert(degree);
+    turnPID.update(rotation);
+
+    leftSide.moveVoltage(turnPID.value() * 120.0);
+    rightSide.moveVoltage(-turnPID.value() * 120.0);
+
+    if (abs(turnPID.error) < turnTargetError)
+      timeOnTarget++;
+    else
+      timeOnTarget = 0;
+    pros::delay(20);
+  }
+  leftSide.moveVoltage(0);
+  rightSide.moveVoltage(0);
 }

@@ -8,6 +8,8 @@
 
 extern int driveTargetTime;
 extern double driveTargetError;
+extern int turnTargetTime;
+extern double turnTargetError;
 
 void goToPoint(double x, double y);
 
