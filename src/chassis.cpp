@@ -4,6 +4,8 @@ Motor topLeftMotor(10);
 Motor topRightMotor(-19);
 Motor backLeftMotor(-20);
 Motor backRightMotor(9);
+MotorGroup leftSide({topLeftMotor, backLeftMotor});
+MotorGroup rightSide({topRightMotor, backRightMotor});
 
 // Chassis Controller - lets us drive the robot around with open- or closed-loop control
 std::shared_ptr<OdomChassisController> chassis =

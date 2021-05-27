@@ -7,6 +7,8 @@ extern Motor topLeftMotor;
 extern Motor topRightMotor;
 extern Motor backLeftMotor;
 extern Motor backRightMotor;
+extern MotorGroup leftSide;
+extern MotorGroup rightSide;
 
 extern std::shared_ptr<OdomChassisController> chassis;
 
