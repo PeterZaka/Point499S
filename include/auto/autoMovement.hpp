@@ -11,7 +11,7 @@ extern double driveTargetError;
 extern int turnTargetTime;
 extern double turnTargetError;
 
-void goToPoint(double x, double y);
+void goTo(double x, double y);
 
 void driveForward(double distance);
 

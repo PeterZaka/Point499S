@@ -1,7 +1,7 @@
 #include "auto/autonomous.hpp"
 
 void fullTestAuton(){
-  goToPoint(24, 24);
+  goTo(24, 24);
 }
 
 void turnTestAuton(){

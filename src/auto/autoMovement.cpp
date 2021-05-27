@@ -5,8 +5,20 @@ double driveTargetError = 50;
 int turnTargetTime = 500;
 double turnTargetError = 3;
 
-void goToPoint(double x, double y){
-  drivePID.value();
+void goTo(double x, double y){
+  OdomState position = chassis->getState();
+  double angle = atan2f(
+    ( y - position.y.convert(inch) ),
+    ( x - position.x.convert(inch))
+  );
+  turnTo(angle);
+  position = chassis->getState();
+
+  double distance = sqrtf(
+    pow ( ( x - position.x.convert(inch) ), 2.0) +
+    pow ( ( y - position.y.convert(inch) ), 2.0)
+  );
+  driveForward(distance);
 }
 
 void driveForward(double distance){
