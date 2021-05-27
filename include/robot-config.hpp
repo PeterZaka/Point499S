@@ -1,6 +1,9 @@
 #pragma once
 
-#include "main.h"
+#include "okapi/api.hpp"
+#include "auto/pid.hpp"
+
+using namespace okapi;
 
 extern ADIEncoder leftEncoder;
 extern ADIEncoder rightEncoder;

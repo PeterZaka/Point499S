@@ -1,6 +1,13 @@
 #pragma once
 
+#include <cmath>
+
+#include "math.hpp"
 #include "robot-config.hpp"
+#include "chassis.hpp"
+
+extern int driveTargetTime;
+extern double driveTargetError;
 
 void goToPoint(double x, double y);
 
