@@ -10,4 +10,5 @@ extern ADIEncoder rightEncoder;
 extern ADIEncoder backEncoder;
 
 extern PID drivePID;
+extern PID anglePID;
 extern PID turnPID;

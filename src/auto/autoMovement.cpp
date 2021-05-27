@@ -27,6 +27,7 @@ void driveForward(double distance){
   double startX = position.x.convert(inch);
   double startY = position.y.convert(inch);
   drivePID.setTarget(distance);
+  anglePID.setTarget(position.theta.convert(degree));
 
   while (timeOnTarget < driveTargetTime){
     position = chassis->getState();
@@ -35,9 +36,10 @@ void driveForward(double distance){
       pow( ( startY - position.y.convert(inch) ), 2.0)
     );
     drivePID.update(distanceFromStart);
+    anglePID.update(position.theta.convert(degree));
     // add in anglePID to drive straight
-    leftSide.moveVoltage(drivePID.value() * 120.0);
-    rightSide.moveVoltage(drivePID.value() * 120.0);
+    leftSide.moveVoltage( (drivePID.value() + anglePID.value()) * 120.0);
+    rightSide.moveVoltage( (drivePID.value() - anglePID.value()) * 120.0);
 
     if (abs(drivePID.error) < driveTargetError)
       timeOnTarget++;
