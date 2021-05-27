@@ -50,6 +50,8 @@ void autonomous() {
 
 void opcontrol() {
 
+	PID drivePID(4,4,4);
+
 	bool fieldCentric = false;
 
 	pros::Task printTask([]()
