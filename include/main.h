@@ -73,7 +73,7 @@ void opcontrol(void);
 
 #ifdef __cplusplus
 
-
+#include "auto/autoMovement.hpp"
 #include "auto/autonomous.hpp"
 #include "auto/pid.hpp"
 #include "chassis.hpp"
