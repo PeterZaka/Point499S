@@ -18,7 +18,7 @@ std::shared_ptr<OdomChassisController> chassis =
           {'A', 'B'})
       // specify the tracking wheels diameter (2.75 in), track (8 in),
       // specify the middle encoder distance (0.375 in) and diameter (2.75 in)
-      .withOdometry({{2.75_in, 8_in, 0.375_in, 2.75_in}, quadEncoderTPR}, StateMode::CARTESIAN)
+      .withOdometry({{2.75_in, 8.87_in, 0.375_in, 2.75_in}, quadEncoderTPR}, StateMode::CARTESIAN)
       .buildOdometry();
 
 std::shared_ptr<XDriveModel> drive = std::dynamic_pointer_cast<XDriveModel>(chassis->getModel());
