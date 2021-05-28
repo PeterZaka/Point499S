@@ -3,13 +3,15 @@
 int driveTargetTime = 500;
 double driveTargetError = 3;
 int turnTargetTime = 500;
-double turnTargetError = 3;
+double turnTargetError = 1;
 
 void goTo(double x, double y){
   double angle = atan2f(
     ( y - yPos ),
     ( x - xPos )
   ) * (180 / pi);
+  // convert counterclockwise to clockwise
+  angle = -angle + 90;
   std::cout << "---" << std::endl;
   std::cout << "turning to " << angle << std::endl;
   turnTo(angle);
