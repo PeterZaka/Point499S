@@ -11,6 +11,7 @@ void goTo(double x, double y){
     ( y - position.y.convert(inch) ),
     ( x - position.x.convert(inch) )
   ) * (180 / pi);
+  std::cout << "---" << std::endl;
   std::cout << "turning to " << angle << std::endl;
   turnTo(angle);
   std::cout << "finished turning to " << angle << std::endl;
@@ -23,6 +24,7 @@ void goTo(double x, double y){
   std::cout << "driving forward " << distance << std::endl;
   driveForward(distance);
   std::cout << "finished driving forward " << distance << std::endl;
+  std::cout << chassis->getState().str() << std::endl;
 }
 
 void driveForward(double distance){
@@ -53,6 +55,7 @@ void driveForward(double distance){
   }
   leftSide.moveVoltage(0);
   rightSide.moveVoltage(0);
+  std::cout << chassis->getState().str() << std::endl;
 }
 
 void turnTo(double angle){
@@ -77,4 +80,5 @@ void turnTo(double angle){
   }
   leftSide.moveVoltage(0);
   rightSide.moveVoltage(0);
+  std::cout << chassis->getState().str() << std::endl;
 }
