@@ -26,7 +26,7 @@ void calculateOdom(){
   double deltaY = (deltaR + deltaL) / 2;
   double deltaX = deltaB;
 
-//  if(rot == prevRot) printf("-");
+  if(rot == prevRot) printf("-");
   rot = iSensor.get() * (pi / 180);
   deltaTheta = rot - prevRot;
   prevRot = iSensor.get() * (pi / 180);
