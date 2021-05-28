@@ -12,5 +12,5 @@ void printOdom(){
 	printf("\n------\n");
 	printf("x =\t %.2lf\t %.2lf\n", odom.x.convert(inch), xPos);
 	printf("y =\t %.2lf\t %.2lf\n", odom.y.convert(inch), yPos);
-	printf("rot =\t %.2lf\t %.2lf\n", odom.theta.convert(degree), rot * (180 / pi));
+	printf("rot =\t %.2lf\t %.2lf\n", odom.theta.convert(degree), rot);
 }
