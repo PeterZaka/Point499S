@@ -41,6 +41,13 @@ void autonomous() {
 
 void opcontrol() {
 
+	iSensor.calibrate();
+	while(iSensor.isCalibrating()){
+		printf("calibrating...\n");
+		pros::delay(200);
+	}
+	printf("done calibrating\n");
+
 	bool fieldCentric = false;
 
 	pros::Task calculateOdomTask([]()
