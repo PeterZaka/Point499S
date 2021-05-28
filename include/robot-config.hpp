@@ -9,6 +9,8 @@ extern ADIEncoder leftEncoder;
 extern ADIEncoder rightEncoder;
 extern ADIEncoder backEncoder;
 
+extern IMU iSensor;
+
 extern PID drivePID;
 extern PID anglePID;
 extern PID turnPID;
