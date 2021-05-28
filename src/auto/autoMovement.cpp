@@ -6,20 +6,18 @@ int turnTargetTime = 500;
 double turnTargetError = 3;
 
 void goTo(double x, double y){
-  OdomState position = chassis->getState();
   double angle = atan2f(
-    ( y - position.y.convert(inch) ),
-    ( x - position.x.convert(inch) )
+    ( y - yPos ),
+    ( x - xPos )
   ) * (180 / pi);
   std::cout << "---" << std::endl;
   std::cout << "turning to " << angle << std::endl;
   turnTo(angle);
   std::cout << "finished turning to " << angle << std::endl;
-  position = chassis->getState();
 
   double distance = sqrtf(
-    pow ( ( x - position.x.convert(inch) ), 2.0) +
-    pow ( ( y - position.y.convert(inch) ), 2.0)
+    pow ( ( x - xPos ), 2.0) +
+    pow ( ( y - yPos ), 2.0)
   );
   std::cout << "driving forward " << distance << std::endl;
   driveForward(distance);
@@ -28,20 +26,18 @@ void goTo(double x, double y){
 
 void driveForward(double distance){
   int timeOnTarget = 0;
-  OdomState position = chassis->getState();
-  double startX = position.x.convert(inch);
-  double startY = position.y.convert(inch);
+  double startX = xPos;
+  double startY = yPos;
   drivePID.setTarget(distance);
-  anglePID.setTarget(position.theta.convert(degree));
+  anglePID.setTarget(rot);
 
   while (timeOnTarget < driveTargetTime){
-    position = chassis->getState();
     double distanceFromStart = sqrtf(
-      pow( ( startX - position.x.convert(inch) ), 2.0) +
-      pow( ( startY - position.y.convert(inch) ), 2.0)
+      pow( ( startX - xPos ), 2.0) +
+      pow( ( startY - yPos ), 2.0)
     );
     drivePID.update(distanceFromStart);
-    anglePID.update(position.theta.convert(degree));
+    anglePID.update(rot);
     // add in anglePID to drive straight
     leftSide.moveVoltage( (drivePID.value() + anglePID.value()) * 120.0);
     rightSide.moveVoltage( (drivePID.value() - anglePID.value()) * 120.0);
@@ -60,13 +56,11 @@ void driveForward(double distance){
 void turnTo(double angle){
   // add get rotation with inertial sensor
   int timeOnTarget = 0;
-  double rotation = chassis->getState().theta.convert(degree);
-  angle = findShortestRotation(rotation, angle);
+  angle = findShortestRotation(rot, angle);
   turnPID.setTarget(angle);
 
   while (timeOnTarget < turnTargetTime){
-    rotation = chassis->getState().theta.convert(degree);
-    turnPID.update(rotation);
+    turnPID.update(rot);
 
     leftSide.moveVoltage(turnPID.value() * 120.0);
     rightSide.moveVoltage(-turnPID.value() * 120.0);

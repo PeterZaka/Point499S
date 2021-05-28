@@ -6,6 +6,7 @@
 #include "robot-config.hpp"
 #include "chassis.hpp"
 #include "debug.hpp"
+#include "auto/odometry.hpp"
 
 extern int driveTargetTime;
 extern double driveTargetError;
