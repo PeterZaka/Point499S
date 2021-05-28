@@ -36,21 +36,20 @@ void competition_initialize() {}
 
 void autonomous() {
 
-	pros::Task printTask([]()
-		{
-		while(1){
-			printf("\n");
-			printOdom();
-			pros::delay(1000);
-		}
-		});
-
 		fullTestAuton();
 }
 
 void opcontrol() {
 
 	bool fieldCentric = false;
+
+	pros::Task calculateOdomTask([]()
+		{
+		while(1){
+			calculateOdom();
+			pros::delay(20);
+		}
+		});
 
 	pros::Task printTask([]()
 		{
