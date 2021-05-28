@@ -22,7 +22,7 @@ void calculateOdom(){
   prevRight = rightEncoder.get();
   prevBack = backEncoder.get();
 
-  double deltaTheta = (deltaR - deltaL) / wheelTrack;
+  double deltaTheta = (deltaL - deltaR) / wheelTrack;
   double deltaY = (deltaR + deltaL) / 2;
   double deltaX = deltaB;
 
