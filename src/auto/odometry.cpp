@@ -26,6 +26,11 @@ void calculateOdom(){
   double deltaY = (deltaR + deltaL) / 2;
   double deltaX = deltaB;
 
+//  if(rot == prevRot) printf("-");
+  rot = iSensor.get();
+  deltaTheta = rot - prevRot;
+  prevRot = iSensor.get();
+
   double localX;
   double localY;
   if (deltaL == deltaR){
@@ -41,5 +46,6 @@ void calculateOdom(){
   double avgA = rot + (deltaTheta / 2);
   xPos += deltaX * cos(avgA) + deltaY * sin(avgA);
   yPos += -deltaX * sin(avgA) + deltaY * cos(avgA);
-  rot += deltaTheta;
+  rot = iSensor.get();
+  //rot += deltaTheta;
 }
