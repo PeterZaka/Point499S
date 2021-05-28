@@ -6,6 +6,6 @@ ADIEncoder backEncoder('A', 'B');
 
 IMU iSensor(17);
 
-PID drivePID(2, 0, 0);
-PID anglePID(2, 0, 0);
+PID drivePID(20, 0, 5);
+PID anglePID(5, 0, 0);
 PID turnPID(3, 0, 0);
