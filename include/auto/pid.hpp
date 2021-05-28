@@ -20,7 +20,7 @@ public:
 
   void reset();
 
-  void setTarget(double Target);
+  void setTarget(double Target, bool shouldReset=true);
 
   void update(double current);
 

@@ -10,8 +10,8 @@ void PID::reset(){
   prevError = 0;
 }
 
-void PID::setTarget(double Target){
-  reset();
+void PID::setTarget(double Target, bool shouldReset){
+  if (shouldReset) reset();
   target = Target;
 }
 
@@ -19,8 +19,10 @@ void PID::update(double current){
   error = target - current;
 
   if(Ki != 0){
-    if(abs(error) < integralLimit)
+    if(abs(error) < integralLimit){
       integral += error;
+      integral = std::clamp(integral, -100000.0, 100000.0);
+    }
     else
       integral = 0;
   }
