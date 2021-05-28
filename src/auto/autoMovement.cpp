@@ -1,7 +1,7 @@
 #include "auto/autoMovement.hpp"
 
 int driveTargetTime = 500;
-double driveTargetError = 50;
+double driveTargetError = 3;
 int turnTargetTime = 500;
 double turnTargetError = 3;
 
@@ -9,8 +9,8 @@ void goTo(double x, double y){
   OdomState position = chassis->getState();
   double angle = atan2f(
     ( y - position.y.convert(inch) ),
-    ( x - position.x.convert(inch))
-  );
+    ( x - position.x.convert(inch) )
+  ) * (180 / pi);
   turnTo(angle);
   position = chassis->getState();
 
@@ -42,7 +42,7 @@ void driveForward(double distance){
     rightSide.moveVoltage( (drivePID.value() - anglePID.value()) * 120.0);
 
     if (abs(drivePID.error) < driveTargetError)
-      timeOnTarget++;
+      timeOnTarget += 20;
     else
       timeOnTarget = 0;
     pros::delay(20);
@@ -66,7 +66,7 @@ void turnTo(double angle){
     rightSide.moveVoltage(-turnPID.value() * 120.0);
 
     if (abs(turnPID.error) < turnTargetError)
-      timeOnTarget++;
+      timeOnTarget += 20;
     else
       timeOnTarget = 0;
     pros::delay(20);

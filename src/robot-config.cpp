@@ -6,4 +6,4 @@ ADIEncoder backEncoder('A', 'B');
 
 PID drivePID(2, 0, 0);
 PID anglePID(2, 0, 0);
-PID turnPID(0.5, 0, 0);
+PID turnPID(3, 0, 0);
