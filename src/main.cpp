@@ -57,7 +57,7 @@ void opcontrol() {
 			pros::delay(20);
 		}
 		});
-
+/*
 	pros::Task printTask([]()
 		{
 		while(1){
@@ -66,7 +66,7 @@ void opcontrol() {
 			pros::delay(3000);
 		}
 		});
-
+*/
 	// Master controller by default
 	Controller controller;
 

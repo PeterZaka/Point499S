@@ -11,14 +11,18 @@ void goTo(double x, double y){
     ( y - position.y.convert(inch) ),
     ( x - position.x.convert(inch) )
   ) * (180 / pi);
+  std::cout << "turning to " << angle << std::endl;
   turnTo(angle);
+  std::cout << "finished turning to " << angle << std::endl;
   position = chassis->getState();
 
   double distance = sqrtf(
     pow ( ( x - position.x.convert(inch) ), 2.0) +
     pow ( ( y - position.y.convert(inch) ), 2.0)
   );
+  std::cout << "driving forward " << distance << std::endl;
   driveForward(distance);
+  std::cout << "finished driving forward " << distance << std::endl;
 }
 
 void driveForward(double distance){
