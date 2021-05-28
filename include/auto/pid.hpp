@@ -12,9 +12,10 @@ public:
   double Ki;
   double Kd;
   double integralLimit;
+  double integralBound;
   double target;
 
-  PID(double Kp, double Ki, double Kd, double integralLimit = 0);
+  PID(double Kp, double Ki, double Kd, double integralLimit = 0, double integralBound = 0);
 
   double value() const { return Value; }
 

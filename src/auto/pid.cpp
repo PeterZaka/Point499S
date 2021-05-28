@@ -1,7 +1,7 @@
 #include "auto/pid.hpp"
 
-PID::PID(double Kp, double Ki, double Kd, double integralLimit) :
-Kp(Kp), Ki(Ki), Kd(Kd), integralLimit(integralLimit) {}
+PID::PID(double Kp, double Ki, double Kd, double integralLimit, double integralBound) :
+Kp(Kp), Ki(Ki), Kd(Kd), integralLimit(integralLimit), integralBound(integralBound) {}
 
 void PID::reset(){
   error = 0;
@@ -23,6 +23,8 @@ void PID::update(double current){
       integral += error;
       integral = std::clamp(integral, -100000.0, 100000.0);
     }
+    if(abs(error) < integralBound)
+      integral = 0;
     else
       integral = 0;
   }
