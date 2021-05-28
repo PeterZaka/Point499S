@@ -8,4 +8,4 @@ IMU iSensor(17);
 
 PID drivePID(20, 0, 5);
 PID anglePID(5, 0, 0);
-PID turnPID(3, 0, 0);
+PID turnPID(3, 1, 0, 15, 1);

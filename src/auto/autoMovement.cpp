@@ -13,6 +13,7 @@ void goTo(double x, double y){
   // convert counterclockwise to clockwise
   angle = -angle + 90;
   std::cout << "---" << std::endl;
+  printOdom();
   std::cout << "turning to " << angle << std::endl;
   turnTo(angle);
   std::cout << "finished turning to " << angle << std::endl;
