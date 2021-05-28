@@ -5,6 +5,7 @@
 #include "math.hpp"
 #include "robot-config.hpp"
 #include "chassis.hpp"
+#include "debug.hpp"
 
 extern int driveTargetTime;
 extern double driveTargetError;
