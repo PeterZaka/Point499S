@@ -1,8 +1,8 @@
 #include "auto/autonomous.hpp"
 
 void fullTestAuton(){
-  goTo(24, 24);
-  goTo(0, 0);
+  goTo(24, 24, forward);
+  goTo(0, 0, backward);
   turnTo(0);
 }
 

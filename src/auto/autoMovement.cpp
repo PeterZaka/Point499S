@@ -5,20 +5,38 @@ double driveTargetError = 3;
 int turnTargetTime = 500;
 double turnTargetError = 1;
 
-void goTo(double x, double y){
+void goTo(double x, double y, movement Movement){
   double angle = atan2f(
     ( y - yPos ),
     ( x - xPos )
   ) * (180 / pi);
   // convert counterclockwise to clockwise
   angle = -angle + 90;
+
+  if (Movement == backward){
+    angle += 180;
+  }
+  if (Movement == best){
+    double forwards = findShortestRotation(rot, angle);
+    double backwards = findShortestRotation(rot, angle + 180);
+    if (abs(rot - forwards) <= abs(rot - backwards)){
+      Movement = forward;
+      angle = forwards;
+    } else {
+      Movement = backward;
+      angle = backwards;
+    }
+  }
   turnTo(angle);
 
   double distance = sqrtf(
     pow ( ( x - xPos ), 2.0) +
     pow ( ( y - yPos ), 2.0)
   );
-  driveForward(distance);
+  if (Movement == forward)
+    driveForward(distance);
+  else
+    driveForward(-distance);
 }
 
 void driveForward(double distance){

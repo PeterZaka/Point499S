@@ -13,7 +13,13 @@ extern double driveTargetError;
 extern int turnTargetTime;
 extern double turnTargetError;
 
-void goTo(double x, double y);
+enum movement{
+  forward,
+  backward,
+  best
+};
+
+void goTo(double x, double y, movement Movement=forward);
 
 void driveForward(double distance);
 
