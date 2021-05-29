@@ -64,6 +64,9 @@ void turnTo(double angle){
 
   while (timeOnTarget < turnTargetTime){
     turnPID.update(rot);
+    std::cout << std::endl;
+    std::cout << "integral " << turnPID.integral << std::endl;
+    std::cout << "error " << turnPID.error << std::endl;
 
     leftSide.moveVoltage(turnPID.value() * 120.0);
     rightSide.moveVoltage(-turnPID.value() * 120.0);
