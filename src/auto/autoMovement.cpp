@@ -38,11 +38,15 @@ void driveForward(double distance){
   drivePID.setTarget(distance);
   anglePID.setTarget(rot);
 
+  bool isBackward = false;
+  if (distance < 0) isBackward = true;
+
   while (timeOnTarget < driveTargetTime){
     double distanceFromStart = findDistanceTo(xPos, yPos, startX, startY);
+    if (isBackward) distanceFromStart *= -1;
+
     drivePID.update(distanceFromStart);
     anglePID.update(rot);
-
     leftSide.moveVoltage( (drivePID.value() + anglePID.value()) * 120.0);
     rightSide.moveVoltage( (drivePID.value() - anglePID.value()) * 120.0);
 
@@ -63,7 +67,6 @@ void turnTo(double angle){
 
   while (timeOnTarget < turnTargetTime){
     turnPID.update(rot);
-
     leftSide.moveVoltage(turnPID.value() * 120.0);
     rightSide.moveVoltage(-turnPID.value() * 120.0);
 
