@@ -8,7 +8,12 @@ void fullTestAuton(){
 
 void turnTestAuton(){
   turnTo(90);
-
+  turnTo(100);
+  turnTo(90);
+  turnTo(95);
+  turnTo(0);
+  turnTo(180);
+  turnTo(0);
 }
 
 void driveTestAuton(){
