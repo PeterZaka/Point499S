@@ -29,9 +29,9 @@ void calculateOdom(){
   if(rot == prevRot){
     std::cout << "-" << std::endl;
   }
-  rot = iSensor.get() * (pi / 180);
+  rot = iSensor.get_rotation() * (pi / 180);
   deltaTheta = rot - prevRot;
-  prevRot = iSensor.get() * (pi / 180);
+  prevRot = iSensor.get_rotation() * (pi / 180);
 
   double localX;
   double localY;
@@ -48,6 +48,6 @@ void calculateOdom(){
   double avgA = rot + (deltaTheta / 2);
   xPos += deltaX * cos(avgA) + deltaY * sin(avgA);
   yPos += -deltaX * sin(avgA) + deltaY * cos(avgA);
-  rot = iSensor.get();
+  rot = iSensor.get_rotation();
   //rot += deltaTheta;
 }

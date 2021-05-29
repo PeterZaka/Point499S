@@ -9,7 +9,7 @@ extern ADIEncoder leftEncoder;
 extern ADIEncoder rightEncoder;
 extern ADIEncoder backEncoder;
 
-extern IMU iSensor;
+extern pros::Imu iSensor;
 
 extern PID drivePID;
 extern PID anglePID;
