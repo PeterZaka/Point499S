@@ -18,5 +18,7 @@ void turnTestAuton(){
 
 void driveTestAuton(){
   driveForward(24);
-
+  driveForward(-12);
+  driveForward(5);
+  driveForward(-17);
 }
