@@ -82,7 +82,7 @@ void opcontrol() {
 
 		double joystickDirection = std::atan2(yAxis, xAxis);
 		if (fieldCentric)
-			joystickDirection += chassis->getState().theta.convert(radian);
+			joystickDirection += rot * (pi / 180);
 
     double maxPower = std::min(sqrt(pow(xAxis,2) + pow(yAxis,2)), 1.0) * 0.9;
     double motorPower = maxPower / (fabs(sin(joystickDirection)) + fabs(cos(joystickDirection)));
