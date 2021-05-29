@@ -18,13 +18,14 @@ void PID::setTarget(double Target, bool shouldReset){
 void PID::update(double current){
   error = target - current;
 
-  if(Ki != 0){
-    if(abs(error) < integralLimit){
+  if (Ki != 0) {
+    if (abs(error) < integralLimit) {
       integral += error;
       integral = std::clamp(integral, -100000.0, 100000.0);
     }
-    if(abs(error) < integralBound)
+    if (abs(error) < integralBound) {
       integral = 0;
+    }
   }
   else {
     integral = 0;

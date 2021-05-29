@@ -25,10 +25,7 @@ void calculateOdom(){
   double deltaTheta = (deltaL - deltaR) / wheelTrack;
   double deltaY = (deltaR + deltaL) / 2;
   double deltaX = deltaB;
-
-  if(rot == prevRot){
-    std::cout << "-" << std::endl;
-  }
+  
   rot = iSensor.get_rotation() * (pi / 180);
   deltaTheta = rot - prevRot;
   prevRot = iSensor.get_rotation() * (pi / 180);

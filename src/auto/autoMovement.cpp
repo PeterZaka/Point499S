@@ -12,19 +12,13 @@ void goTo(double x, double y){
   ) * (180 / pi);
   // convert counterclockwise to clockwise
   angle = -angle + 90;
-  std::cout << "---" << std::endl;
-  printOdom();
-  std::cout << "turning to " << angle << std::endl;
   turnTo(angle);
-  std::cout << "finished turning to " << angle << std::endl;
 
   double distance = sqrtf(
     pow ( ( x - xPos ), 2.0) +
     pow ( ( y - yPos ), 2.0)
   );
-  std::cout << "driving forward " << distance << std::endl;
   driveForward(distance);
-  std::cout << "finished driving forward " << distance << std::endl;
 }
 
 void driveForward(double distance){
@@ -41,7 +35,7 @@ void driveForward(double distance){
     );
     drivePID.update(distanceFromStart);
     anglePID.update(rot);
-    // add in anglePID to drive straight
+
     leftSide.moveVoltage( (drivePID.value() + anglePID.value()) * 120.0);
     rightSide.moveVoltage( (drivePID.value() - anglePID.value()) * 120.0);
 
@@ -53,11 +47,9 @@ void driveForward(double distance){
   }
   leftSide.moveVoltage(0);
   rightSide.moveVoltage(0);
-  printOdom();
 }
 
 void turnTo(double angle){
-  // add get rotation with inertial sensor
   int timeOnTarget = 0;
   angle = findShortestRotation(rot, angle);
   turnPID.setTarget(angle);
@@ -76,5 +68,4 @@ void turnTo(double angle){
   }
   leftSide.moveVoltage(0);
   rightSide.moveVoltage(0);
-  printOdom();
 }
