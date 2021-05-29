@@ -29,3 +29,20 @@ double findShortestRotation(double start, double rotation){
 	else
 		return under - startNormal + start;
 }
+
+double findRotationTo(double startX, double startY, double endX, double endY){
+	double angle = atan2f(
+    ( endY - startY ),
+    ( endX - startX )
+  ) * (180 / 3.141592653589793);
+  // convert counterclockwise to clockwise
+  angle = -angle + 90;
+	return angle;
+}
+
+double findDistanceTo(double startX, double startY, double endX, double endY){
+	return sqrtf(
+    pow ( ( endX - startX ), 2.0) +
+    pow ( ( endY - startY ), 2.0)
+  );
+}

@@ -6,12 +6,7 @@ int turnTargetTime = 500;
 double turnTargetError = 1;
 
 void goTo(double x, double y, movement Movement){
-  double angle = atan2f(
-    ( y - yPos ),
-    ( x - xPos )
-  ) * (180 / pi);
-  // convert counterclockwise to clockwise
-  angle = -angle + 90;
+  double angle = findRotationTo(xPos, yPos, x, y);
 
   if (Movement == backward){
     angle += 180;
@@ -29,10 +24,7 @@ void goTo(double x, double y, movement Movement){
   }
   turnTo(angle);
 
-  double distance = sqrtf(
-    pow ( ( x - xPos ), 2.0) +
-    pow ( ( y - yPos ), 2.0)
-  );
+  double distance = findDistanceTo(xPos, yPos, x, y);
   if (Movement == forward)
     driveForward(distance);
   else
@@ -47,10 +39,7 @@ void driveForward(double distance){
   anglePID.setTarget(rot);
 
   while (timeOnTarget < driveTargetTime){
-    double distanceFromStart = sqrtf(
-      pow( ( startX - xPos ), 2.0) +
-      pow( ( startY - yPos ), 2.0)
-    );
+    double distanceFromStart = findDistanceTo(xPos, yPos, startX, startY);
     drivePID.update(distanceFromStart);
     anglePID.update(rot);
 
