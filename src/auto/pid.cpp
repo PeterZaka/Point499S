@@ -21,13 +21,13 @@ void PID::update(double current){
   if(Ki != 0){
     if(abs(error) < integralLimit){
       integral += error;
-      std::cout << "adding integral " << integral << std::endl;
       integral = std::clamp(integral, -100000.0, 100000.0);
     }
     if(abs(error) < integralBound)
       integral = 0;
-    else
-      integral = 0;
+  }
+  else {
+    integral = 0;
   }
 
   derivative = prevError - error;
