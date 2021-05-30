@@ -25,10 +25,15 @@ void goTo(double x, double y, movement Movement){
   turnTo(angle);
 
   double distance = findDistanceTo(xPos, yPos, x, y);
-  if (Movement == forward)
-    driveForward(distance);
-  else
-    driveForward(-distance);
+  angle = findRotationTo(xPos, yPos, x, y);
+  if (Movement == forward){
+    angle = findShortestRotation(rot, angle);
+    driveForward(distance, angle);
+  }
+  else {
+    angle = findShortestRotation(rot, angle + 180);
+    driveForward(-distance, angle);
+  }
 }
 
 void driveForward(double distance, double rotation){
