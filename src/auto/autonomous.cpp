@@ -22,3 +22,8 @@ void driveTestAuton(){
   driveForward(5);
   driveForward(-17);
 }
+
+void driveToTestAuton(){
+  driveTo(12, 24);
+  driveTo(0, 0, true);
+}

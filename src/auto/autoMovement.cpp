@@ -31,12 +31,12 @@ void goTo(double x, double y, movement Movement){
     driveForward(-distance);
 }
 
-void driveForward(double distance){
+void driveForward(double distance, double rotation){
   int timeOnTarget = 0;
   double startX = xPos;
   double startY = yPos;
   drivePID.setTarget(distance);
-  anglePID.setTarget(rot);
+  anglePID.setTarget(rotation);
 
   bool isBackward = false;
   if (distance < 0) isBackward = true;
@@ -46,6 +46,42 @@ void driveForward(double distance){
     if (isBackward) distanceFromStart *= -1;
 
     drivePID.update(distanceFromStart);
+    anglePID.update(rot);
+    leftSide.moveVoltage( (drivePID.value() + anglePID.value()) * 120.0);
+    rightSide.moveVoltage( (drivePID.value() - anglePID.value()) * 120.0);
+
+    if (abs(drivePID.error) < driveTargetError)
+      timeOnTarget += 20;
+    else
+      timeOnTarget = 0;
+    pros::delay(20);
+  }
+  leftSide.moveVoltage(0);
+  rightSide.moveVoltage(0);
+}
+
+void driveTo(double x, double y, bool isBackward){
+  int timeOnTarget = 0;
+  double prevRotation = findRotationTo(xPos, yPos, x, y);
+
+  while (timeOnTarget < driveTargetTime){
+    double distance = findDistanceTo(xPos, yPos, x, y);
+    double rotation = findRotationTo(xPos, yPos, x, y);
+    if(isBackward){
+      distance *= -1;
+      rotation += 180;
+    }
+    if (abs(rotation - prevRotation) > 100){
+      distance *= -1;
+      rotation += 180;
+    }
+    prevRotation = rotation;
+
+    rotation = findShortestRotation(rot, rotation);
+    drivePID.setTarget(distance, false);
+    anglePID.setTarget(rotation, false);
+
+    drivePID.update(0);
     anglePID.update(rot);
     leftSide.moveVoltage( (drivePID.value() + anglePID.value()) * 120.0);
     rightSide.moveVoltage( (drivePID.value() - anglePID.value()) * 120.0);

@@ -73,6 +73,8 @@ void opcontrol() {
 	ControllerButton fullTestButton(ControllerDigital::A);
 	ControllerButton turnTestButton(ControllerDigital::Y);
 	ControllerButton driveTestButton(ControllerDigital::X);
+	ControllerButton driveToTestButton(ControllerDigital::up);
+
 	ControllerButton fieldCentricButton(ControllerDigital::B);
 
 	while (true) {
@@ -114,6 +116,8 @@ void opcontrol() {
 			turnTestAuton();
 		else if (driveTestButton.changedToPressed())
 			driveTestAuton();
+		else if (driveToTestButton.changedToPressed())
+			driveToTestAuton();
 
 		if (fieldCentricButton.changedToPressed())
 			fieldCentric = !fieldCentric;

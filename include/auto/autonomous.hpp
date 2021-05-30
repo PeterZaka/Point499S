@@ -7,3 +7,5 @@ void fullTestAuton();
 void turnTestAuton();
 
 void driveTestAuton();
+
+void driveToTestAuton();
