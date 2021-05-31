@@ -1,8 +1,8 @@
 #include "auto/autonomous.hpp"
 
 void fullTestAuton(){
-  goToPoint(24, 24, forward);
-  goToPoint(0, 0, backward);
+  goToPoint(24, 24, best);
+  goToPoint(0, 0, best);
   turnToAngle(0);
 }
 
@@ -17,10 +17,10 @@ void turnTestAuton(){
 }
 
 void driveTestAuton(){
-  driveForward(24);
-  driveForward(-12);
-  driveForward(5);
-  driveForward(-17);
+  driveForward(24, 0);
+  driveForward(-12, 0);
+  driveForward(5, 0);
+  driveForward(-17, 0);
 }
 
 void driveToTestAuton(){
