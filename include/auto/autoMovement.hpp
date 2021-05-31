@@ -26,18 +26,6 @@ void driveTo(double x, double y, bool isBackward=false);
 
 void turnTo(double angle);
 
-/*
+// ----- helper functions -----
 
-  goToPoint(x, y);
-
-  driveForward(12);
-
-  turnTo(90);
-
-  liftTo(far);
-  liftTo(middle);
-  liftTo(close);
-
-
-
-*/
+void findBestRotation(double& angle, movement& Movement);

@@ -7,21 +7,8 @@ double turnTargetError = 1;
 
 void goTo(double x, double y, movement Movement){
   double angle = findRotationTo(xPos, yPos, x, y);
-
-  if (Movement == backward){
-    angle += 180;
-  }
-  if (Movement == best){
-    double forwards = findShortestRotation(rot, angle);
-    double backwards = findShortestRotation(rot, angle + 180);
-    if (abs(rot - forwards) <= abs(rot - backwards)){
-      Movement = forward;
-      angle = forwards;
-    } else {
-      Movement = backward;
-      angle = backwards;
-    }
-  }
+  if (Movement == backward) angle += 180;
+  if (Movement == best) findBestRotation(angle, Movement);
   turnTo(angle);
 
   double distance = findDistanceTo(xPos, yPos, x, y);
@@ -119,4 +106,18 @@ void turnTo(double angle){
   }
   leftSide.moveVoltage(0);
   rightSide.moveVoltage(0);
+}
+
+// ----- helper functions -----
+
+void findBestRotation(double& angle, movement& Movement){
+  double forwards = findShortestRotation(rot, angle);
+  double backwards = findShortestRotation(rot, angle + 180);
+  if (abs(rot - forwards) <= abs(rot - backwards)){
+    Movement = forward;
+    angle = forwards;
+  } else {
+    Movement = backward;
+    angle = backwards;
+  }
 }
