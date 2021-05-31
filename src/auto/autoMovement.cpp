@@ -5,8 +5,8 @@ double driveTargetError = 3;
 int turnTargetTime = 500;
 double turnTargetError = 1;
 
-void goTo(double x, double y, movement Movement){
-  turnTo(x, y, Movement);
+void goToPoint(double x, double y, movement Movement){
+  turnToPoint(x, y, Movement);
 
   double distance = findDistanceTo(xPos, yPos, x, y);
   double angle = findRotationTo(xPos, yPos, x, y);
@@ -45,7 +45,7 @@ void driveForward(double distance, double rotation){
   rightSide.moveVoltage(0);
 }
 
-void driveTo(double x, double y, bool isBackward){
+void driveToPoint(double x, double y, bool isBackward){
   int timeOnTarget = 0;
   double prevRotation = findRotationTo(xPos, yPos, x, y);
 
@@ -81,7 +81,7 @@ void driveTo(double x, double y, bool isBackward){
   rightSide.moveVoltage(0);
 }
 
-void turnTo(double angle){
+void turnToAngle(double angle){
   int timeOnTarget = 0;
   angle = findShortestRotation(rot, angle);
   turnPID.setTarget(angle);
@@ -101,11 +101,11 @@ void turnTo(double angle){
   rightSide.moveVoltage(0);
 }
 
-void turnTo(double x, double y, movement Movement){
+void turnToPoint(double x, double y, movement Movement){
   double angle = findRotationTo(xPos, yPos, x, y);
   if (Movement == backward) angle += 180;
   if (Movement == best) findBestRotation(angle, Movement);
-  turnTo(angle);
+  turnToAngle(angle);
 }
 
 // ----- helper functions -----

@@ -19,13 +19,13 @@ enum movement{
   best
 };
 
-void goTo(double x, double y, movement Movement=forward);
+void goToPoint(double x, double y, movement Movement=forward);
 
 void driveForward(double distance, double rotation=rot);
-void driveTo(double x, double y, bool isBackward=false);
+void driveToPoint(double x, double y, bool isBackward=false);
 
-void turnTo(double angle);
-void turnTo(double x, double y, movement Movement=forward);
+void turnToAngle(double angle);
+void turnToPoint(double x, double y, movement Movement=forward);
 
 // ----- helper functions -----
 
