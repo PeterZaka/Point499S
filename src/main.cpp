@@ -41,7 +41,8 @@ void autonomous() {
 
 void opcontrol() {
 
-	//iSensor.reset();
+	iSensor.reset();
+	pros::delay(20);
 	while(iSensor.is_calibrating()){
 		printf("calibrating...\n");
 		pros::delay(200);
