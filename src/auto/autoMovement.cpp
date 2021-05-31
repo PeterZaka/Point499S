@@ -45,14 +45,16 @@ void driveForward(double distance, double rotation){
   rightSide.moveVoltage(0);
 }
 
-void driveToPoint(double x, double y, bool isBackward){
+void driveToPoint(double x, double y, movement Movement){
   int timeOnTarget = 0;
   double prevRotation = findRotationTo(xPos, yPos, x, y);
+  if(Movement == backward) prevRotation += 180;
+  if(Movement == best) findBestRotation(prevRotation, Movement);
 
   while (timeOnTarget < driveTargetTime){
     double distance = findDistanceTo(xPos, yPos, x, y);
     double rotation = findRotationTo(xPos, yPos, x, y);
-    if(isBackward){
+    if(Movement == backward){
       distance *= -1;
       rotation += 180;
     }
