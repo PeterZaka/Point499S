@@ -25,6 +25,7 @@ void driveForward(double distance, double rotation=rot);
 void driveTo(double x, double y, bool isBackward=false);
 
 void turnTo(double angle);
+void turnTo(double x, double y, movement Movement=forward);
 
 // ----- helper functions -----
 
