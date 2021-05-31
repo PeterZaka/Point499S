@@ -55,7 +55,7 @@ void opcontrol() {
 		{
 		while(1){
 			calculateOdom();
-			pros::delay(20);
+			pros::delay(10);
 		}
 		});
 /*

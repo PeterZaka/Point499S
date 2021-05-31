@@ -22,29 +22,30 @@ void calculateOdom(){
   prevRight = rightEncoder.get();
   prevBack = backEncoder.get();
 
-  double deltaTheta = (deltaL - deltaR) / wheelTrack;
+  //double deltaTheta = (deltaL - deltaR) / wheelTrack;
   double deltaY = (deltaR + deltaL) / 2;
   double deltaX = deltaB;
-  
+
   rot = iSensor.get_rotation() * (pi / 180);
-  deltaTheta = rot - prevRot;
-  prevRot = iSensor.get_rotation() * (pi / 180);
+  double deltaTheta = rot - prevRot;
+  prevRot = rot;
 
   double localX;
   double localY;
-  if (deltaL == deltaR){
+  if (deltaTheta == 0){
     localX = deltaX;
     localY = deltaY;
   } else {
     localX = 2 * sin(deltaTheta / 2) *
-      (deltaX / deltaTheta + backDistance * 2);
+      (deltaB / deltaTheta + backDistance);
     localY = 2 * sin(deltaTheta / 2) *
       (deltaR / deltaTheta + wheelTrack / 2);
   }
 
-  double avgA = rot + (deltaTheta / 2);
-  xPos += deltaX * cos(avgA) + deltaY * sin(avgA);
-  yPos += -deltaX * sin(avgA) + deltaY * cos(avgA);
+  // average rotation, same as (rot + prevRot) / 2
+  double avgA = rot - (deltaTheta / 2);
+  xPos += localX * cos(avgA) + localY * sin(avgA);
+  yPos += -localX * sin(avgA) + localY * cos(avgA);
   rot = iSensor.get_rotation();
   //rot += deltaTheta;
 }
