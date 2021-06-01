@@ -51,26 +51,18 @@ void driveForward(double distance, double rotation){
   rightSide.moveVoltage(0);
 }
 
-void driveToPoint(double x, double y, movement Movement){
+void driveToPoint(double x, double y){
   int timeOnTarget = 0;
-  double prevRotation = findRotationTo(xPos, yPos, x, y);
-  if(Movement == backward) prevRotation += 180;
-  if(Movement == best) findBestRotation(prevRotation, Movement);
+  movement Movement = best;
+  drivePID.reset();
+  anglePID.reset();
 
   while (timeOnTarget < driveTargetTime){
     double distance = findDistanceTo(xPos, yPos, x, y);
     double rotation = findRotationTo(xPos, yPos, x, y);
-    if(Movement == backward){
-      distance *= -1;
-      rotation += 180;
-    }
-    if (abs(rotation - prevRotation) > 100){
-      distance *= -1;
-      rotation += 180;
-    }
-    prevRotation = rotation;
+    findBestRotation(rotation, Movement);
+    if(Movement == backward) distance *= -1;
 
-    rotation = findShortestRotation(rot, rotation);
     drivePID.setTarget(distance, false);
     anglePID.setTarget(rotation, false);
 

@@ -25,5 +25,5 @@ void driveTestAuton(){
 
 void driveToTestAuton(){
   driveToPoint(12, 24);
-  driveToPoint(0, 0, backward);
+  driveToPoint(0, 0);
 }
