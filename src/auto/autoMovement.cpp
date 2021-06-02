@@ -6,16 +6,20 @@ int turnTargetTime = 500;
 double turnTargetError = 1;
 
 void goToPoint(double x, double y, movement Movement){
+  std::cout << "Movement before: " << Movement << std::endl;
   turnToPoint(x, y, Movement);
+  std::cout << "Movement after: " << Movement << std::endl;
 
   double distance = findDistanceTo(xPos, yPos, x, y);
   double angle = findRotationTo(xPos, yPos, x, y);
+  std::cout << "Movement before: " << Movement << std::endl;
   std::cout << "first angle " << angle << std::endl;
 
   if (Movement == backward) angle += 180;
   if (Movement == best) findBestRotation(angle, Movement);
   else findShortestRotation(rot, angle);
 
+  std::cout << "Movement after: " << Movement << std::endl;
   std::cout << "final angle " << angle << std::endl;
 
   if (Movement == forward) driveForward(distance, angle);
