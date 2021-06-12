@@ -8,10 +8,11 @@
 #include "debug.hpp"
 #include "auto/odometry.hpp"
 
-extern int driveTargetTime;
-extern double driveTargetError;
-extern int turnTargetTime;
-extern double turnTargetError;
+extern int driveTargetTime; // amount of time (in milliseconds) needed within target error for driving
+extern double driveTargetError; // be within distance (in inches) to be on target
+extern int turnTargetTime; // amount of time (in milliseconds) needed within target error for turning
+extern double turnTargetError; // be within distance (in degrees) to be on target
+extern double correctRotationError; // be outside distance (in inches) to change rotation
 
 enum movement{
   forward,

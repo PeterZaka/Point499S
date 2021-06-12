@@ -4,6 +4,7 @@ int driveTargetTime = 500;
 double driveTargetError = 3;
 int turnTargetTime = 500;
 double turnTargetError = 1;
+double correctRotationError = 2;
 
 void goToPoint(double x, double y, movement Movement){
   turnToPoint(x, y, Movement);
@@ -65,8 +66,13 @@ void driveToPoint(double x, double y){
 
     drivePID.update(0);
     anglePID.update(rot);
-    leftSide.moveVoltage( (drivePID.value() + anglePID.value()) * 120.0);
-    rightSide.moveVoltage( (drivePID.value() - anglePID.value()) * 120.0);
+    if (abs(distance) > correctRotationError){
+      leftSide.moveVoltage( (drivePID.value() + anglePID.value()) * 120.0);
+      rightSide.moveVoltage( (drivePID.value() - anglePID.value()) * 120.0);
+    } else {
+      leftSide.moveVoltage(drivePID.value() * 120.0);
+      rightSide.moveVoltage(drivePID.value() * 120.0);
+    }
 
     if (abs(drivePID.error) < driveTargetError)
       timeOnTarget += 20;
