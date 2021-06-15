@@ -1,23 +1,14 @@
 #include "auto/autoMovement.hpp"
 
 int driveTargetTime = 500;
-double driveTargetError = 3;
+double driveTargetError = 1;
 int turnTargetTime = 500;
-double turnTargetError = 1;
+double turnTargetError = 0.5;
 double correctRotationError = 2;
 
 void goToPoint(double x, double y, movement Movement){
   turnToPoint(x, y, Movement);
-
-  double distance = findDistanceTo(xPos, yPos, x, y);
-  double angle = findRotationTo(xPos, yPos, x, y);
-
-  if (Movement == backward) angle += 180;
-  if (Movement == best) findBestRotation(angle, Movement);
-  else angle = findShortestRotation(rot, angle);
-
-  if (Movement == forward) driveForward(distance, angle);
-  else if (Movement == backward) driveForward(-distance, angle);
+  driveToPoint(x, y);
 }
 
 void driveForward(double distance, double rotation){
