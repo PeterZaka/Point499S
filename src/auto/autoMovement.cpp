@@ -1,14 +1,14 @@
 #include "auto/autoMovement.hpp"
 
-int driveTargetTime = 500;
-double driveTargetError = 1;
-int turnTargetTime = 500;
-double turnTargetError = 0.5;
-double correctRotationError = 2;
+int driveTargetTime = 500; // amount of time (in milliseconds) needed within target error for driving
+double driveTargetError = 1; // be within distance (in inches) to be on target
+int turnTargetTime = 500; // amount of time (in milliseconds) needed within target error for turning
+double turnTargetError = 0.5; // be within distance (in degrees) to be on target
+double correctRotationError = 2; // be outside distance (in inches) to change rotation
 
 void goToPoint(double x, double y, movement Movement){
   turnToPoint(x, y, Movement);
-  driveToPoint(x, y);
+  driveToPoint(x, y, Movement);
 }
 
 void driveForward(double distance, double rotation){
@@ -40,17 +40,25 @@ void driveForward(double distance, double rotation){
   rightSide.moveVoltage(0);
 }
 
-void driveToPoint(double x, double y){
+void driveToPoint(double x, double y, movement Movement){
   int timeOnTarget = 0;
-  movement Movement = best;
+  movement prevBestMovement = best;
+  movement bestMovement = best;
   drivePID.reset();
   anglePID.reset();
 
   while (timeOnTarget < driveTargetTime){
     double distance = findDistanceTo(xPos, yPos, x, y);
     double rotation = findRotationTo(xPos, yPos, x, y);
-    findBestRotation(rotation, Movement);
-    if(Movement == backward) distance *= -1;
+
+    findBestRotation(rotation, bestMovement);
+    if( (abs(distance) < driveTargetError) && (bestMovement != prevBestMovement) ) // if passed target
+        Movement = best;
+
+    prevBestMovement = bestMovement;
+
+    if ( (Movement == best) && (bestMovement == backward) ) distance *= -1;
+    else if (Movement == backward) distance *= -1;
 
     drivePID.setTarget(distance, false);
     anglePID.setTarget(rotation, false);

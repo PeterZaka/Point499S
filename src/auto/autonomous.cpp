@@ -17,13 +17,14 @@ void turnTestAuton(){
 }
 
 void driveTestAuton(){
-  driveForward(24, 0);
-  driveForward(-12, 0);
-  driveForward(5, 0);
-  driveForward(-17, 0);
+  driveForward(24);
+  driveForward(-12);
+  driveForward(5);
+  driveForward(-17);
 }
 
 void driveToTestAuton(){
+  driveToPoint(24, 0, forward);
   driveToPoint(12, 24);
   driveToPoint(0, 0);
 }
