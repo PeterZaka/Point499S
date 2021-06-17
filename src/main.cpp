@@ -35,7 +35,7 @@ void competition_initialize() {}
 
 
 void autonomous() {
-	
+
 }
 
 void opcontrol() {
@@ -74,6 +74,7 @@ void opcontrol() {
 	ControllerButton test2Button(ControllerDigital::B);
 	ControllerButton test3Button(ControllerDigital::Y);
 	ControllerButton test4Button(ControllerDigital::X);
+	ControllerButton balanceButton(ControllerDigital::down);
 
 	ControllerButton fieldCentricButton(ControllerDigital::up);
 
@@ -118,6 +119,8 @@ void opcontrol() {
 			test3();
 		else if (test4Button.changedToPressed())
 			test4();
+		else if (balanceButton.changedToPressed())
+			balance({5, 0, 0});
 
 		if (fieldCentricButton.changedToPressed())
 			fieldCentric = !fieldCentric;

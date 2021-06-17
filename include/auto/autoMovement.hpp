@@ -28,6 +28,8 @@ void driveToPoint(double x, double y, movement Movement=best, double strength=10
 void turnToAngle(double angle);
 void turnToPoint(double x, double y, movement Movement=forward);
 
+void balance(PID balancePID);
+
 // ----- helper functions -----
 
 void findBestRotation(double& angle, movement& Movement);

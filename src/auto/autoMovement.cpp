@@ -115,6 +115,21 @@ void turnToPoint(double x, double y, movement Movement){
   turnToAngle(angle);
 }
 
+void balance(PID balancePID){
+  // add angle correction?
+  balancePID.setTarget(0);
+  while(true){
+    balancePID.update(iSensor.get_pitch());
+
+    leftSide.moveVoltage( balancePID.value() * 120.0);
+    rightSide.moveVoltage( balancePID.value() * 120.0);
+
+    pros::delay(20);
+  }
+  leftSide.moveVoltage(0);
+  rightSide.moveVoltage(0);
+}
+
 // ----- helper functions -----
 
 void findBestRotation(double& angle, movement& Movement){
