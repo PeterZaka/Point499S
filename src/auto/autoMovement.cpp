@@ -40,12 +40,11 @@ void driveForward(double distance, double rotation){
   rightSide.moveVoltage(0);
 }
 
-void driveToPoint(double x, double y, movement Movement){
+void driveToPoint(double x, double y, movement Movement, double strength, bool isExponential){
   int timeOnTarget = 0;
   movement prevBestMovement = best;
   movement bestMovement = best;
   drivePID.reset();
-  anglePID.reset();
 
   while (timeOnTarget < driveTargetTime){
     double distance = findDistanceTo(xPos, yPos, x, y);
@@ -61,13 +60,17 @@ void driveToPoint(double x, double y, movement Movement){
     else if (Movement == backward) distance *= -1;
 
     drivePID.setTarget(distance, false);
-    anglePID.setTarget(rotation, false);
-
     drivePID.update(0);
-    anglePID.update(rot);
+
     if (abs(distance) > correctRotationError){
-      leftSide.moveVoltage( (drivePID.value() + anglePID.value()) * 120.0);
-      rightSide.moveVoltage( (drivePID.value() - anglePID.value()) * 120.0);
+      double strengthValue = strength * (rotation - rot);
+      if(isExponential)
+      {
+        if(strengthValue < 0) strengthValue *= -strengthValue;
+        else strengthValue *= strengthValue;
+      }
+      leftSide.moveVoltage( (drivePID.value() + strengthValue) * 120.0);
+      rightSide.moveVoltage( (drivePID.value() - strengthValue) * 120.0);
     } else {
       leftSide.moveVoltage(drivePID.value() * 120.0);
       rightSide.moveVoltage(drivePID.value() * 120.0);
