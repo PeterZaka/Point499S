@@ -35,8 +35,7 @@ void competition_initialize() {}
 
 
 void autonomous() {
-
-		fullTestAuton();
+	
 }
 
 void opcontrol() {
@@ -71,12 +70,12 @@ void opcontrol() {
 	// Master controller by default
 	Controller controller;
 
-	ControllerButton fullTestButton(ControllerDigital::A);
-	ControllerButton turnTestButton(ControllerDigital::Y);
-	ControllerButton driveTestButton(ControllerDigital::X);
-	ControllerButton driveToTestButton(ControllerDigital::up);
+	ControllerButton test1Button(ControllerDigital::A);
+	ControllerButton test2Button(ControllerDigital::B);
+	ControllerButton test3Button(ControllerDigital::Y);
+	ControllerButton test4Button(ControllerDigital::X);
 
-	ControllerButton fieldCentricButton(ControllerDigital::B);
+	ControllerButton fieldCentricButton(ControllerDigital::up);
 
 	while (true) {
 
@@ -111,14 +110,14 @@ void opcontrol() {
 		backRightMotor.moveVoltage(br * 12000);
 
 
-		if (fullTestButton.changedToPressed())
-			fullTestAuton();
-		else if (turnTestButton.changedToPressed())
-			turnTestAuton();
-		else if (driveTestButton.changedToPressed())
-			driveTestAuton();
-		else if (driveToTestButton.changedToPressed())
-			driveToTestAuton();
+		if (test1Button.changedToPressed())
+			test1();
+		else if (test2Button.changedToPressed())
+			test2();
+		else if (test3Button.changedToPressed())
+			test3();
+		else if (test4Button.changedToPressed())
+			test4();
 
 		if (fieldCentricButton.changedToPressed())
 			fieldCentric = !fieldCentric;

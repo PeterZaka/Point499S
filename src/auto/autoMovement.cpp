@@ -3,7 +3,7 @@
 int driveTargetTime = 500; // amount of time (in milliseconds) needed within target error for driving
 double driveTargetError = 1; // be within distance (in inches) to be on target
 int turnTargetTime = 500; // amount of time (in milliseconds) needed within target error for turning
-double turnTargetError = 0.5; // be within distance (in degrees) to be on target
+double turnTargetError = 1; // be within distance (in degrees) to be on target
 double correctRotationError = 2; // be outside distance (in inches) to change rotation
 
 void goToPoint(double x, double y, movement Movement){
