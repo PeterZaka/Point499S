@@ -83,11 +83,11 @@ void driveToPoint(double x, double y, movement Movement, double strength, bool i
         printf("strengthValue =\t %.2lf\n", strengthValue);
       }
 
-      leftSide.moveVoltage( (drivePID.value() + strengthValue) * 120.0);
-      rightSide.moveVoltage( (drivePID.value() - strengthValue) * 120.0);
+      leftSide.moveVoltage( std::clamp( (drivePID.value() + strengthValue) * 120.0, -12000.0, 12000.0) );
+      rightSide.moveVoltage( std::clamp( (drivePID.value() - strengthValue) * 120.0, -12000.0, 12000.0) );
 
       if(angleClamp == 200){
-        printf("calculated voltage =\t %.2lf\n\n", (drivePID.value() + strengthValue) * 120.0);
+        printf("calculated voltage =\t %.2lf\n\n", std::clamp( (drivePID.value() + strengthValue) * 120.0, -12000.0, 12000.0));
         printf("left voltage =\t %.2lf\n", (double)leftSide.getVoltage());
       }
 
