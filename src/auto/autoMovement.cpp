@@ -70,7 +70,8 @@ void driveToPoint(double x, double y, movement Movement, double strength, bool i
         else strengthValue *= strengthValue;
       }
       strengthValue = std::clamp(strengthValue, -angleClamp, angleClamp);
-      printf("strengthValue =\t %.2lf\n", strengthValue);
+      printf("rotation =\t %.2lf\n", rotation);
+      printf("rot =\t %.2lf\n\n", rot);
 
       leftSide.moveVoltage( (drivePID.value() + strengthValue) * 120.0);
       rightSide.moveVoltage( (drivePID.value() - strengthValue) * 120.0);
