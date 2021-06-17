@@ -80,12 +80,17 @@ void driveToPoint(double x, double y, movement Movement, double strength, bool i
       strengthValue = std::clamp(strengthValue, -angleClamp, angleClamp);
 
       if(angleClamp == 200){
-        printf("rotation =\t %.2lf\n", rotation);
-        printf("rot =\t %.2lf\n\n", rot);
+        printf("strengthValue =\t %.2lf\n", strengthValue);
       }
 
       leftSide.moveVoltage( (drivePID.value() + strengthValue) * 120.0);
       rightSide.moveVoltage( (drivePID.value() - strengthValue) * 120.0);
+
+      if(angleClamp == 200){
+        printf("calculated voltage =\t %.2lf\n\n", (drivePID.value() + strengthValue) * 120.0);
+        printf("left voltage =\t %.2lf\n", (double)leftSide.getVoltage());
+      }
+
     } else {
       leftSide.moveVoltage(drivePID.value() * 120.0);
       rightSide.moveVoltage(drivePID.value() * 120.0);
