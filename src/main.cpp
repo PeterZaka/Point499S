@@ -78,6 +78,8 @@ void opcontrol() {
 
 	ControllerButton fieldCentricButton(ControllerDigital::up);
 
+	brainPrint("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+
 	while (true) {
 
 		double yAxis = controller.getAnalog(ControllerAnalog::leftY);
