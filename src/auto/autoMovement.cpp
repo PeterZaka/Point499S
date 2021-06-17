@@ -56,8 +56,16 @@ void driveToPoint(double x, double y, movement Movement, double strength, bool i
 
     prevBestMovement = bestMovement;
 
-    if ( (Movement == best) && (bestMovement == backward) ) distance *= -1;
-    else if (Movement == backward) distance *= -1;
+    if ( (Movement == best) && (bestMovement == backward) ) {
+      distance *= -1;
+    } else if (Movement == forward) {
+      rotation = findRotationTo(xPos, yPos, x, y);
+      rotation = findShortestRotation(rot, rotation);
+    } else if (Movement == backward) {
+      rotation = findRotationTo(xPos, yPos, x, y);
+      rotation = findShortestRotation(rot, rotation + 180);
+      distance *= -1;
+    }
 
     drivePID.setTarget(distance, false);
     drivePID.update(0);
