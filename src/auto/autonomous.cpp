@@ -24,7 +24,7 @@ void driveTestAuton(){
 }
 
 void driveToTestAuton(){
-  driveToPoint(24, 0, forward, 2, true);
+  driveToPoint(24, 0, forward, 2, true, 150);
   driveToPoint(12, 24);
   driveToPoint(0, 0);
 }

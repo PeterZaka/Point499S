@@ -40,7 +40,7 @@ void driveForward(double distance, double rotation){
   rightSide.moveVoltage(0);
 }
 
-void driveToPoint(double x, double y, movement Movement, double strength, bool isExponential){
+void driveToPoint(double x, double y, movement Movement, double strength, bool isExponential, double angleClamp){
   int timeOnTarget = 0;
   movement prevBestMovement = best;
   movement bestMovement = best;
@@ -69,6 +69,8 @@ void driveToPoint(double x, double y, movement Movement, double strength, bool i
         if(strengthValue < 0) strengthValue *= -strengthValue;
         else strengthValue *= strengthValue;
       }
+      strengthValue = std::clamp(strengthValue, -angleClamp, angleClamp);
+
       leftSide.moveVoltage( (drivePID.value() + strengthValue) * 120.0);
       rightSide.moveVoltage( (drivePID.value() - strengthValue) * 120.0);
     } else {
