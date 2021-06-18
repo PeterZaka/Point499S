@@ -13,18 +13,7 @@ void on_center_button() {
 
 
 void initialize() {
-	Logger::setDefaultLogger(
-    std::make_shared<Logger>(
-        TimeUtilFactory::createDefault().getTimer(), // It needs a Timer
-        "/ser/sout", // Output to the PROS terminal
-        Logger::LogLevel::warn // Show errors and warnings
-    )
-);
-
-	pros::lcd::initialize();
-	pros::lcd::set_text(1, "Hello PROS User!");
-
-	pros::lcd::register_btn1_cb(on_center_button);
+	autonSelectScreenInitialize();
 }
 
 
@@ -79,7 +68,7 @@ void opcontrol() {
 
 	ControllerButton fieldCentricButton(ControllerDigital::up);
 
-	brainPrint("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+	//brainPrint("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
 
 	while (true) {
 
