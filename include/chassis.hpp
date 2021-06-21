@@ -10,7 +10,3 @@ extern Motor backLeftMotor;
 extern Motor backRightMotor;
 extern MotorGroup leftSide;
 extern MotorGroup rightSide;
-
-extern std::shared_ptr<OdomChassisController> chassis;
-
-extern std::shared_ptr<XDriveModel> drive;

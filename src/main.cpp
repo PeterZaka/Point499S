@@ -37,8 +37,6 @@ void opcontrol() {
 	}
 	printf("done calibrating\n");
 
-	bool fieldCentric = false;
-
 	pros::Task calculateOdomTask([]()
 		{
 		while(1){
@@ -47,18 +45,20 @@ void opcontrol() {
 		}
 		});
 
-	/*pros::Task printTask([]()
+	pros::Task printTask([]()
 		{
 		while(1){
 			printf("\n");
-			printOdom();
+			printEncoders();
 			pros::delay(3000);
 		}
 		});
-		*/
 
 	// Master controller by default
 	Controller controller;
+
+	ControllerButton intakeUpButton(ControllerDigital::R2);
+	ControllerButton intakeDownButton(ControllerDigital::R1);
 
 	ControllerButton test1Button(ControllerDigital::A);
 	ControllerButton test2Button(ControllerDigital::B);
@@ -66,56 +66,22 @@ void opcontrol() {
 	ControllerButton test4Button(ControllerDigital::X);
 	ControllerButton balanceButton(ControllerDigital::down);
 
-	ControllerButton fieldCentricButton(ControllerDigital::up);
-
-	//brainPrint("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-
 	while (true) {
-
 		double yAxis = controller.getAnalog(ControllerAnalog::leftY);
-		double xAxis = controller.getAnalog(ControllerAnalog::leftX);
+		double xAxis = controller.getAnalog(ControllerAnalog::rightX);
+		if(abs(yAxis) < 0.1) yAxis = 0;
+		if(abs(xAxis) < 0.1) xAxis = 0;
+		leftSide.moveVoltage((yAxis + xAxis) * 12000.0);
+		rightSide.moveVoltage((yAxis - xAxis) * 12000.0);
 
-		double joystickDirection = std::atan2(yAxis, xAxis);
-		if (fieldCentric)
-			joystickDirection += rot * (pi / 180);
+		if(intakeUpButton.isPressed()) intake.moveVoltage(12000.0);
+		else if(intakeDownButton.isPressed()) intake.moveVoltage(-12000.0);
 
-    double maxPower = std::min(sqrt(pow(xAxis,2) + pow(yAxis,2)), 1.0) * 0.9;
-    double motorPower = maxPower / (fabs(sin(joystickDirection)) + fabs(cos(joystickDirection)));
-
-    // move
-    double tl = (sin(joystickDirection) + cos(joystickDirection)) * motorPower;
-    double bl = (sin(joystickDirection) - cos(joystickDirection)) * motorPower;
-    double tr = (sin(joystickDirection) - cos(joystickDirection)) * motorPower;
-    double br = (sin(joystickDirection) + cos(joystickDirection)) * motorPower;
-
-    // rotate
-    double clockwise = controller.getAnalog(ControllerAnalog::rightX);
-
-    maxPower = std::max(fabs(clockwise), maxPower);
-    tl += (maxPower - fabs(tl)) * clockwise;
-    bl += (maxPower - fabs(br)) * clockwise;
-    tr -= (maxPower - fabs(tr)) * clockwise;
-    br -= (maxPower - fabs(br)) * clockwise;
-
-		topLeftMotor.moveVoltage(tl * 12000);
-		backLeftMotor.moveVoltage(bl * 12000);
-		topRightMotor.moveVoltage(tr * 12000);
-		backRightMotor.moveVoltage(br * 12000);
-
-
-		if (test1Button.changedToPressed())
-			test1();
-		else if (test2Button.changedToPressed())
-			test2();
-		else if (test3Button.changedToPressed())
-			test3();
-		else if (test4Button.changedToPressed())
-			test4();
-		else if (balanceButton.changedToPressed())
-			balance({5, 0, 0});
-
-		if (fieldCentricButton.changedToPressed())
-			fieldCentric = !fieldCentric;
+		if (test1Button.changedToPressed()) test1();
+		else if (test2Button.changedToPressed()) test2();
+		else if (test3Button.changedToPressed()) test3();
+		else if (test4Button.changedToPressed()) test4();
+		else if (balanceButton.changedToPressed()) balance({5, 0, 0});
 
 		pros::delay(10);
 	}

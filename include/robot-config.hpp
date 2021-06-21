@@ -5,6 +5,8 @@
 
 using namespace okapi;
 
+extern Motor intake;
+
 extern ADIEncoder leftEncoder;
 extern ADIEncoder rightEncoder;
 extern ADIEncoder backEncoder;

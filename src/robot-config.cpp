@@ -1,5 +1,7 @@
 #include "robot-config.hpp"
 
+Motor intake(1);
+
 ADIEncoder leftEncoder('E', 'F', true);
 ADIEncoder rightEncoder('G', 'H');
 ADIEncoder backEncoder('A', 'B');
