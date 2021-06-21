@@ -8,6 +8,7 @@ static const char * btnm_map[] = {"Test 1", "Test 2", "\n",
 
 static void countdown(){
   lv_scr_load(countdownScr);
+  lv_obj_set_hidden(countdownScr, false);
   lv_label_set_text(countdownLabel, "3");
   pros::delay(1000);
   lv_label_set_text(countdownLabel, "2");
@@ -15,13 +16,15 @@ static void countdown(){
   lv_label_set_text(countdownLabel, "1");
   pros::delay(1000);
   lv_label_set_text(countdownLabel, "");
+  lv_obj_set_hidden(countdownScr, true);
 }
 
 static lv_res_t event_handler(lv_obj_t* obj, const char* txt){
   lv_obj_t* currentScr = lv_scr_act();
+  lv_obj_set_hidden(currentScr, true);
   printf("%s was pressed\n", txt);
   countdown();
-  lv_scr_load(currentScr);
+  lv_obj_set_hidden(currentScr, false);
   return LV_RES_OK;
 }
 
@@ -30,7 +33,7 @@ void autonSelectScreenInitialize(){
   lv_obj_t* autonScr = lv_page_create(NULL, NULL);
   lv_scr_load(autonScr);
 
-  lv_obj_t* btnm1 = lv_btnm_create(lv_scr_act(), NULL);
+  lv_obj_t* btnm1 = lv_btnm_create(autonScr, NULL);
   lv_btnm_set_map(btnm1, btnm_map);
   lv_obj_align(btnm1, NULL, LV_ALIGN_CENTER, 0, 0);
   lv_btnm_set_action(btnm1, event_handler);
