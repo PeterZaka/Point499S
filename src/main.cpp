@@ -93,8 +93,8 @@ void opcontrol() {
 			leftSide.moveVoltage((leftYAxis + anglePID.value() / 100.0) * 12000.0);
 			rightSide.moveVoltage((leftYAxis - anglePID.value() / 100.0) * 12000.0);
 		} else {
-			leftSide.moveVoltage((leftYAxis + rightYAxis) * 12000.0);
-			rightSide.moveVoltage((leftYAxis - rightYAxis) * 12000.0);
+			leftSide.moveVoltage((leftYAxis) * 12000.0);
+			rightSide.moveVoltage((rightYAxis) * 12000.0);
 		}
 
 		if(intakeUpButton.isPressed()) intake.moveVoltage(12000.0);
