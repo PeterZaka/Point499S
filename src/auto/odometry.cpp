@@ -1,8 +1,8 @@
 #include "auto/odometry.hpp"
 
 double wheelDiameter = 2.75;
-double wheelTrack = 8;
-double backDistance = 0.375;
+double wheelTrack = 4;
+double backDistance = 5.75;
 
 double xPos = 0;
 double yPos = 0;

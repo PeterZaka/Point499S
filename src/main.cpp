@@ -49,7 +49,7 @@ void opcontrol() {
 		{
 		while(1){
 			printf("\n");
-			printEncoders();
+			printOdom();
 			pros::delay(3000);
 		}
 		});
@@ -66,16 +66,40 @@ void opcontrol() {
 	ControllerButton test4Button(ControllerDigital::X);
 	ControllerButton balanceButton(ControllerDigital::down);
 
+	bool isDrivingStraight = false;
+
 	while (true) {
-		double yAxis = controller.getAnalog(ControllerAnalog::leftY);
-		double xAxis = controller.getAnalog(ControllerAnalog::rightX);
-		if(abs(yAxis) < 0.1) yAxis = 0;
-		if(abs(xAxis) < 0.1) xAxis = 0;
-		leftSide.moveVoltage((yAxis + xAxis) * 12000.0);
-		rightSide.moveVoltage((yAxis - xAxis) * 12000.0);
+		double leftYAxis = controller.getAnalog(ControllerAnalog::leftY);
+		double rightYAxis = controller.getAnalog(ControllerAnalog::rightY);
+		if(abs(leftYAxis) < 0.1) leftYAxis = 0;
+		if(abs(rightYAxis) < 0.1) rightYAxis = 0;
+
+		if(abs(leftYAxis) > 0 && abs(rightYAxis) > 0){ // if moving jotsticks
+			if(abs(leftYAxis - rightYAxis) < 0.1){ // if joysticks in simillar range
+				if(isDrivingStraight == false){
+					isDrivingStraight = true;
+					anglePID.setTarget(rot);
+				} else {
+					anglePID.update(rot);
+				}
+			} else {
+				isDrivingStraight = false;
+			}
+		} else {
+			isDrivingStraight = false;
+		}
+
+		if(isDrivingStraight){
+			leftSide.moveVoltage((leftYAxis + anglePID.value() / 100.0) * 12000.0);
+			rightSide.moveVoltage((leftYAxis - anglePID.value() / 100.0) * 12000.0);
+		} else {
+			leftSide.moveVoltage((leftYAxis + rightYAxis) * 12000.0);
+			rightSide.moveVoltage((leftYAxis - rightYAxis) * 12000.0);
+		}
 
 		if(intakeUpButton.isPressed()) intake.moveVoltage(12000.0);
 		else if(intakeDownButton.isPressed()) intake.moveVoltage(-12000.0);
+		else intake.moveVoltage(0);
 
 		if (test1Button.changedToPressed()) test1();
 		else if (test2Button.changedToPressed()) test2();
