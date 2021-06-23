@@ -6,6 +6,9 @@
 using namespace okapi;
 
 extern Motor intake;
+extern Motor leftLift;
+extern Motor rightLift;
+extern MotorGroup lift;
 
 extern ADIEncoder leftEncoder;
 extern ADIEncoder rightEncoder;

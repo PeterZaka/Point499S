@@ -1,6 +1,9 @@
 #include "robot-config.hpp"
 
 Motor intake(7);
+Motor leftLift(8);
+Motor rightLift(9);
+MotorGroup lift({leftLift, rightLift});
 
 ADIEncoder leftEncoder('E', 'F', true);
 ADIEncoder rightEncoder('G', 'H');

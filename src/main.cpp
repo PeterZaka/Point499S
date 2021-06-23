@@ -59,6 +59,8 @@ void opcontrol() {
 
 	ControllerButton intakeUpButton(ControllerDigital::R2);
 	ControllerButton intakeDownButton(ControllerDigital::R1);
+	ControllerButton liftUpButton(ControllerDigital::L2);
+	ControllerButton liftDownButton(ControllerDigital::L1);
 
 	ControllerButton test1Button(ControllerDigital::A);
 	ControllerButton test2Button(ControllerDigital::B);
@@ -74,16 +76,13 @@ void opcontrol() {
 		if(abs(leftYAxis) < 0.1) leftYAxis = 0;
 		if(abs(rightYAxis) < 0.1) rightYAxis = 0;
 
-		if(abs(leftYAxis) > 0 && abs(rightYAxis) > 0){ // if moving jotsticks
-			if(abs(leftYAxis - rightYAxis) < 0.1){ // if joysticks in simillar range
-				if(isDrivingStraight == false){
-					isDrivingStraight = true;
-					anglePID.setTarget(rot);
-				} else {
-					anglePID.update(rot);
-				}
+		if(abs(leftYAxis) > 0 && abs(rightYAxis) > 0 && // if moving jotsticks
+		 (abs(leftYAxis - rightYAxis) < 0.1)){ // if joysticks in simillar range
+			if(isDrivingStraight == false){
+				isDrivingStraight = true;
+				anglePID.setTarget(rot);
 			} else {
-				isDrivingStraight = false;
+				anglePID.update(rot);
 			}
 		} else {
 			isDrivingStraight = false;
@@ -100,6 +99,10 @@ void opcontrol() {
 		if(intakeUpButton.isPressed()) intake.moveVoltage(12000.0);
 		else if(intakeDownButton.isPressed()) intake.moveVoltage(-12000.0);
 		else intake.moveVoltage(0);
+
+		if(liftUpButton.isPressed()) lift.moveVoltage(12000.0);
+		else if(liftDownButton.isPressed()) lift.moveVoltage(-12000.0);
+		else lift.moveVoltage(0);
 
 		if (test1Button.changedToPressed()) test1();
 		else if (test2Button.changedToPressed()) test2();
