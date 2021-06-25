@@ -49,6 +49,7 @@ void opcontrol() {
 		{
 		while(1){
 			printf("\n");
+			printEncoders();
 			printOdom();
 			pros::delay(3000);
 		}
