@@ -1,14 +1,14 @@
 #include "brain.hpp"
 
 static lv_obj_t* autonContainer;
-static lv_obj_t* countdownScr;
+static lv_obj_t* countdownContainer;
 static lv_obj_t* countdownLabel;
 
 static const char * btnm_map[] = {"Test 1", "Test 2", "\n",
                                   "Test 3", "Test 4", ""};
 
 static void countdown(){
-  lv_obj_set_hidden(countdownScr, false);
+  lv_obj_set_hidden(countdownContainer, false);
   lv_label_set_text(countdownLabel, "3");
   pros::delay(1000);
   lv_label_set_text(countdownLabel, "2");
@@ -16,14 +16,14 @@ static void countdown(){
   lv_label_set_text(countdownLabel, "1");
   pros::delay(1000);
   lv_label_set_text(countdownLabel, "");
-  lv_obj_set_hidden(countdownScr, true);
+  lv_obj_set_hidden(countdownContainer, true);
 }
 
 static lv_res_t event_handler(lv_obj_t* obj, const char* txt){
   lv_obj_set_hidden(autonContainer, true);
   printf("%s was pressed\n", txt);
-  // countdown();
-  // lv_obj_set_hidden(autonScr, false);
+  countdown();
+  lv_obj_set_hidden(autonContainer, false);
   return LV_RES_OK;
 }
 
@@ -38,9 +38,11 @@ void autonSelectScreenInitialize(){
   lv_obj_align(btnm1, NULL, LV_ALIGN_CENTER, 0, 0);
   lv_btnm_set_action(btnm1, event_handler);
 
-  // countdownScr = lv_page_create(NULL, NULL);
-  // lv_obj_set_hidden(countdownScr, true);
-  // countdownLabel =  lv_label_create(countdownScr, NULL);
+  countdownContainer = lv_obj_create(lv_scr_act(), NULL);
+  lv_obj_set_size(countdownContainer, lv_obj_get_width(lv_scr_act()), lv_obj_get_height(lv_scr_act()));
+  lv_obj_align(countdownContainer, NULL, LV_ALIGN_CENTER, 0, 0);
+  lv_obj_set_hidden(countdownContainer, true);
+  countdownLabel =  lv_label_create(countdownContainer, NULL);
 }
 
 void brainPrint(std::string words){
