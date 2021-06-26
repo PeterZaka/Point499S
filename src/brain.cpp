@@ -1,58 +1,61 @@
 #include "brain.hpp"
 
-static lv_obj_t* autonContainer;
-static lv_obj_t* countdownContainer;
-// static lv_obj_t* countdownLabel;
+static lv_obj_t* autonPage;
+static lv_obj_t* backPage;
 
 static const char * btnm_map[] = {"Test 1", "Test 2", "\n",
                                   "Test 3", "Test 4", ""};
 
-static void countdown(){
-  // lv_obj_set_hidden(countdownContainer, false);
-  // lv_label_set_text(countdownLabel, "3");
-  // pros::delay(1000);
-  // lv_label_set_text(countdownLabel, "2");
-  // pros::delay(1000);
-  // lv_label_set_text(countdownLabel, "1");
-  // pros::delay(1000);
-  // lv_label_set_text(countdownLabel, "");
-  lv_obj_set_hidden(countdownContainer, true);
+static lv_obj_t* createBtn(lv_obj_t* parent, lv_coord_t x, lv_coord_t y, lv_coord_t width, lv_coord_t height,
+    const char* text, int id) {
+    lv_obj_t* btn = lv_btn_create(parent, NULL);
+    lv_obj_set_pos(btn, x, y);
+    lv_obj_set_size(btn, width, height);
+    lv_obj_set_free_num(btn, id);
+
+    lv_obj_t* label = lv_label_create(btn, NULL);
+    lv_label_set_text(label, text);
+    lv_obj_align(label, NULL, LV_ALIGN_CENTER, 0, 0);
+
+    return btn;
 }
 
 static lv_res_t event_handler(lv_obj_t* obj, const char* txt){
-  lv_obj_set_hidden(autonContainer, true);
+  lv_obj_set_hidden(autonPage, true);
+  lv_obj_set_hidden(backPage, false);
   printf("%s was pressed\n", txt);
-  /*Create a Label on the currently active screen*/
-  lv_obj_t* countdownLabel =  lv_label_create(lv_scr_act(), NULL);
-  lv_obj_align(countdownLabel, NULL, LV_ALIGN_CENTER, 0, 0);
-  lv_label_set_text(countdownLabel, "3");
-  pros::delay(1000);
-  lv_label_set_text(countdownLabel, "2");
-  pros::delay(1000);
-  lv_label_set_text(countdownLabel, "1");
-  pros::delay(1000);
-  lv_obj_del(countdownLabel);
-  lv_obj_set_hidden(autonContainer, false);
+  return LV_RES_OK;
+}
+
+static lv_res_t btn_click_action(lv_obj_t* btn){
+  uint8_t id = lv_obj_get_free_num(btn);
+  if(id == 0){
+    lv_obj_set_hidden(backPage, true);
+    lv_obj_set_hidden(autonPage, false);
+  }
+
   return LV_RES_OK;
 }
 
 // https://github.com/lvgl/lv_demos/tree/v5.3/lv_tutorial
 void autonSelectScreenInitialize(){
-  autonContainer = lv_obj_create(lv_scr_act(), NULL);
-  lv_obj_set_size(autonContainer, lv_obj_get_width(lv_scr_act()), lv_obj_get_height(lv_scr_act()));
-  lv_obj_align(autonContainer, NULL, LV_ALIGN_CENTER, 0, 0);
+  autonPage = lv_page_create(lv_scr_act(), NULL);
+  lv_obj_set_size(autonPage, lv_obj_get_width(lv_scr_act()), lv_obj_get_height(lv_scr_act()));
+  lv_obj_align(autonPage, NULL, LV_ALIGN_CENTER, 0, 0);
 
-  lv_obj_t* btnm1 = lv_btnm_create(autonContainer, NULL);
+  lv_obj_t* btnm1 = lv_btnm_create(autonPage, NULL);
   lv_btnm_set_map(btnm1, btnm_map);
+  lv_obj_set_size(autonPage, lv_obj_get_width(lv_scr_act()), lv_obj_get_height(lv_scr_act()));
   lv_obj_align(btnm1, NULL, LV_ALIGN_CENTER, 0, 0);
   lv_btnm_set_action(btnm1, event_handler);
 
-  // countdownContainer = lv_obj_create(lv_scr_act(), NULL);
-  // lv_obj_set_size(countdownContainer, lv_obj_get_width(lv_scr_act()), lv_obj_get_height(lv_scr_act()));
-  // lv_obj_align(countdownContainer, NULL, LV_ALIGN_CENTER, 0, 0);
-  // lv_obj_set_hidden(countdownContainer, true);
-  // countdownLabel =  lv_label_create(countdownContainer, NULL);
-  // lv_obj_align(countdownLabel, NULL, LV_ALIGN_CENTER, 0, 0);
+  backPage = lv_page_create(autonPage, NULL);
+  lv_obj_set_hidden(backPage, true);
+  lv_obj_set_size(backPage, lv_obj_get_width(lv_scr_act()), lv_obj_get_height(lv_scr_act()));
+  lv_obj_align(backPage, NULL, LV_ALIGN_CENTER, 0, 0);
+
+  lv_obj_t* backBtn = createBtn(backPage, 0, 0, 50, 50, "Back", 0);
+  lv_btn_set_action(backBtn, LV_BTN_ACTION_CLICK, btn_click_action);
 }
 
 void brainPrint(std::string words){
