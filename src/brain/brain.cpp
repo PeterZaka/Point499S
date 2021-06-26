@@ -6,23 +6,9 @@ static lv_obj_t* backPage;
 static const char * btnm_map[] = {"Test 1", "Test 2", "\n",
                                   "Test 3", "Test 4", ""};
 
-static lv_obj_t* createBtn(lv_obj_t* parent, lv_coord_t x, lv_coord_t y, lv_coord_t width, lv_coord_t height,
-    const char* text, int id) {
-    lv_obj_t* btn = lv_btn_create(parent, NULL);
-    lv_obj_set_pos(btn, x, y);
-    lv_obj_set_size(btn, width, height);
-    lv_obj_set_free_num(btn, id);
-
-    lv_obj_t* label = lv_label_create(btn, NULL);
-    lv_label_set_text(label, text);
-    lv_obj_align(label, NULL, LV_ALIGN_CENTER, 0, 0);
-
-    return btn;
-}
-
 static lv_res_t event_handler(lv_obj_t* obj, const char* txt){
-  lv_obj_set_hidden(autonPage, true);
-  lv_obj_set_hidden(backPage, false);
+  hide(autonPage);
+  show(backPage);
   printf("%s was pressed\n", txt);
   return LV_RES_OK;
 }
@@ -30,8 +16,8 @@ static lv_res_t event_handler(lv_obj_t* obj, const char* txt){
 static lv_res_t btn_click_action(lv_obj_t* btn){
   uint8_t id = lv_obj_get_free_num(btn);
   if(id == 0){
-    lv_obj_set_hidden(backPage, true);
-    lv_obj_set_hidden(autonPage, false);
+    hide(backPage);
+    show(autonPage);
   }
 
   return LV_RES_OK;
@@ -50,7 +36,7 @@ void autonSelectScreenInitialize(){
   lv_btnm_set_action(btnm1, event_handler);
 
   backPage = lv_page_create(autonPage, NULL);
-  lv_obj_set_hidden(backPage, true);
+  hide(backPage);
   lv_obj_set_size(backPage, lv_obj_get_width(lv_scr_act()), lv_obj_get_height(lv_scr_act()));
   lv_obj_align(backPage, NULL, LV_ALIGN_CENTER, 0, 0);
 
