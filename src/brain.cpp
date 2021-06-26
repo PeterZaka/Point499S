@@ -1,5 +1,6 @@
 #include "brain.hpp"
 
+static lv_obj_t* autonScr;
 static lv_obj_t* countdownScr;
 static lv_obj_t* countdownLabel;
 
@@ -7,7 +8,6 @@ static const char * btnm_map[] = {"Test 1", "Test 2", "\n",
                                   "Test 3", "Test 4", ""};
 
 static void countdown(){
-  lv_scr_load(countdownScr);
   lv_obj_set_hidden(countdownScr, false);
   lv_label_set_text(countdownLabel, "3");
   pros::delay(1000);
@@ -20,17 +20,16 @@ static void countdown(){
 }
 
 static lv_res_t event_handler(lv_obj_t* obj, const char* txt){
-  lv_obj_t* currentScr = lv_scr_act();
-  lv_obj_set_hidden(currentScr, true);
+  lv_obj_set_hidden(autonScr, true);
   printf("%s was pressed\n", txt);
   countdown();
-  lv_obj_set_hidden(currentScr, false);
+  lv_obj_set_hidden(autonScr, false);
   return LV_RES_OK;
 }
 
 // https://github.com/lvgl/lv_demos/tree/v5.3/lv_tutorial
 void autonSelectScreenInitialize(){
-  lv_obj_t* autonScr = lv_page_create(NULL, NULL);
+  autonScr = lv_page_create(NULL, NULL);
   lv_scr_load(autonScr);
 
   lv_obj_t* btnm1 = lv_btnm_create(autonScr, NULL);
@@ -39,6 +38,7 @@ void autonSelectScreenInitialize(){
   lv_btnm_set_action(btnm1, event_handler);
 
   countdownScr = lv_page_create(NULL, NULL);
+  lv_obj_set_hidden(countdownScr, true);
   countdownLabel =  lv_label_create(countdownScr, NULL);
 }
 
