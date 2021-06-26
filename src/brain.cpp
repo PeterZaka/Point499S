@@ -22,8 +22,15 @@ static void countdown(){
 static lv_res_t event_handler(lv_obj_t* obj, const char* txt){
   lv_obj_set_hidden(autonContainer, true);
   printf("%s was pressed\n", txt);
-  countdown();
-  lv_obj_set_hidden(autonContainer, false);
+  lv_obj_set_hidden(countdownContainer, false);
+  lv_label_set_text(countdownLabel, "3");
+  pros::delay(1000);
+  lv_label_set_text(countdownLabel, "2");
+  pros::delay(1000);
+  lv_label_set_text(countdownLabel, "1");
+  pros::delay(1000);
+  lv_label_set_text(countdownLabel, "");
+  lv_obj_set_hidden(countdownContainer, true);
   return LV_RES_OK;
 }
 
@@ -43,6 +50,7 @@ void autonSelectScreenInitialize(){
   lv_obj_align(countdownContainer, NULL, LV_ALIGN_CENTER, 0, 0);
   lv_obj_set_hidden(countdownContainer, true);
   countdownLabel =  lv_label_create(countdownContainer, NULL);
+  lv_obj_align(countdownLabel, NULL, LV_ALIGN_CENTER, 0, 0);
 }
 
 void brainPrint(std::string words){
