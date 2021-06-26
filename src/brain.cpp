@@ -29,7 +29,7 @@ static lv_res_t event_handler(lv_obj_t* obj, const char* txt){
 
 // https://github.com/lvgl/lv_demos/tree/v5.3/lv_tutorial
 void autonSelectScreenInitialize(){
-  autonScr = lv_page_create(NULL, NULL);
+  autonScr = lv_page_create(lv_scr_act(), NULL);
   lv_scr_load(autonScr);
 
   lv_obj_t* btnm1 = lv_btnm_create(autonScr, NULL);
@@ -37,7 +37,7 @@ void autonSelectScreenInitialize(){
   lv_obj_align(btnm1, NULL, LV_ALIGN_CENTER, 0, 0);
   lv_btnm_set_action(btnm1, event_handler);
 
-  countdownScr = lv_page_create(NULL, NULL);
+  countdownScr = lv_page_create(lv_scr_act(), NULL);
   lv_obj_set_hidden(countdownScr, true);
   countdownLabel =  lv_label_create(countdownScr, NULL);
 }
