@@ -22,23 +22,23 @@ static void countdown(){
 static lv_res_t event_handler(lv_obj_t* obj, const char* txt){
   lv_obj_set_hidden(autonScr, true);
   printf("%s was pressed\n", txt);
-  countdown();
-  lv_obj_set_hidden(autonScr, false);
+  // countdown();
+  // lv_obj_set_hidden(autonScr, false);
   return LV_RES_OK;
 }
 
 // https://github.com/lvgl/lv_demos/tree/v5.3/lv_tutorial
 void autonSelectScreenInitialize(){
-  autonScr = lv_page_create(lv_scr_act(), NULL);
+  autonScr = lv_page_create(NULL, NULL);
 
   lv_obj_t* btnm1 = lv_btnm_create(autonScr, NULL);
   lv_btnm_set_map(btnm1, btnm_map);
   lv_obj_align(btnm1, NULL, LV_ALIGN_CENTER, 0, 0);
   lv_btnm_set_action(btnm1, event_handler);
 
-  countdownScr = lv_page_create(lv_scr_act(), NULL);
-  lv_obj_set_hidden(countdownScr, true);
-  countdownLabel =  lv_label_create(countdownScr, NULL);
+  // countdownScr = lv_page_create(NULL, NULL);
+  // lv_obj_set_hidden(countdownScr, true);
+  // countdownLabel =  lv_label_create(countdownScr, NULL);
 }
 
 void brainPrint(std::string words){
