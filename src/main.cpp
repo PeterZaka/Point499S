@@ -13,6 +13,8 @@ void on_center_button() {
 
 
 void initialize() {
+	claw.setBrakeMode(AbstractMotor::brakeMode::hold);
+
 	autonSelectScreenInitialize();
 }
 
@@ -62,11 +64,13 @@ void opcontrol() {
 	ControllerButton intakeDownButton(ControllerDigital::R1);
 	ControllerButton liftUpButton(ControllerDigital::L2);
 	ControllerButton liftDownButton(ControllerDigital::L1);
+	ControllerButton clawOpenButton(ControllerDigital::A);
+	ControllerButton clawCloseButton(ControllerDigital::B);
 
-	ControllerButton test1Button(ControllerDigital::A);
-	ControllerButton test2Button(ControllerDigital::B);
-	ControllerButton test3Button(ControllerDigital::Y);
-	ControllerButton test4Button(ControllerDigital::X);
+	ControllerButton test1Button(ControllerDigital::up);
+	ControllerButton test2Button(ControllerDigital::right);
+	ControllerButton test3Button(ControllerDigital::left);
+	// ControllerButton test4Button(ControllerDigital::Y);
 	ControllerButton balanceButton(ControllerDigital::down);
 
 	bool isDrivingStraight = false;
@@ -105,11 +109,15 @@ void opcontrol() {
 		else if(liftDownButton.isPressed()) lift.moveVoltage(-12000.0);
 		else lift.moveVoltage(0);
 
+		if(clawOpenButton.isPressed()) claw.moveVoltage(12000.0);
+		else if(clawCloseButton.isPressed()) claw.moveVoltage(-12000.0);
+		else claw.moveVoltage(0);
+
 		if (test1Button.changedToPressed()) test1();
 		else if (test2Button.changedToPressed()) test2();
 		else if (test3Button.changedToPressed()) test3();
-		else if (test4Button.changedToPressed()) test4();
-		else if (balanceButton.changedToPressed()) balance({5, 0, 0});
+		else if (balanceButton.changedToPressed()) balance({3, 0, 0});
+		// else if (test4Button.changedToPressed()) test4();
 
 		pros::delay(10);
 	}

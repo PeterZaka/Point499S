@@ -1,5 +1,6 @@
 #include "robot-config.hpp"
 
+Motor claw(10);
 Motor intake(7);
 Motor leftLift(8);
 Motor rightLift(9);
@@ -11,6 +12,6 @@ ADIEncoder backEncoder('A', 'B');
 
 pros::Imu iSensor(5);
 
-PID drivePID(15, 0, 5);
+PID drivePID(12, 0, 5);
 PID anglePID(10, 0, 0);
-PID turnPID(3, 0.3, 0, 15, 0.5);
+PID turnPID(2, 0.1, 0, 10, 0.5);

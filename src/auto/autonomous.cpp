@@ -7,10 +7,9 @@ void test1(){
 }
 
 void test2(){
-  turnToAngle(-10);
-  driveToPoint(24, 0, forward);
-  driveToPoint(12, 24);
-  driveToPoint(0, 0);
+  driveToPoint(24, 24, forward, 3, false, 70);
+  turnToAngle(90);
+  driveToPoint(0, 0, backward, 10, false, 80);
 }
 
 void test3(){
