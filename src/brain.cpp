@@ -1,6 +1,6 @@
 #include "brain.hpp"
 
-static lv_obj_t* autonScr;
+static lv_obj_t* autonContainer;
 static lv_obj_t* countdownScr;
 static lv_obj_t* countdownLabel;
 
@@ -20,7 +20,7 @@ static void countdown(){
 }
 
 static lv_res_t event_handler(lv_obj_t* obj, const char* txt){
-  lv_obj_set_hidden(autonScr, true);
+  lv_obj_set_hidden(autonContainer, true);
   printf("%s was pressed\n", txt);
   // countdown();
   // lv_obj_set_hidden(autonScr, false);
@@ -29,9 +29,9 @@ static lv_res_t event_handler(lv_obj_t* obj, const char* txt){
 
 // https://github.com/lvgl/lv_demos/tree/v5.3/lv_tutorial
 void autonSelectScreenInitialize(){
-  autonScr = lv_page_create(lv_scr_act(), NULL);
+  autonContainer = lv_obj_create(lv_scr_act(), NULL);
 
-  lv_obj_t* btnm1 = lv_btnm_create(autonScr, NULL);
+  lv_obj_t* btnm1 = lv_btnm_create(autonContainer, NULL);
   lv_btnm_set_map(btnm1, btnm_map);
   lv_obj_align(btnm1, NULL, LV_ALIGN_CENTER, 0, 0);
   lv_btnm_set_action(btnm1, event_handler);
