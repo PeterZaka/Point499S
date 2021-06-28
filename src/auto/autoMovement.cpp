@@ -130,8 +130,13 @@ void balance(PID balancePID){
   while(true){
     balancePID.update(iSensor.get_pitch());
 
-    leftSide.moveVoltage( balancePID.value() * 120.0);
-    rightSide.moveVoltage( balancePID.value() * 120.0);
+    if (abs(balancePID.value()) > 5) {
+      leftSide.moveVoltage( balancePID.value() * 120.0);
+      rightSide.moveVoltage( balancePID.value() * 120.0);
+    } else {
+      leftSide.moveVoltage(0);
+      rightSide.moveVoltage(0);
+    }
 
     pros::delay(20);
   }

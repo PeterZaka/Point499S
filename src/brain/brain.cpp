@@ -3,7 +3,7 @@
 static lv_obj_t* autonPage;
 static lv_obj_t* backPage;
 
-static const char * btnm_map[] = {"Test 1", "Test 2", "\n",
+static const char* btnm_map[] = {"Test 1", "Test 2", "\n",
                                   "Test 3", "Test 4", ""};
 
 static lv_res_t event_handler(lv_obj_t* obj, const char* txt){

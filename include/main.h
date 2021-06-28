@@ -83,7 +83,7 @@ void opcontrol(void);
 #include "chassis.hpp"
 #include "auto/autoMovement.hpp"
 
-#include "brain.hpp"
+#include "brain/brain.hpp"
 
 
 #endif
