@@ -101,8 +101,8 @@ void opcontrol() {
 			rightSide.moveVoltage((rightYAxis) * 12000.0);
 		}
 
-		if(intakeUpButton.isPressed()) intake.moveVoltage(12000.0);
-		else if(intakeDownButton.isPressed()) intake.moveVoltage(-12000.0);
+		if(intakeUpButton.isPressed()) intake.moveVoltage(12000.0 * 0.8);
+		else if(intakeDownButton.isPressed()) intake.moveVoltage(-12000.0 * 0.8);
 		else intake.moveVoltage(0);
 
 		if(liftUpButton.isPressed()) lift.moveVoltage(12000.0);
