@@ -1,8 +1,7 @@
 #include "robot-config.hpp"
 
-Motor claw(10);
-Motor intake(7);
-Motor leftLift(8);
+Motor claw(-11);
+Motor leftLift(-6);
 Motor rightLift(9);
 MotorGroup lift({leftLift, rightLift});
 

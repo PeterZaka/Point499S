@@ -6,7 +6,6 @@
 using namespace okapi;
 
 extern Motor claw;
-extern Motor intake;
 extern Motor leftLift;
 extern Motor rightLift;
 extern MotorGroup lift;

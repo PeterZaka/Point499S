@@ -60,12 +60,10 @@ void opcontrol() {
 	// Master controller by default
 	Controller controller;
 
-	ControllerButton intakeUpButton(ControllerDigital::R2);
-	ControllerButton intakeDownButton(ControllerDigital::R1);
-	ControllerButton liftUpButton(ControllerDigital::L2);
-	ControllerButton liftDownButton(ControllerDigital::L1);
-	ControllerButton clawOpenButton(ControllerDigital::A);
-	ControllerButton clawCloseButton(ControllerDigital::B);
+	ControllerButton liftUpButton(ControllerDigital::R1);
+	ControllerButton liftDownButton(ControllerDigital::R2);
+	ControllerButton clawUpButton(ControllerDigital::L1);
+	ControllerButton clawDownButton(ControllerDigital::L2);
 
 	ControllerButton test1Button(ControllerDigital::up);
 	ControllerButton test2Button(ControllerDigital::right);
@@ -101,16 +99,12 @@ void opcontrol() {
 			rightSide.moveVoltage((rightYAxis) * 12000.0);
 		}
 
-		if(intakeUpButton.isPressed()) intake.moveVoltage(12000.0 * 0.8);
-		else if(intakeDownButton.isPressed()) intake.moveVoltage(-12000.0 * 0.8);
-		else intake.moveVoltage(0);
-
-		if(liftUpButton.isPressed()) lift.moveVoltage(12000.0);
-		else if(liftDownButton.isPressed()) lift.moveVoltage(-12000.0);
+		if(liftUpButton.isPressed()) lift.moveVoltage(12000.0 * 0.5);
+		else if(liftDownButton.isPressed()) lift.moveVoltage(-12000.0 * 0.9);
 		else lift.moveVoltage(0);
 
-		if(clawOpenButton.isPressed()) claw.moveVoltage(12000.0);
-		else if(clawCloseButton.isPressed()) claw.moveVoltage(-12000.0);
+		if(clawUpButton.isPressed()) claw.moveVoltage(12000.0 * 0.9);
+		else if(clawDownButton.isPressed()) claw.moveVoltage(-12000.0 * 0.9);
 		else claw.moveVoltage(0);
 
 		if (test1Button.changedToPressed()) test1();
