@@ -66,10 +66,10 @@ void opcontrol() {
 	ControllerButton clawDownButton(ControllerDigital::L2);
 
 	ControllerButton test1Button(ControllerDigital::up);
-	ControllerButton test2Button(ControllerDigital::right);
+	ControllerButton test2Button(ControllerDigital::down);
 	ControllerButton test3Button(ControllerDigital::left);
-	// ControllerButton test4Button(ControllerDigital::Y);
-	ControllerButton balanceButton(ControllerDigital::down);
+	ControllerButton test4Button(ControllerDigital::right);
+	// ControllerButton balanceButton(ControllerDigital::down);
 
 	bool isDrivingStraight = false;
 
@@ -110,8 +110,8 @@ void opcontrol() {
 		if (test1Button.changedToPressed()) test1();
 		else if (test2Button.changedToPressed()) test2();
 		else if (test3Button.changedToPressed()) test3();
-		else if (balanceButton.changedToPressed()) balance({3, 0, 0});
-		// else if (test4Button.changedToPressed()) test4();
+		// else if (balanceButton.changedToPressed()) balance({3, 0, 0});
+		else if (test4Button.changedToPressed()) test4();
 
 		pros::delay(10);
 	}

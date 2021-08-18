@@ -7,53 +7,28 @@ void test1(){
 }
 
 void test2(){
-  driveToPoint(24, 24, forward, 3, false, 70);
-  turnToAngle(90);
-  driveToPoint(0, 0, backward, 10, false, 80);
+  goToPoint(0, 24);
+  goToPoint(24, 24);
+  goToPoint(24, 0);
+  goToPoint(0, 0);
+  turnToAngle(0);
+
+  // driveToPoint(24, 24, forward, 3, false, 70);
+  // turnToAngle(90);
+  // driveToPoint(0, 0, backward, 10, false, 80);
 }
 
 void test3(){
   driveTargetTime = 1;
   driveToPoint(24, 0, forward);
   reset();
-
-  driveToPoint(24, 0, forward, 10, false, 150);
-  reset();
-
-  driveToPoint(24, 0, forward, 10, false, 200);
-  reset();
-
-  driveToPoint(24, 0, forward, 2, true);
-  reset();
-
-  driveToPoint(24, 0, forward, 2, true, 150);
-  reset();
-
-  driveToPoint(24, 0, forward, 2, true, 200);
-  reset();
   driveTargetTime = 500;
 }
 
 void test4(){
-  driveTargetTime = 1;
-  driveToPoint(24, 24, forward);
-  reset();
-
-  driveToPoint(24, 24, forward, 10, false, 150);
-  reset();
-
-  driveToPoint(24, 24, forward, 10, false, 200);
-  reset();
-
-  driveToPoint(24, 24, forward, 2, true);
-  reset();
-
-  driveToPoint(24, 24, forward, 2, true, 150);
-  reset();
-
-  driveToPoint(24, 24, forward, 2, true, 200);
-  reset();
-  driveTargetTime = 500;
+  turnToAngle(90);
+  turnToAngle(-90);
+  turnToAngle(0);
 }
 
 void reset(){
