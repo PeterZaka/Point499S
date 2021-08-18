@@ -1,17 +1,7 @@
 #include "brain.hpp"
 
-static lv_obj_t* autonPage;
-static lv_obj_t* backPage;
-
 static const char* btnm_map[] = {"Test 1", "Test 2", "\n",
                                   "Test 3", "Test 4", ""};
-
-static lv_res_t event_handler(lv_obj_t* obj, const char* txt){
-  hide(autonPage);
-  show(backPage);
-  printf("%s was pressed\n", txt);
-  return LV_RES_OK;
-}
 
 static lv_res_t btn_click_action(lv_obj_t* btn){
   uint8_t id = lv_obj_get_free_num(btn);
@@ -19,9 +9,11 @@ static lv_res_t btn_click_action(lv_obj_t* btn){
     case 0:
       hide(backPage);
       show(autonPage);
+      break;
     case 1:
       hide(autonPage);
       show(backPage);
+      break;
   }
 
   return LV_RES_OK;
@@ -31,17 +23,15 @@ static lv_res_t btn_click_action(lv_obj_t* btn){
 void autonSelectScreenInitialize(){
   autonPage = lv_page_create(lv_scr_act(), NULL);
   lv_obj_set_size(autonPage, lv_obj_get_width(lv_scr_act()), lv_obj_get_height(lv_scr_act()));
-  lv_obj_align(autonPage, NULL, LV_ALIGN_CENTER, 0, 0);
 
   lv_obj_t* forwardBtn = createBtn(autonPage, 0, 0, 100, 100, "Forward", 1);
   lv_btn_set_action(forwardBtn, LV_BTN_ACTION_CLICK, btn_click_action);
 
-  backPage = lv_page_create(autonPage, NULL);
+  backPage = lv_page_create(lv_scr_act(), NULL);
   hide(backPage);
   lv_obj_set_size(backPage, lv_obj_get_width(lv_scr_act()), lv_obj_get_height(lv_scr_act()));
-  lv_obj_align(backPage, NULL, LV_ALIGN_CENTER, 0, 0);
 
-  lv_obj_t* backBtn = createBtn(backPage, 0, 0, 50, 50, "Back", 0);
+  lv_obj_t* backBtn = createBtn(backPage, 0, 0, 100, 100, "Back", 0);
   lv_btn_set_action(backBtn, LV_BTN_ACTION_CLICK, btn_click_action);
 }
 

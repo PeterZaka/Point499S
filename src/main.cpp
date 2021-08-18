@@ -13,8 +13,6 @@ void on_center_button() {
 
 
 void initialize() {
-	claw.setBrakeMode(AbstractMotor::brakeMode::hold);
-
 	autonSelectScreenInitialize();
 }
 
@@ -47,15 +45,15 @@ void opcontrol() {
 		}
 		});
 
-	pros::Task printTask([]()
-		{
-		while(1){
-			printf("\n");
-			printEncoders();
-			printOdom();
-			pros::delay(3000);
-		}
-		});
+	// pros::Task printTask([]()
+	// 	{
+	// 	while(1){
+	// 		printf("\n");
+	// 		printEncoders();
+	// 		printOdom();
+	// 		pros::delay(3000);
+	// 	}
+	// 	});
 
 	// Master controller by default
 	Controller controller;
@@ -91,6 +89,8 @@ void opcontrol() {
 			isDrivingStraight = false;
 		}
 
+		isDrivingStraight = false;
+
 		if(isDrivingStraight){
 			leftSide.moveVoltage((leftYAxis + anglePID.value() / 100.0) * 12000.0);
 			rightSide.moveVoltage((leftYAxis - anglePID.value() / 100.0) * 12000.0);
@@ -100,7 +100,7 @@ void opcontrol() {
 		}
 
 		if(liftUpButton.isPressed()) lift.moveVoltage(12000.0 * 0.5);
-		else if(liftDownButton.isPressed()) lift.moveVoltage(-12000.0 * 0.9);
+		else if(liftDownButton.isPressed()) lift.moveVoltage(-12000.0 * 0.5);
 		else lift.moveVoltage(0);
 
 		if(clawUpButton.isPressed()) claw.moveVoltage(12000.0 * 0.9);

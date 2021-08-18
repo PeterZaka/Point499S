@@ -119,9 +119,14 @@ void turnToAngle(double angle){
 
 void turnToPoint(double x, double y, movement Movement){
   double angle = findRotationTo(xPos, yPos, x, y);
+  printf("\n--------------\n");
+  printf("Current position: (%.2lf, %.2lf)\n", xPos, yPos);
+  printf("Wanted position: (%.2lf, %.2lf)\n", x, y);
+  printf("Wanted angle: %.2lf\n", angle);
   if (Movement == backward) angle += 180;
   if (Movement == best) findBestRotation(angle, Movement);
   turnToAngle(angle);
+  printf("Current angle: %.2lf\n", rot);
 }
 
 void balance(PID balancePID){
