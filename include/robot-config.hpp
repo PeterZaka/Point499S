@@ -9,6 +9,8 @@ extern Motor claw;
 extern Motor leftLift;
 extern Motor rightLift;
 extern MotorGroup lift;
+extern PID rightLiftPID;
+extern PID liftPID;
 
 extern ADIEncoder leftEncoder;
 extern ADIEncoder rightEncoder;

@@ -2,8 +2,10 @@
 
 Motor claw(-11);
 Motor leftLift(-6);
-Motor rightLift(9);
+Motor rightLift(10);
 MotorGroup lift({leftLift, rightLift});
+PID rightLiftPID(0, 0, 0);
+PID liftPID(1, 0, 0);
 
 ADIEncoder leftEncoder('E', 'F');
 ADIEncoder rightEncoder('G', 'H', true);

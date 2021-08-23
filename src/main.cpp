@@ -45,15 +45,15 @@ void opcontrol() {
 		}
 		});
 
-	// pros::Task printTask([]()
-	// 	{
-	// 	while(1){
-	// 		printf("\n");
-	// 		printEncoders();
-	// 		printOdom();
-	// 		pros::delay(3000);
-	// 	}
-	// 	});
+	pros::Task printTask([]()
+		{
+		while(1){
+			printf("\n");
+			printf("Left lift: %.2lf\n", leftLift.getPosition());
+			printf("Right lift: %.2lf\n", rightLift.getPosition());
+			pros::delay(3000);
+		}
+		});
 
 	// Master controller by default
 	Controller controller;
@@ -70,6 +70,7 @@ void opcontrol() {
 	// ControllerButton balanceButton(ControllerDigital::down);
 
 	bool isDrivingStraight = false;
+	bool isLiftStopped = false;
 
 	while (true) {
 		double leftYAxis = controller.getAnalog(ControllerAnalog::leftY);
@@ -99,9 +100,28 @@ void opcontrol() {
 			rightSide.moveVoltage((rightYAxis) * 12000.0);
 		}
 
-		if(liftUpButton.isPressed()) lift.moveVoltage(12000.0 * 0.5);
-		else if(liftDownButton.isPressed()) lift.moveVoltage(-12000.0 * 0.5);
-		else lift.moveVoltage(0);
+		if(liftUpButton.isPressed()){
+			lift.moveVoltage(12000.0 * 0.8);
+			isLiftStopped = false;
+		}
+		else if(liftDownButton.isPressed()){
+			lift.moveVoltage(-12000.0 * 0.8);
+			isLiftStopped = false;
+		}
+		else {
+			// if(isLiftStopped == false){
+			// 	isLiftStopped = true;
+			// 	liftPID.setTarget(lift.getPosition());
+			// } else {
+			// 	liftPID.update(lift.getPosition());
+			// }
+			// lift.moveVoltage(120.0 * liftPID.value());
+			lift.moveVoltage(0.0);
+		}
+		// rightLiftPID.setTarget(leftLift.getPosition(), false);
+		// rightLiftPID.update(rightLift.getPosition());
+		// if (abs(rightLiftPID.error) > 50) rightLift.moveVoltage(120.0 * rightLiftPID.value());
+		// else rightLift.moveVoltage(120.0 * rightLiftPID.value() * 0.1);
 
 		if(clawUpButton.isPressed()) claw.moveVoltage(12000.0 * 0.9);
 		else if(clawDownButton.isPressed()) claw.moveVoltage(-12000.0 * 0.9);
