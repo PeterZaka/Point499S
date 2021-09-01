@@ -2,7 +2,7 @@
 
 void driveTest(){
   driveForward(48);
-  driveForward(48);
+  driveForward(-48);
 }
 
 void turnTest(){

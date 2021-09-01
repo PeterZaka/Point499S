@@ -15,8 +15,8 @@ void on_center_button() {
 void initialize() {
 	autonSelectScreenInitialize();
 
-	clawForward.setBrakeMode(AbstractMotor::brakeMode::hold);
-	clawBackward.setBrakeMode(AbstractMotor::brakeMode::hold);
+	clawFront.setBrakeMode(AbstractMotor::brakeMode::hold);
+	clawBack.setBrakeMode(AbstractMotor::brakeMode::hold);
 }
 
 
@@ -62,10 +62,10 @@ void opcontrol() {
 
 	ControllerButton liftUpButton(ControllerDigital::R1);
 	ControllerButton liftDownButton(ControllerDigital::R2);
-	ControllerButton clawForwardUpButton(ControllerDigital::L1);
-	ControllerButton clawForwardDownButton(ControllerDigital::L2);
-	ControllerButton clawBackwardUpButton(ControllerDigital::X);
-	ControllerButton clawBackwardDownButton(ControllerDigital::B);
+	ControllerButton clawFrontUpButton(ControllerDigital::L1);
+	ControllerButton clawFrontDownButton(ControllerDigital::L2);
+	ControllerButton clawBackUpButton(ControllerDigital::X);
+	ControllerButton clawBackDownButton(ControllerDigital::B);
 
 	bool isDrivingStraight = false;
 	bool isLiftStopped = false;
@@ -110,13 +110,36 @@ void opcontrol() {
 			lift.moveVoltage(0.0);
 		}
 
-		if(clawForwardUpButton.isPressed()) clawForward.moveVoltage(12000.0 * 0.9);
-		else if(clawForwardDownButton.isPressed()) clawForward.moveVoltage(-12000.0 * 0.9);
-		else clawForward.moveVoltage(0);
+		if(clawFrontUpButton.isPressed()) clawFront.moveVoltage(12000.0 * 0.9);
+		else if(clawFrontDownButton.isPressed()) clawFront.moveVoltage(-12000.0 * 0.9);
+		else clawFront.moveVoltage(0);
 
-		if(clawBackwardUpButton.isPressed()) clawBackward.moveVoltage(12000.0 * 0.9);
-		else if(clawBackwardDownButton.isPressed()) clawBackward.moveVoltage(-12000.0 * 0.9);
-		else clawBackward.moveVoltage(0);
+		if(clawBackUpButton.isPressed()) clawBack.moveVoltage(12000.0 * 0.9);
+		else if(clawBackDownButton.isPressed()) clawBack.moveVoltage(-12000.0 * 0.9);
+		else clawBack.moveVoltage(0);
+
+		switch (Test){
+			case drive:
+				pros::delay(3000);
+				driveTest();
+				break;
+			case turn:
+				pros::delay(3000);
+				turnTest();
+				break;
+			case diagonal:
+				pros::delay(3000);
+				diagonalTest();
+				break;
+			case curve:
+				pros::delay(3000);
+				curveTest();
+				break;
+			default:
+				break;
+		}
+
+		if (Test != none) Test = none;
 
 		pros::delay(10);
 	}

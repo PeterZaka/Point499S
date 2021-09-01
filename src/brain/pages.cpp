@@ -3,7 +3,7 @@
 lv_obj_t* auton_page;
 lv_obj_t* test_page;
 
-static std::function<void()> func;
+testSelection Test = none;
 
 static void countdown(){
   lv_obj_t* countdown_label =  lv_label_create(lv_scr_act(), NULL);
@@ -15,24 +15,29 @@ static void countdown(){
   lv_label_set_text(countdown_label, "1");
   pros::delay(1000);
   lv_obj_del(countdown_label);
-  func();
 }
 
 lv_res_t btn_click_action(lv_obj_t* btn){
   uint8_t id = lv_obj_get_free_num(btn);
   std::cout << "Pressed: " << (int)id << std::endl;
   if (id == 0) {
-      hide(test_page);
-      show(auton_page);
+    hide(test_page);
+    show(auton_page);
   } else if (id == 1) {
-      hide(auton_page);
-      show(test_page);
+    hide(auton_page);
+    show(test_page);
   } else if (id == 2) {
-      func = driveTest;
-      pros::Task countdown_task(countdown);
+    pros::Task countdown_task(countdown);
+    Test = drive;
   } else if (id == 3) {
-      func = turnTest;
-      pros::Task countdown_task(countdown);
+    pros::Task countdown_task(countdown);
+    Test = turn;
+  } else if (id == 4) {
+    pros::Task countdown_task(countdown);
+    Test = diagonal;
+  } else if (id == 5) {
+    pros::Task countdown_task(countdown);
+    Test = curve;
   }
   return LV_RES_OK;
 }

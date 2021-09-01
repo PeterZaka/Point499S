@@ -9,6 +9,16 @@
 extern lv_obj_t* auton_page;
 extern lv_obj_t* test_page;
 
+enum testSelection{
+  none,
+  drive,
+  turn,
+  diagonal,
+  curve
+};
+
+extern testSelection Test;
+
 lv_res_t btn_click_action(lv_obj_t* btn);
 
 void init_auton_page();
