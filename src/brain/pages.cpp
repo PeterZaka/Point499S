@@ -1,19 +1,38 @@
 #include "pages.hpp"
 
 lv_obj_t* auton_page;
-lv_obj_t* back_page;
+lv_obj_t* test_page;
+
+static std::function<void()> func;
+
+static void countdown(){
+  lv_obj_t* countdown_label =  lv_label_create(lv_scr_act(), NULL);
+  lv_obj_align(countdown_label, NULL, LV_ALIGN_CENTER, 0, 0);
+  lv_label_set_text(countdown_label, "3");
+  pros::delay(1000);
+  lv_label_set_text(countdown_label, "2");
+  pros::delay(1000);
+  lv_label_set_text(countdown_label, "1");
+  pros::delay(1000);
+  lv_obj_del(countdown_label);
+  func();
+}
 
 lv_res_t btn_click_action(lv_obj_t* btn){
   uint8_t id = lv_obj_get_free_num(btn);
-  switch (id){
-    case 0:
-      hide(back_page);
+  std::cout << "Pressed: " << (int)id << std::endl;
+  if (id == 0) {
+      hide(test_page);
       show(auton_page);
-      break;
-    case 1:
+  } else if (id == 1) {
       hide(auton_page);
-      show(back_page);
-      break;
+      show(test_page);
+  } else if (id == 2) {
+      func = driveTest;
+      pros::Task countdown_task(countdown);
+  } else if (id == 3) {
+      func = turnTest;
+      pros::Task countdown_task(countdown);
   }
   return LV_RES_OK;
 }
@@ -26,14 +45,28 @@ void init_auton_page(){
   lv_btn_set_action(forwardBtn, LV_BTN_ACTION_CLICK, btn_click_action);
 }
 
-void init_back_page(){
-  back_page = lv_page_create(lv_scr_act(), NULL);
-  hide(back_page);
-  lv_obj_set_size(back_page, lv_obj_get_width(lv_scr_act()), lv_obj_get_height(lv_scr_act()));
+// width: 450
+// height: 210
 
-  lv_obj_t* backBtn = createBtn(back_page, btn_style_mustang, 0, 0, 100, 100, "Back", 0);
-  lv_btn_set_action(backBtn, LV_BTN_ACTION_CLICK, btn_click_action);
+void init_test_page(){
+  test_page = lv_page_create(lv_scr_act(), NULL);
+  hide(test_page);
+  lv_obj_set_size(test_page, lv_obj_get_width(lv_scr_act()), lv_obj_get_height(lv_scr_act()));
 
-  lv_obj_t* midBtn = createBtn(back_page, btn_style_mustang, (450-250)/2, 0, 250, 100, "Mid", 3);
-  lv_obj_t* toprightoffBtn = createBtn(back_page, btn_style_mustang, 450-100, 0, 100, 100, "Top Right\nthat is offset", 5);
+  lv_obj_t* homeBtn = createBtn(test_page, btn_style_mustang, 0, 0, 50, 50, "Home", 0);
+  lv_btn_set_action(homeBtn, LV_BTN_ACTION_CLICK, btn_click_action);
+
+  lv_obj_t* driveTestBtn = createBtn(test_page, btn_style_mustang, 60, 0, 190, 100, "Drive Test", 2);
+  lv_btn_set_action(driveTestBtn, LV_BTN_ACTION_CLICK, btn_click_action);
+
+  lv_obj_t* turnTestBtn = createBtn(test_page, btn_style_mustang, 260, 0, 190, 100, "Turn Test", 3);
+  lv_btn_set_action(turnTestBtn, LV_BTN_ACTION_CLICK, btn_click_action);
+
+  lv_obj_t* diagonalTestBtn = createBtn(test_page, btn_style_mustang, 60, 110, 190, 100, "Diagonal Test", 4);
+  lv_btn_set_action(diagonalTestBtn, LV_BTN_ACTION_CLICK, btn_click_action);
+
+  lv_obj_t* curveTestBtn = createBtn(test_page, btn_style_mustang, 260, 110, 190, 100, "Curve Test", 5);
+  lv_btn_set_action(curveTestBtn, LV_BTN_ACTION_CLICK, btn_click_action);
+
+  //lv_obj_t* midBtn = createBtn(back_page, btn_style_red, (450-250)/2, 0, 250, 210, "Mid", 2);
 }

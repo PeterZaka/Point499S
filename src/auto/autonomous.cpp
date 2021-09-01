@@ -1,34 +1,25 @@
 #include "auto/autonomous.hpp"
 
-void test1(){
-  goToPoint(24, 24, best);
-  goToPoint(0, 0, best);
-  turnToAngle(0);
+void driveTest(){
+  driveForward(48);
+  driveForward(48);
 }
 
-void test2(){
-  goToPoint(0, 24);
-  goToPoint(24, 24);
-  goToPoint(24, 0);
-  goToPoint(0, 0);
-  turnToAngle(0);
-
-  // driveToPoint(24, 24, forward, 3, false, 70);
-  // turnToAngle(90);
-  // driveToPoint(0, 0, backward, 10, false, 80);
-}
-
-void test3(){
-  driveTargetTime = 1;
-  driveToPoint(24, 0, forward);
-  reset();
-  driveTargetTime = 500;
-}
-
-void test4(){
+void turnTest(){
   turnToAngle(90);
   turnToAngle(-90);
   turnToAngle(0);
+}
+
+void diagonalTest(){
+  driveToPoint(24, 24);
+  driveToPoint(0, 0);
+  turnToAngle(0);
+}
+
+void curveTest(){
+  driveToPoint(24, 0, forward);
+  reset();
 }
 
 void reset(){

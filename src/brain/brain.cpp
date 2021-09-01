@@ -3,7 +3,7 @@
 void autonSelectScreenInitialize(){
   init_button_styles();
   init_auton_page();
-  init_back_page();
+  init_test_page();
 }
 
 void brainPrint(std::string words){

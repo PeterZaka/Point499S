@@ -2,12 +2,12 @@
 
 #include "auto/autoMovement.hpp"
 
-void test1();
+void driveTest();
 
-void test2();
+void turnTest();
 
-void test3();
+void diagonalTest();
 
-void test4();
+void curveTest();
 
 void reset();

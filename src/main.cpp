@@ -14,6 +14,9 @@ void on_center_button() {
 
 void initialize() {
 	autonSelectScreenInitialize();
+
+	clawForward.setBrakeMode(AbstractMotor::brakeMode::hold);
+	clawBackward.setBrakeMode(AbstractMotor::brakeMode::hold);
 }
 
 
@@ -45,29 +48,24 @@ void opcontrol() {
 		}
 		});
 
-	pros::Task printTask([]()
-		{
-		while(1){
-			printf("\n");
-			printf("Left lift: %.2lf\n", leftLift.getPosition());
-			printf("Right lift: %.2lf\n", rightLift.getPosition());
-			pros::delay(3000);
-		}
-		});
+	// pros::Task printTask([]()
+	// 	{
+	// 	while(1){
+	// 		printf("\n");
+	// 		std::cout << liftPower << std::endl;
+	// 		pros::delay(3000);
+	// 	}
+	// 	});
 
 	// Master controller by default
 	Controller controller;
 
 	ControllerButton liftUpButton(ControllerDigital::R1);
 	ControllerButton liftDownButton(ControllerDigital::R2);
-	ControllerButton clawUpButton(ControllerDigital::L1);
-	ControllerButton clawDownButton(ControllerDigital::L2);
-
-	ControllerButton test1Button(ControllerDigital::up);
-	ControllerButton test2Button(ControllerDigital::down);
-	ControllerButton test3Button(ControllerDigital::left);
-	ControllerButton test4Button(ControllerDigital::right);
-	// ControllerButton balanceButton(ControllerDigital::down);
+	ControllerButton clawForwardUpButton(ControllerDigital::L1);
+	ControllerButton clawForwardDownButton(ControllerDigital::L2);
+	ControllerButton clawBackwardUpButton(ControllerDigital::X);
+	ControllerButton clawBackwardDownButton(ControllerDigital::B);
 
 	bool isDrivingStraight = false;
 	bool isLiftStopped = false;
@@ -101,37 +99,24 @@ void opcontrol() {
 		}
 
 		if(liftUpButton.isPressed()){
-			lift.moveVoltage(12000.0 * 0.8);
+			lift.moveVoltage(12000.0 * liftPower);
 			isLiftStopped = false;
 		}
 		else if(liftDownButton.isPressed()){
-			lift.moveVoltage(-12000.0 * 0.8);
+			lift.moveVoltage(-12000.0 * liftPower);
 			isLiftStopped = false;
 		}
 		else {
-			// if(isLiftStopped == false){
-			// 	isLiftStopped = true;
-			// 	liftPID.setTarget(lift.getPosition());
-			// } else {
-			// 	liftPID.update(lift.getPosition());
-			// }
-			// lift.moveVoltage(120.0 * liftPID.value());
 			lift.moveVoltage(0.0);
 		}
-		// rightLiftPID.setTarget(leftLift.getPosition(), false);
-		// rightLiftPID.update(rightLift.getPosition());
-		// if (abs(rightLiftPID.error) > 50) rightLift.moveVoltage(120.0 * rightLiftPID.value());
-		// else rightLift.moveVoltage(120.0 * rightLiftPID.value() * 0.1);
 
-		if(clawUpButton.isPressed()) claw.moveVoltage(12000.0 * 0.9);
-		else if(clawDownButton.isPressed()) claw.moveVoltage(-12000.0 * 0.9);
-		else claw.moveVoltage(0);
+		if(clawForwardUpButton.isPressed()) clawForward.moveVoltage(12000.0 * 0.9);
+		else if(clawForwardDownButton.isPressed()) clawForward.moveVoltage(-12000.0 * 0.9);
+		else clawForward.moveVoltage(0);
 
-		if (test1Button.changedToPressed()) test1();
-		else if (test2Button.changedToPressed()) test2();
-		else if (test3Button.changedToPressed()) test3();
-		// else if (balanceButton.changedToPressed()) balance({3, 0, 0});
-		else if (test4Button.changedToPressed()) test4();
+		if(clawBackwardUpButton.isPressed()) clawBackward.moveVoltage(12000.0 * 0.9);
+		else if(clawBackwardDownButton.isPressed()) clawBackward.moveVoltage(-12000.0 * 0.9);
+		else clawBackward.moveVoltage(0);
 
 		pros::delay(10);
 	}
