@@ -2,7 +2,7 @@
 
 double wheelDiameter = 2.75;
 double wheelTrack = 4;
-double backDistance = 5.75;
+double backDistance = 3;
 
 double xPos = 0;
 double yPos = 0;
@@ -30,7 +30,7 @@ void calculateOdom(){
   double deltaTheta = rot - prevRot;
   prevRot = rot;
 
-  double localX;
+  double localX = 0;
   double localY;
   if (deltaTheta == 0){
     localX = deltaX;

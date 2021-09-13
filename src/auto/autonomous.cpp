@@ -1,8 +1,8 @@
 #include "auto/autonomous.hpp"
 
 void driveTest(){
-  driveForward(48);
-  driveForward(-48);
+  goToPoint(0, 48, best);
+  goToPoint(0, 0, best);
 }
 
 void turnTest(){

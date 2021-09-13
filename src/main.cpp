@@ -51,30 +51,67 @@ void opcontrol() {
 	// pros::Task printTask([]()
 	// 	{
 	// 	while(1){
-	// 		printf("\n");
-	// 		std::cout << liftPower << std::endl;
-	// 		pros::delay(3000);
+	// 		if (isDebugging) {
+	// 			printf("\n");
+	// 			std::cout << "x: " << xPos << std::endl;
+	// 			std::cout << "y: " << yPos << std::endl;
+	// 			std::cout << "rot: " << rot << std::endl;
+	// 		}
+	// 		pros::delay(5000 * 1);
 	// 	}
 	// 	});
 
-	// Master controller by default
-	Controller controller;
+	pros::Task debugTask([]()
+	{
+		ControllerButton printPosButton(ControllerDigital::A);
+		ControllerButton resetPosButton(ControllerDigital::Y);
+		while(1){
+			if (resetPosButton.changedToPressed()) {
+				isDebugging = true;
+				xPos = 0;
+				yPos = 0;
+				iSensor.tare();
+			}
+			if (isDebugging){
+				update_debug_page();
+				if (printPosButton.changedToPressed()){
+					printf("Pos: (%.2lf, %.2lf, %.2lf)\n", xPos, yPos, rot);
+					printf("Encoder: (%.2lf, %.2lf, %.2lf)\n\n", leftEncoder.get(), backEncoder.get(), rightEncoder.get());
+				}
+			}
+			pros::delay(50);
+		}
+	});
 
-	ControllerButton liftUpButton(ControllerDigital::R1);
-	ControllerButton liftDownButton(ControllerDigital::R2);
-	ControllerButton clawFrontUpButton(ControllerDigital::L1);
-	ControllerButton clawFrontDownButton(ControllerDigital::L2);
-	ControllerButton clawBackUpButton(ControllerDigital::X);
-	ControllerButton clawBackDownButton(ControllerDigital::B);
+	// Master controller by default
+	Controller controller(ControllerId::master);
+	Controller controllerPartner(ControllerId::partner);
+
+	ControllerButton liftUpButton(ControllerId::master, ControllerDigital::R1);
+	ControllerButton liftDownButton(ControllerId::master, ControllerDigital::R2);
+	ControllerButton clawFrontUpButton(ControllerId::partner, ControllerDigital::R1);
+	ControllerButton clawFrontDownButton(ControllerId::partner, ControllerDigital::R2);
+	ControllerButton clawBackUpButton(ControllerId::partner, ControllerDigital::L1);
+	ControllerButton clawBackDownButton(ControllerId::partner, ControllerDigital::L2);
 
 	bool isDrivingStraight = false;
 	bool isLiftStopped = false;
+	bool isTank = true;
 
 	while (true) {
 		double leftYAxis = controller.getAnalog(ControllerAnalog::leftY);
 		double rightYAxis = controller.getAnalog(ControllerAnalog::rightY);
+		double rightXAxis = controller.getAnalog(ControllerAnalog::rightX);
+		if (isTank) {
+			if(abs(leftYAxis) < 0.1) leftYAxis = -controllerPartner.getAnalog(ControllerAnalog::rightY);
+			if(abs(rightYAxis) < 0.1) rightYAxis = -controllerPartner.getAnalog(ControllerAnalog::leftY);
+		} else {
+			if(abs(leftYAxis) < 0.1) leftYAxis = -controllerPartner.getAnalog(ControllerAnalog::leftY);
+			if(abs(rightXAxis) < 0.1) rightXAxis = -controllerPartner.getAnalog(ControllerAnalog::rightX);
+		}
 		if(abs(leftYAxis) < 0.1) leftYAxis = 0;
 		if(abs(rightYAxis) < 0.1) rightYAxis = 0;
+		if(abs(rightXAxis) < 0.1) rightXAxis = 0;
 
 		if(abs(leftYAxis) > 0 && abs(rightYAxis) > 0 && // if moving jotsticks
 		 (abs(leftYAxis - rightYAxis) < 0.1)){ // if joysticks in simillar range
@@ -91,11 +128,21 @@ void opcontrol() {
 		isDrivingStraight = false;
 
 		if(isDrivingStraight){
-			leftSide.moveVoltage((leftYAxis + anglePID.value() / 100.0) * 12000.0);
-			rightSide.moveVoltage((leftYAxis - anglePID.value() / 100.0) * 12000.0);
+			if (isTank) {
+				leftSide.moveVoltage((leftYAxis + anglePID.value() / 100.0) * 12000.0);
+				rightSide.moveVoltage((rightYAxis - anglePID.value() / 100.0) * 12000.0);
+			} else {
+				leftSide.moveVoltage((leftYAxis + rightXAxis + anglePID.value() / 100.0) * 12000.0);
+				rightSide.moveVoltage((leftYAxis - rightXAxis - anglePID.value() / 100.0) * 12000.0);
+			}
 		} else {
-			leftSide.moveVoltage((leftYAxis) * 12000.0);
-			rightSide.moveVoltage((rightYAxis) * 12000.0);
+			if (isTank) {
+				leftSide.moveVoltage((leftYAxis) * 12000.0);
+				rightSide.moveVoltage((rightYAxis) * 12000.0);
+			} else {
+				leftSide.moveVoltage((leftYAxis + rightXAxis) * 12000.0);
+				rightSide.moveVoltage((leftYAxis - rightXAxis) * 12000.0);
+			}
 		}
 
 		if(liftUpButton.isPressed()){

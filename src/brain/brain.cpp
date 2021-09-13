@@ -2,8 +2,11 @@
 // https://github.com/lvgl/lv_demos/tree/v5.3/lv_tutorial
 void autonSelectScreenInitialize(){
   init_button_styles();
-  init_auton_page();
+  init_home_page();
   init_test_page();
+  init_debug_page();
+  init_auton_page();
+  init_auton_make_page();
 }
 
 void brainPrint(std::string words){

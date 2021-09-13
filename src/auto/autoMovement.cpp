@@ -1,10 +1,10 @@
 #include "auto/autoMovement.hpp"
 
-int driveTargetTime = 250; // amount of time (in milliseconds) needed within target error for driving
-double driveTargetError = 1; // be within distance (in inches) to be on target
+int driveTargetTime = 500; // amount of time (in milliseconds) needed within target error for driving
+double driveTargetError = 5; // be within distance (in inches) to be on target
 int turnTargetTime = 250; // amount of time (in milliseconds) needed within target error for turning
 double turnTargetError = 1; // be within distance (in degrees) to be on target
-double correctRotationError = 2; // be outside distance (in inches) to change rotation
+double correctRotationError = 5; // be outside distance (in inches) to change rotation
 
 void goToPoint(double x, double y, movement Movement){
   turnToPoint(x, y, Movement);
@@ -17,6 +17,10 @@ void driveForward(double distance, double rotation){
   double startY = yPos;
   drivePID.setTarget(distance);
   anglePID.setTarget(rotation);
+  if (isDebugging){
+    printf("\ndriveForward - Start: (%.2lf, %.2lf, %.2lf)\n", xPos, yPos, rot);
+    printf("Target: %.2lf in, %.2lf rot)\n", distance, rotation);
+  }
 
   bool isBackward = false;
   if (distance < 0) isBackward = true;
@@ -38,6 +42,7 @@ void driveForward(double distance, double rotation){
   }
   leftSide.moveVoltage(0);
   rightSide.moveVoltage(0);
+  if (isDebugging) printf("End: (%.2lf, %.2lf, %.2lf)\n", xPos, yPos, rot);
 }
 
 void driveToPoint(double x, double y, movement Movement, double strength, bool isExponential, double angleClamp){
@@ -45,6 +50,10 @@ void driveToPoint(double x, double y, movement Movement, double strength, bool i
   movement prevBestMovement = best;
   movement bestMovement = best;
   drivePID.reset();
+  if (isDebugging){
+    printf("\ndrivetoPoint - Start: (%.2lf, %.2lf, %.2lf)\n", xPos, yPos, rot);
+    printf("Target: (%.2lf, %.2lf)\n", x, y);
+  }
 
   while (timeOnTarget < driveTargetTime){
     double distance = findDistanceTo(xPos, yPos, x, y);
@@ -95,12 +104,17 @@ void driveToPoint(double x, double y, movement Movement, double strength, bool i
   }
   leftSide.moveVoltage(0);
   rightSide.moveVoltage(0);
+  if (isDebugging) printf("End: (%.2lf, %.2lf, %.2lf)\n", xPos, yPos, rot);
 }
 
 void turnToAngle(double angle){
   int timeOnTarget = 0;
   angle = findShortestRotation(rot, angle);
   turnPID.setTarget(angle);
+  if (isDebugging){
+    printf("\nturnToAngle - Start: %.2lf\n", rot);
+    printf("Target: %.2lf rot\n", angle);
+  }
 
   while (timeOnTarget < turnTargetTime){
     turnPID.update(rot);
@@ -115,18 +129,19 @@ void turnToAngle(double angle){
   }
   leftSide.moveVoltage(0);
   rightSide.moveVoltage(0);
+
+  if (isDebugging) printf("End: %.2lf\n", rot);
 }
 
 void turnToPoint(double x, double y, movement Movement){
   double angle = findRotationTo(xPos, yPos, x, y);
-  printf("\n--------------\n");
-  printf("Current position: (%.2lf, %.2lf)\n", xPos, yPos);
-  printf("Wanted position: (%.2lf, %.2lf)\n", x, y);
-  printf("Wanted angle: %.2lf\n", angle);
+  if (isDebugging){
+    printf("\nturnToPoint - Start: (%.2lf, %.2lf, %.2lf)\n", xPos, yPos, rot);
+    printf("Target: (%.2lf, %.2lf, %.2lf)\n", x, y, angle);
+  }
   if (Movement == backward) angle += 180;
   if (Movement == best) findBestRotation(angle, Movement);
   turnToAngle(angle);
-  printf("Current angle: %.2lf\n", rot);
 }
 
 void balance(PID balancePID){

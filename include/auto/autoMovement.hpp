@@ -7,6 +7,7 @@
 #include "chassis.hpp"
 #include "debug.hpp"
 #include "auto/odometry.hpp"
+#include "brain/pages.hpp"
 
 extern int driveTargetTime; // amount of time (in milliseconds) needed within target error for driving
 extern double driveTargetError; // be within distance (in inches) to be on target
@@ -23,7 +24,7 @@ enum movement{
 void goToPoint(double x, double y, movement Movement=forward);
 
 void driveForward(double distance, double rotation=rot);
-void driveToPoint(double x, double y, movement Movement=best, double strength=10, bool isExponential=false, double angleClamp=100);
+void driveToPoint(double x, double y, movement Movement=best, double strength=3, bool isExponential=false, double angleClamp=50);
 
 void turnToAngle(double angle);
 void turnToPoint(double x, double y, movement Movement=forward);
