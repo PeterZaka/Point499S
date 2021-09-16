@@ -5,10 +5,10 @@
 
 using namespace okapi;
 
-extern Motor clawFront;
-extern Motor clawBack;
-extern Motor leftLift;
-extern Motor rightLift;
+extern MotorGroup clawFront;
+extern MotorGroup clawBack;
+extern MotorGroup leftLift;
+extern MotorGroup rightLift;
 extern MotorGroup lift;
 extern PID rightLiftPID;
 extern PID liftPID;

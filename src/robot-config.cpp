@@ -1,10 +1,10 @@
 #include "robot-config.hpp"
 
-Motor clawFront(-13);
-Motor clawBack(-11);
-Motor leftLift(-6);
-Motor rightLift(9);
-MotorGroup lift({leftLift, rightLift});
+MotorGroup clawFront({-13});
+MotorGroup clawBack({-11});
+MotorGroup leftLift({-6});
+MotorGroup rightLift({9});
+MotorGroup lift({-6, 9});
 PID rightLiftPID(0, 0, 0);
 PID liftPID(1, 0, 0);
 

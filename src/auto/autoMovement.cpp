@@ -1,10 +1,11 @@
 #include "auto/autoMovement.hpp"
 
 int driveTargetTime = 500; // amount of time (in milliseconds) needed within target error for driving
-double driveTargetError = 5; // be within distance (in inches) to be on target
+double driveTargetError = 3; // be within distance (in inches) to be on target
 int turnTargetTime = 250; // amount of time (in milliseconds) needed within target error for turning
 double turnTargetError = 1; // be within distance (in degrees) to be on target
-double correctRotationError = 5; // be outside distance (in inches) to change rotation
+double correctRotationError = 3; // be outside distance (in inches) to change rotation
+double slowDownRotationError = 8;
 
 void goToPoint(double x, double y, movement Movement){
   turnToPoint(x, y, Movement);
@@ -55,6 +56,7 @@ void driveToPoint(double x, double y, movement Movement, double strength, bool i
     printf("Target: (%.2lf, %.2lf)\n", x, y);
   }
 
+  double prevRotation;
   while (timeOnTarget < driveTargetTime){
     double distance = findDistanceTo(xPos, yPos, x, y);
     double rotation = findRotationTo(xPos, yPos, x, y);
@@ -87,6 +89,7 @@ void driveToPoint(double x, double y, movement Movement, double strength, bool i
         else strengthValue *= strengthValue;
       }
       strengthValue = std::clamp(strengthValue, -angleClamp, angleClamp);
+      if (abs(distance) <= slowDownRotationError) strengthValue *= 0.1;
 
       leftSide.moveVoltage( std::clamp( (drivePID.value() + strengthValue) * 120.0, -12000.0, 12000.0) );
       rightSide.moveVoltage( std::clamp( (drivePID.value() - strengthValue) * 120.0, -12000.0, 12000.0) );
@@ -142,6 +145,37 @@ void turnToPoint(double x, double y, movement Movement){
   if (Movement == backward) angle += 180;
   if (Movement == best) findBestRotation(angle, Movement);
   turnToAngle(angle);
+}
+
+void groupMoveTo(MotorGroup group, double pos, PID groupPID, double targetError, double targetTime){
+  std::cout << "start" << std::endl;
+  double timeOnTarget = 0;
+  group.tarePosition();
+  groupPID.setTarget(pos);
+  while (timeOnTarget < targetTime){
+    groupPID.update(group.getPosition());
+    group.moveVoltage(groupPID.value() * 120.0);
+
+    if (abs(groupPID.error) < targetError)
+      timeOnTarget += 20;
+    else
+      timeOnTarget = 0;
+    pros::delay(20);
+  }
+  std::cout << "end" << std::endl;
+  group.moveVoltage(0);
+}
+
+void groupMoveTo(MotorGroup group, double pos, double distanceToStart, PID groupPID, double targetError, double targetTime){
+  double startPosX = xPos;
+  double startPosY = yPos;
+
+  pros::Task startTurn([startPosX, startPosY,
+    group, pos, distanceToStart, groupPID, targetError, targetTime]()
+  {
+    while(findDistanceTo(startPosX, startPosY, xPos, yPos) < distanceToStart) pros::delay(20);
+    groupMoveTo(group, pos, groupPID, targetError, targetTime);
+  });
 }
 
 void balance(PID balancePID){

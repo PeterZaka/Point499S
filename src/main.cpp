@@ -1,5 +1,5 @@
 #include "main.h"
-
+#include "auto/autonomous.hpp"
 
 void on_center_button() {
 	static bool pressed = false;
@@ -27,7 +27,27 @@ void competition_initialize() {}
 
 
 void autonomous() {
+	iSensor.reset();
+	pros::delay(20);
+	while(iSensor.is_calibrating()){
+		printf("calibrating...\n");
+		pros::delay(200);
+	}
+	printf("done calibrating\n");
 
+	pros::Task calculateOdomTask([]()
+		{
+		while(1){
+			calculateOdom();
+			pros::delay(10);
+		}
+		});
+
+	groupMoveTo(clawFront, -1400, 24);
+	driveToPoint(0, 63, best);
+	turnToAngle(-15);
+	groupMoveTo(clawFront, 1200);
+	driveToPoint(0, 0, best);
 }
 
 void opcontrol() {
@@ -113,8 +133,10 @@ void opcontrol() {
 		if(abs(rightYAxis) < 0.1) rightYAxis = 0;
 		if(abs(rightXAxis) < 0.1) rightXAxis = 0;
 
-		if(abs(leftYAxis) > 0 && abs(rightYAxis) > 0 && // if moving jotsticks
-		 (abs(leftYAxis - rightYAxis) < 0.1)){ // if joysticks in simillar range
+		bool isStraightArcade = (!isTank && abs(rightXAxis) < 0.1 && abs(leftYAxis) > 0);
+		bool isStraightTank = (abs(leftYAxis) > 0 && abs(rightYAxis) > 0 && // if moving jotsticks
+		 (abs(leftYAxis - rightYAxis) < 0.1));
+		if(isStraightArcade || isStraightTank){ // if joysticks in simillar range
 			if(isDrivingStraight == false){
 				isDrivingStraight = true;
 				anglePID.setTarget(rot);
@@ -125,7 +147,7 @@ void opcontrol() {
 			isDrivingStraight = false;
 		}
 
-		isDrivingStraight = false;
+		//isDrivingStraight = false;
 
 		if(isDrivingStraight){
 			if (isTank) {

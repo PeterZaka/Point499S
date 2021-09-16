@@ -1,8 +1,9 @@
 #include "auto/autonomous.hpp"
 
 void driveTest(){
-  goToPoint(0, 48, best);
-  goToPoint(0, 0, best);
+  groupMoveTo(clawFront, -1500);
+  // goToPoint(0, 48, best);
+  // goToPoint(0, 0, best);
 }
 
 void turnTest(){
@@ -18,7 +19,7 @@ void diagonalTest(){
 }
 
 void curveTest(){
-  driveToPoint(24, 0, forward);
+  driveToPoint(24, 0, forward, 10);
   reset();
 }
 
