@@ -11,6 +11,7 @@ PID liftPID(1, 0, 0);
 ADIEncoder leftEncoder('G', 'H');
 ADIEncoder rightEncoder('E', 'F', true);
 ADIEncoder backEncoder('A', 'B');
+Potentiometer clawFrontPot(10);
 
 pros::Imu iSensor(5);
 

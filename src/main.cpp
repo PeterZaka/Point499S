@@ -43,11 +43,7 @@ void autonomous() {
 		}
 		});
 
-	groupMoveTo(clawFront, -1400, 24);
-	driveToPoint(0, 63, best);
-	turnToAngle(-15);
-	groupMoveTo(clawFront, 1200);
-	driveToPoint(0, 0, best);
+		driveTest();
 }
 
 void opcontrol() {

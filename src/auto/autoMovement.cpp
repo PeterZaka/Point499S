@@ -150,7 +150,6 @@ void turnToPoint(double x, double y, movement Movement){
 void groupMoveTo(MotorGroup group, double pos, PID groupPID, double targetError, double targetTime){
   std::cout << "start" << std::endl;
   double timeOnTarget = 0;
-  group.tarePosition();
   groupPID.setTarget(pos);
   while (timeOnTarget < targetTime){
     groupPID.update(group.getPosition());

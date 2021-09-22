@@ -16,6 +16,7 @@ extern PID liftPID;
 extern ADIEncoder leftEncoder;
 extern ADIEncoder rightEncoder;
 extern ADIEncoder backEncoder;
+extern Potentiometer clawFrontPot;
 
 extern pros::Imu iSensor;
 
