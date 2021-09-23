@@ -30,7 +30,7 @@ void calculateOdom(){
   double deltaTheta = rot - prevRot;
   prevRot = rot;
 
-  double localX = 0;
+  double localX;
   double localY;
   if (deltaTheta == 0){
     localX = deltaX;

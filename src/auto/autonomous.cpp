@@ -1,29 +1,38 @@
 #include "auto/autonomous.hpp"
 
 void driveTest(){
+  // Get First Tower
   groupMoveTo(clawFront, -1300, 24);
-	driveToPoint(0, 58, forward);
+	driveToPoint(-1, 56, forward);
 	turnToAngle(-10);
-	groupMoveTo(clawFront, 0);
-  // Got First Tower
-  // driveToPoint(17, 48, best);
-  // driveToPoint(17, 10, best);
+	groupMoveTo(clawFront, 0, PID(1, 0, 0), 600, 500);
 
-  groupMoveTo(clawBack, -2000, 0);
-  driveToPoint(0, 22, best);
+  // Part A: Get in position
+  driveToPoint(0, 20.5, best);
+  lift.moveVoltage(-12000.0 * 0.9);
   turnToAngle(-90);
-  lift.moveVoltage(-12000.0);
-  driveForward(-10, -90);
-  turnToAngle(-100);
-  groupMoveTo(lift, 300);
-  // Got Second Tower
+  // Part B: Drive and get tower in grip
+  driveForward(-9, -90);
+  groupMoveTo(clawBack, -2000);
+  turnTargetError = 20;
+  turnToAngle(-120);
+  turnTargetError = 2;
+  // Part C: Secure tower in grip
+  groupMoveTo(clawBack, -2200, 0);
+  driveForward(-1, -120);
+  groupMoveTo(lift, 700, 0, PID(15, 0, 0), 50, 10000);
+  pros::delay(500);
 
+  // Drive to end position
   driveToPoint(-26, 24, best);
 }
 
 void turnTest(){
   turnToAngle(90);
   turnToAngle(-90);
+  turnToAngle(0);
+  turnToAngle(-10);
+  turnToAngle(-30);
   turnToAngle(0);
 }
 

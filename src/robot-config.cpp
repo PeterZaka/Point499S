@@ -15,8 +15,6 @@ Potentiometer clawFrontPot(10);
 
 pros::Imu iSensor(5);
 
-// 12 0 5
 PID drivePID(8, 0, 0);
 PID anglePID(2, 0, 0);
-// 2, 0.1, 0, 10, 0.5
-PID turnPID(1.6, 0.2, 0, 10, 0.5);
+PID turnPID(1.7, 0.4, 0, 10, 2);

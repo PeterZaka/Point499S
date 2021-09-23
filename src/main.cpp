@@ -43,6 +43,15 @@ void autonomous() {
 		}
 		});
 
+		pros::Task debugTask([]()
+		{
+			while(1){
+				printf("Pos: (%.2lf, %.2lf, %.2lf)\n", xPos, yPos, rot);
+				printf("Encoder: (%.2lf, %.2lf, %.2lf)\n\n", leftEncoder.get(), backEncoder.get(), rightEncoder.get());
+				pros::delay(1000);
+			}
+		});
+
 		driveTest();
 }
 
@@ -105,6 +114,7 @@ void opcontrol() {
 
 	ControllerButton liftUpButton(ControllerId::master, ControllerDigital::R1);
 	ControllerButton liftDownButton(ControllerId::master, ControllerDigital::R2);
+	
 	ControllerButton clawFrontUpButton(ControllerId::partner, ControllerDigital::R1);
 	ControllerButton clawFrontDownButton(ControllerId::partner, ControllerDigital::R2);
 	ControllerButton clawBackUpButton(ControllerId::partner, ControllerDigital::L1);
