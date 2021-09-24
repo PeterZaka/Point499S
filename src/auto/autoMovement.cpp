@@ -1,6 +1,6 @@
 #include "auto/autoMovement.hpp"
 
-int driveTargetTime = 500; // amount of time (in milliseconds) needed within target error for driving
+int driveTargetTime = 250; // amount of time (in milliseconds) needed within target error for driving
 double driveTargetError = 3; // be within distance (in inches) to be on target
 int turnTargetTime = 250; // amount of time (in milliseconds) needed within target error for turning
 double turnTargetError = 2; // be within distance (in degrees) to be on target
@@ -148,7 +148,6 @@ void turnToPoint(double x, double y, movement Movement){
 }
 
 void groupMoveTo(MotorGroup group, double pos, PID groupPID, double targetError, double targetTime){
-  std::cout << "start" << std::endl;
   double timeOnTarget = 0;
   groupPID.setTarget(pos);
   while (timeOnTarget < targetTime){
@@ -161,16 +160,14 @@ void groupMoveTo(MotorGroup group, double pos, PID groupPID, double targetError,
       timeOnTarget = 0;
     pros::delay(20);
   }
-  std::cout << "end" << std::endl;
   group.moveVoltage(0);
 }
 
 void groupMoveTo(MotorGroup group, double pos, double distanceToStart, PID groupPID, double targetError, double targetTime){
   double startPosX = xPos;
   double startPosY = yPos;
-
-  pros::Task startTurn([startPosX, startPosY,
-    group, pos, distanceToStart, groupPID, targetError, targetTime]()
+  // startPosX, startPosY, group, pos, distanceToStart, groupPID, targetError, targetTime
+  pros::Task startTurn([=]()
   {
     while(findDistanceTo(startPosX, startPosY, xPos, yPos) < distanceToStart) pros::delay(20);
     groupMoveTo(group, pos, groupPID, targetError, targetTime);
