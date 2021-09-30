@@ -1,6 +1,7 @@
 #pragma once
 
-#include <functional>
+#include "brainClasses/Page.hpp"
+#include "brainClasses/Button.hpp"
 #include "pros/apix.h"
 #include "brain/lvglHelper.hpp"
 #include "brain/config.hpp"

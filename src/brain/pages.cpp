@@ -70,15 +70,25 @@ lv_res_t btn_click_action(lv_obj_t* btn){
 void init_home_page(){
   home_page = lv_page_create(lv_scr_act(), NULL);
   lv_obj_set_size(home_page, lv_obj_get_width(lv_scr_act()), lv_obj_get_height(lv_scr_act()));
+  hide(home_page);
+  //
+  // lv_obj_t* testBtn = createBtn(home_page, btn_style_mustang, 0, 0, 100, 100, "Test", 1);
+  // lv_btn_set_action(testBtn, LV_BTN_ACTION_CLICK, btn_click_action);
+  //
+  // lv_obj_t* debugBtn = createBtn(home_page, btn_style_mustang, 110, 0, 100, 100, "Debug", 6);
+  // lv_btn_set_action(debugBtn, LV_BTN_ACTION_CLICK, btn_click_action);
+  //
+  // lv_obj_t* autonBtn = createBtn(home_page, btn_style_mustang, 220, 0, 100, 100, "Auton", 8);
+  // lv_btn_set_action(autonBtn, LV_BTN_ACTION_CLICK, btn_click_action);
 
-  lv_obj_t* testBtn = createBtn(home_page, btn_style_mustang, 0, 0, 100, 100, "Test", 1);
-  lv_btn_set_action(testBtn, LV_BTN_ACTION_CLICK, btn_click_action);
+  Page HomePage = Page();
+  Page bPage = Page();
 
-  lv_obj_t* debugBtn = createBtn(home_page, btn_style_mustang, 110, 0, 100, 100, "Debug", 6);
-  lv_btn_set_action(debugBtn, LV_BTN_ACTION_CLICK, btn_click_action);
+  Button aaa(HomePage.lv_page, 0, 100, 100, 100, "aaa");
+  aaa.setFunction(bPage.show);
 
-  lv_obj_t* autonBtn = createBtn(home_page, btn_style_mustang, 220, 0, 100, 100, "Auton", 8);
-  lv_btn_set_action(autonBtn, LV_BTN_ACTION_CLICK, btn_click_action);
+  Button bbb(bPage.lv_page, 100, 100, 100, 100, "bbb");
+  bbb.setFunction(HomePage.show);
 }
 
 // width: 450

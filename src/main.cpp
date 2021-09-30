@@ -114,7 +114,7 @@ void opcontrol() {
 
 	ControllerButton liftUpButton(ControllerId::master, ControllerDigital::R1);
 	ControllerButton liftDownButton(ControllerId::master, ControllerDigital::R2);
-	
+
 	ControllerButton clawFrontUpButton(ControllerId::partner, ControllerDigital::R1);
 	ControllerButton clawFrontDownButton(ControllerId::partner, ControllerDigital::R2);
 	ControllerButton clawBackUpButton(ControllerId::partner, ControllerDigital::L1);

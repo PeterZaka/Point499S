@@ -5,31 +5,31 @@ void driveTest(){
   groupMoveTo(clawFront, -1300, 0);
   // Drive to tower
   int prevDriveTargetTime = driveTargetTime; driveTargetTime = 1;
-	driveToPoint(-1, 56, forward);
-  driveTargetTime = prevDriveTargetTime;
+	driveToPoint(-1, 55.5, forward);
+	driveTargetTime = prevDriveTargetTime;
   // Turn into tower
-  leftSide.moveVoltage(12000.0); rightSide.moveVoltage(-12000.0);
-  while(rot > -5) pros::delay(20);
-  leftSide.moveVoltage(0); rightSide.moveVoltage(0);
-  // Secure tower
+  leftSide.moveVoltage(-12000.0);
+  rightSide.moveVoltage(12000.0);
+  while (rot > -7) pros::delay(20);
+  leftSide.moveVoltage(0);
+  rightSide.moveVoltage(0);
+  pros::delay(250);
 	groupMoveTo(clawFront, 0, 0, PID(1, 0, 0), 200, 100);
-  // pros::delay(500);
+  pros::delay(250);
 
-  // Get Second Tower
   // Part A: Get in position
-  driveToPoint(0, 20.5, best);
+  driveToPoint(0, 20, best);
   lift.moveVoltage(-12000.0 * 0.9);
   turnToAngle(-90);
   // Part B: Drive and get tower in grip
   driveForward(-9, -90);
   groupMoveTo(clawBack, -2000);
-  turnTargetError = 20;
+  turnTargetError = 30;
   turnToAngle(-120);
   turnTargetError = 2;
   // Part C: Secure tower in grip
   groupMoveTo(clawBack, -2200, 0);
-  driveForward(-1); // (-1, -120)
-  // Keep lift up
+  driveForward(-1);
   groupMoveTo(lift, 700, 0, PID(15, 0, 0), 50, 10000);
   pros::delay(500);
 

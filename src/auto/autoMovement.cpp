@@ -166,7 +166,7 @@ void groupMoveTo(MotorGroup group, double pos, PID groupPID, double targetError,
 void groupMoveTo(MotorGroup group, double pos, double distanceToStart, PID groupPID, double targetError, double targetTime){
   double startPosX = xPos;
   double startPosY = yPos;
-  // startPosX, startPosY, group, pos, distanceToStart, groupPID, targetError, targetTime
+
   pros::Task startTurn([=]()
   {
     while(findDistanceTo(startPosX, startPosY, xPos, yPos) < distanceToStart) pros::delay(20);
