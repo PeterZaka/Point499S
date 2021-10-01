@@ -6,7 +6,7 @@ Page::Page(){
   lv_page = lv_page_create(lv_scr_act(), NULL);
   lv_obj_set_size(lv_page, lv_obj_get_width(lv_scr_act()), lv_obj_get_height(lv_scr_act()));
   Page::allPages.push_back(lv_page);
-  std::function<void()> show = [this](){showPage();};
+  show = [this](){showPage();};
 }
 
 void Page::showPage(){
