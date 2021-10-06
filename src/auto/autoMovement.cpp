@@ -136,6 +136,20 @@ void turnToAngle(double angle){
   if (isDebugging) printf("End: %.2lf\n", rot);
 }
 
+void turnToAngle(double angle, double power){
+  if (rot > angle) {
+    leftSide.moveVoltage(-12000.0 * power);
+    rightSide.moveVoltage(12000.0 * power);
+    while (rot > angle) pros::delay(20);
+  } else {
+    leftSide.moveVoltage(12000.0 * power);
+    rightSide.moveVoltage(-12000.0 * power);
+    while (rot < angle) pros::delay(20);
+  }
+  leftSide.moveVoltage(0);
+  rightSide.moveVoltage(0);
+}
+
 void turnToPoint(double x, double y, movement Movement){
   double angle = findRotationTo(xPos, yPos, x, y);
   if (isDebugging){

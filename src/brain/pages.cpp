@@ -89,6 +89,7 @@ void init_home_page(){
 
   Button bbb(bPage.lv_page, 100, 100, 100, 100, "bbb");
   bbb.setFunction(HomePage.show);
+  lv_obj_set_hidden(bPage.lv_page, true);
 }
 
 // width: 450

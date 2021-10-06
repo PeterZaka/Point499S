@@ -1,6 +1,6 @@
 #include "auto/autonomous.hpp"
 
-void driveTest(){
+void rightAuton(){
   // Get First Tower
   groupMoveTo(clawFront, -1300, 0);
   // Drive to tower
@@ -35,6 +35,35 @@ void driveTest(){
 
   // Drive to end position
   driveToPoint(-26, 24, best);
+}
+
+void leftAuton(){
+  // Get First Tower
+  groupMoveTo(clawFront, -1300, 0);
+  // Drive to tower
+  int prevDriveTargetTime = driveTargetTime; driveTargetTime = 1;
+	driveToPoint(8, 55.5, forward);
+	driveTargetTime = prevDriveTargetTime;
+  // Turn into tower
+  turnToAngle(-1, 0.5);
+  groupMoveTo(clawFront, 0, PID(1, 0, 0), 200, 100);
+
+  // Take down middle tower
+  turnToAngle(-90);
+  groupMoveTo(clawBack, -2000, 0);
+  driveToPoint(38, 62, backward);
+  turnToAngle(-70, 1);
+  groupMoveTo(clawBack, 0, 0, PID(1, 0, 0), 200, 100);
+
+  driveToPoint(-6, 5, backward);
+  turnToAngle(-86);
+  groupMoveTo(clawBack, -3000, 0);
+  driveForward(-7, -86);
+  driveForward(12, -90);
+}
+
+void driveTest(){
+  driveForward(48);
 }
 
 void turnTest(){

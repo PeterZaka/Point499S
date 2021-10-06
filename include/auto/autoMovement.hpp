@@ -28,6 +28,7 @@ void driveForward(double distance, double rotation=rot);
 void driveToPoint(double x, double y, movement Movement=best, double strength=5, bool isExponential=false, double angleClamp=100);
 
 void turnToAngle(double angle);
+void turnToAngle(double angle, double power);
 void turnToPoint(double x, double y, movement Movement=forward);
 
 void groupMoveTo(MotorGroup group, double pos, PID groupPID=PID(1,0,0), double targetError=50, double targetTime=10);

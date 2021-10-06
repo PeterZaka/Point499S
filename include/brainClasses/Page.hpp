@@ -14,9 +14,8 @@ public:
   std::function<void()> show;
 
   lv_obj_t* lv_page;
+  static std::vector<lv_obj_t*> allPages;
 
 private:
-
-  static std::vector<lv_obj_t*> allPages;
 
 };

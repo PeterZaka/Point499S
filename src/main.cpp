@@ -52,7 +52,7 @@ void autonomous() {
 			}
 		});
 
-		driveTest();
+		leftAuton();
 }
 
 void opcontrol() {
@@ -114,6 +114,7 @@ void opcontrol() {
 
 	ControllerButton liftUpButton(ControllerId::master, ControllerDigital::R1);
 	ControllerButton liftDownButton(ControllerId::master, ControllerDigital::R2);
+	ControllerButton testButton(ControllerId::master, ControllerDigital::A);
 
 	ControllerButton clawFrontUpButton(ControllerId::partner, ControllerDigital::R1);
 	ControllerButton clawFrontDownButton(ControllerId::partner, ControllerDigital::R2);
@@ -192,6 +193,8 @@ void opcontrol() {
 		if(clawBackUpButton.isPressed()) clawBack.moveVoltage(12000.0 * 0.9);
 		else if(clawBackDownButton.isPressed()) clawBack.moveVoltage(-12000.0 * 0.9);
 		else clawBack.moveVoltage(0);
+
+		if (testButton.isPressed()) leftAuton();
 
 		switch (Test){
 			case drive:
