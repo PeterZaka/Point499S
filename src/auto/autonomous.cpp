@@ -5,7 +5,7 @@ void rightAuton(){
   groupMoveTo(clawFront, -1300, 0);
   // Drive to tower
   int prevDriveTargetTime = driveTargetTime; driveTargetTime = 1;
-	driveToPoint(-1, 55.5, forward);
+	driveToPoint(-1, 54.5, forward);
 	driveTargetTime = prevDriveTargetTime;
   // Turn into tower
   leftSide.moveVoltage(-12000.0);
@@ -42,24 +42,29 @@ void leftAuton(){
   groupMoveTo(clawFront, -1300, 0);
   // Drive to tower
   int prevDriveTargetTime = driveTargetTime; driveTargetTime = 1;
-	driveToPoint(8, 55.5, forward);
+	driveToPoint(9, 55.5, forward);
 	driveTargetTime = prevDriveTargetTime;
   // Turn into tower
-  turnToAngle(-1, 0.5);
+  turnToAngle(-1, 0.3);
   groupMoveTo(clawFront, 0, PID(1, 0, 0), 200, 100);
+  clawFront.moveVoltage(12000.0);
 
   // Take down middle tower
   turnToAngle(-90);
-  groupMoveTo(clawBack, -2000, 0);
-  driveToPoint(38, 62, backward);
+  groupMoveTo(clawBack, -1450, 0);
+  driveToPoint(40, 61, backward);
   turnToAngle(-70, 1);
+  driveForward(12);
+  turnToPoint(-9, 6, backward);
   groupMoveTo(clawBack, 0, 0, PID(1, 0, 0), 200, 100);
 
-  driveToPoint(-6, 5, backward);
-  turnToAngle(-86);
-  groupMoveTo(clawBack, -3000, 0);
-  driveForward(-7, -86);
-  driveForward(12, -90);
+  driveToPoint(-9, 6, backward);
+  lift.moveVoltage(-12000.0 * 0.9);
+  turnToAngle(-77);
+  driveForward(-7, -77);
+  groupMoveTo(clawBack, -2400, PID(1, 0, 0), 200, 100);
+  groupMoveTo(clawBack, -2200, 2, PID(1, 0, 0), 200, 100);
+  driveForward(14);
 }
 
 void driveTest(){

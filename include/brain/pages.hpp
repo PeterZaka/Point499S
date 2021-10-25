@@ -3,6 +3,7 @@
 #include "brainClasses/Page.hpp"
 #include "brainClasses/Button.hpp"
 #include "pros/apix.h"
+#include "brain/autonSelect.hpp"
 #include "brain/lvglHelper.hpp"
 #include "brain/config.hpp"
 #include "auto/autonomous.hpp"

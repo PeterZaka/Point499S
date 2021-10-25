@@ -81,15 +81,26 @@ void init_home_page(){
   // lv_obj_t* autonBtn = createBtn(home_page, btn_style_mustang, 220, 0, 100, 100, "Auton", 8);
   // lv_btn_set_action(autonBtn, LV_BTN_ACTION_CLICK, btn_click_action);
 
-  Page HomePage = Page();
-  Page bPage = Page();
+  Page* HomePage = new Page();
+  Page* AutonPage = new Page();
 
-  Button aaa(HomePage.lv_page, 0, 100, 100, 100, "aaa");
-  aaa.setFunction(bPage.show);
+  // Home Page
+  Button autonBtn(HomePage, 0, 100, 100, 100, "Auton");
+  autonBtn.setFunction(AutonPage->show);
 
-  Button bbb(bPage.lv_page, 100, 100, 100, 100, "bbb");
-  bbb.setFunction(HomePage.show);
-  lv_obj_set_hidden(bPage.lv_page, true);
+  // Auton Page
+  Button homeBtn(AutonPage, 0, 0, 100, 100, "Home");
+
+  homeBtn.setFunction(HomePage->show);
+  autonLabel = lv_label_create(AutonPage->lv_page, NULL);
+  lv_obj_align(autonLabel, NULL, LV_ALIGN_CENTER, 0, 150);
+  changeToLeftAuton();
+  Button leftBtn(AutonPage, 100, 0, 150, 100, "Left Auton");
+  leftBtn.setFunction(changeToLeftAuton);
+  Button rightBtn(AutonPage, 250, 0, 150, 100, "Right Auton");
+  rightBtn.setFunction(changeToRightAuton);
+
+  HomePage->show();
 }
 
 // width: 450

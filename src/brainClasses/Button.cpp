@@ -8,9 +8,9 @@ static lv_res_t click_function(lv_obj_t* btn){
   return LV_RES_OK;
 }
 
-Button::Button(lv_obj_t* parent, lv_coord_t x, lv_coord_t y, lv_coord_t width, lv_coord_t height,
+Button::Button(Page* page, lv_coord_t x, lv_coord_t y, lv_coord_t width, lv_coord_t height,
        std::string text){
-   lv_btn = lv_btn_create(parent, NULL);
+   lv_btn = lv_btn_create(page->lv_page, NULL);
    lv_obj_set_pos(lv_btn, x, y);
    lv_obj_set_size(lv_btn, width, height);
    lv_obj_set_free_num(lv_btn, Button::next_id++);

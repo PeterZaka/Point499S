@@ -17,6 +17,14 @@ void initialize() {
 
 	clawFront.setBrakeMode(AbstractMotor::brakeMode::hold);
 	clawBack.setBrakeMode(AbstractMotor::brakeMode::hold);
+
+	iSensor.reset();
+	pros::delay(20);
+	while(iSensor.is_calibrating()){
+		printf("calibrating...\n");
+		pros::delay(200);
+	}
+	printf("done calibrating\n");
 }
 
 
@@ -27,13 +35,6 @@ void competition_initialize() {}
 
 
 void autonomous() {
-	iSensor.reset();
-	pros::delay(20);
-	while(iSensor.is_calibrating()){
-		printf("calibrating...\n");
-		pros::delay(200);
-	}
-	printf("done calibrating\n");
 
 	pros::Task calculateOdomTask([]()
 		{
@@ -52,18 +53,12 @@ void autonomous() {
 			}
 		});
 
-		leftAuton();
+		autonFunc();
 }
 
 void opcontrol() {
 
-	iSensor.reset();
-	pros::delay(20);
-	while(iSensor.is_calibrating()){
-		printf("calibrating...\n");
-		pros::delay(200);
-	}
-	printf("done calibrating\n");
+	clawBack.setBrakeMode(AbstractMotor::brakeMode::hold);
 
 	pros::Task calculateOdomTask([]()
 		{
@@ -154,7 +149,7 @@ void opcontrol() {
 			isDrivingStraight = false;
 		}
 
-		//isDrivingStraight = false;
+		isDrivingStraight = false;
 
 		if(isDrivingStraight){
 			if (isTank) {
@@ -194,7 +189,7 @@ void opcontrol() {
 		else if(clawBackDownButton.isPressed()) clawBack.moveVoltage(-12000.0 * 0.9);
 		else clawBack.moveVoltage(0);
 
-		if (testButton.isPressed()) leftAuton();
+		if (testButton.isPressed()) autonFunc();
 
 		switch (Test){
 			case drive:

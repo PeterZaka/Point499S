@@ -1,6 +1,7 @@
 #pragma once
 
 #include "pros/apix.h"
+#include "brainClasses/Page.hpp"
 #include <map>
 #include <functional>
 
@@ -8,7 +9,7 @@ class Button {
 
 public:
 
-  Button(lv_obj_t* parent, lv_coord_t x, lv_coord_t y, lv_coord_t width, lv_coord_t height,
+  Button(Page* page , lv_coord_t x, lv_coord_t y, lv_coord_t width, lv_coord_t height,
          std::string text);
 
   void setFunction(std::function<void()> func);
