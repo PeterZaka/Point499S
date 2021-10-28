@@ -1,7 +1,7 @@
 #include "robot-config.hpp"
 
 MotorGroup clawFront({-13});
-MotorGroup clawBack({-11});
+MotorGroup clawBack({-12});
 MotorGroup leftLift({-6});
 MotorGroup rightLift({10});
 MotorGroup lift({-6, 10});

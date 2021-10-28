@@ -110,6 +110,8 @@ void opcontrol() {
 	ControllerButton liftUpButton(ControllerId::master, ControllerDigital::R1);
 	ControllerButton liftDownButton(ControllerId::master, ControllerDigital::R2);
 	ControllerButton testButton(ControllerId::master, ControllerDigital::A);
+	ControllerButton setForwardButton(ControllerId::master, ControllerDigital::up);
+	ControllerButton setBackwardButton(ControllerId::master, ControllerDigital::down);
 
 	ControllerButton clawFrontUpButton(ControllerId::partner, ControllerDigital::R1);
 	ControllerButton clawFrontDownButton(ControllerId::partner, ControllerDigital::R2);
@@ -119,6 +121,7 @@ void opcontrol() {
 	bool isDrivingStraight = false;
 	bool isLiftStopped = false;
 	bool isTank = true;
+	bool isBackward = false;
 
 	while (true) {
 		double leftYAxis = controller.getAnalog(ControllerAnalog::leftY);
@@ -149,24 +152,53 @@ void opcontrol() {
 			isDrivingStraight = false;
 		}
 
-		isDrivingStraight = false;
+		// isDrivingStraight = false;
+		//
+		// if(isDrivingStraight){
+		// 	if (isTank) {
+		// 		leftSide.moveVoltage((leftYAxis + anglePID.value() / 100.0) * 12000.0);
+		// 		rightSide.moveVoltage((rightYAxis - anglePID.value() / 100.0) * 12000.0);
+		// 	} else {
+		// 		leftSide.moveVoltage((leftYAxis + rightXAxis + anglePID.value() / 100.0) * 12000.0);
+		// 		rightSide.moveVoltage((leftYAxis - rightXAxis - anglePID.value() / 100.0) * 12000.0);
+		// 	}
+		// } else {
+		// 	if (isTank) {
+		// 		leftSide.moveVoltage((leftYAxis) * 12000.0);
+		// 		rightSide.moveVoltage((rightYAxis) * 12000.0);
+		// 	} else {
+		// 		leftSide.moveVoltage((leftYAxis + rightXAxis) * 12000.0);
+		// 		rightSide.moveVoltage((leftYAxis - rightXAxis) * 12000.0);
+		// 	}
+		// }
 
-		if(isDrivingStraight){
-			if (isTank) {
-				leftSide.moveVoltage((leftYAxis + anglePID.value() / 100.0) * 12000.0);
-				rightSide.moveVoltage((rightYAxis - anglePID.value() / 100.0) * 12000.0);
-			} else {
-				leftSide.moveVoltage((leftYAxis + rightXAxis + anglePID.value() / 100.0) * 12000.0);
-				rightSide.moveVoltage((leftYAxis - rightXAxis - anglePID.value() / 100.0) * 12000.0);
+		if (setForwardButton.changedToPressed()) {
+			controller.rumble("..");
+			isBackward = false;
+		}
+		if (setBackwardButton.changedToPressed()) {
+			controller.rumble("-");
+			isBackward = true;
+		}
+		if (isTank) {
+			if (isBackward) {
+				double tempRightYAxis = rightYAxis;
+				rightYAxis = -leftYAxis;
+				leftYAxis = -tempRightYAxis;
 			}
+			leftSide.moveVoltage((leftYAxis) * 12000.0);
+			rightSide.moveVoltage((rightYAxis) * 12000.0);
 		} else {
-			if (isTank) {
-				leftSide.moveVoltage((leftYAxis) * 12000.0);
-				rightSide.moveVoltage((rightYAxis) * 12000.0);
-			} else {
-				leftSide.moveVoltage((leftYAxis + rightXAxis) * 12000.0);
-				rightSide.moveVoltage((leftYAxis - rightXAxis) * 12000.0);
-			}
+			leftSide.moveVoltage((leftYAxis + rightXAxis) * 12000.0);
+			rightSide.moveVoltage((leftYAxis - rightXAxis) * 12000.0);
+		}
+
+		if (isTank) {
+			leftSide.moveVoltage((leftYAxis) * 12000.0);
+			rightSide.moveVoltage((rightYAxis) * 12000.0);
+		} else {
+			leftSide.moveVoltage((leftYAxis + rightXAxis) * 12000.0);
+			rightSide.moveVoltage((leftYAxis - rightXAxis) * 12000.0);
 		}
 
 		if(liftUpButton.isPressed()){

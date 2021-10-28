@@ -1,28 +1,29 @@
 #include "auto/autonomous.hpp"
 
 void rightAuton(){
+
+  yPos = 5;
+
   // Get First Tower
   groupMoveTo(clawFront, -1300, 0);
   // Drive to tower
   int prevDriveTargetTime = driveTargetTime; driveTargetTime = 1;
 	driveToPoint(-1, 54.5, forward);
 	driveTargetTime = prevDriveTargetTime;
+  clawFront.moveVoltage(-12000.0);
+  pros::delay(250);
   // Turn into tower
-  leftSide.moveVoltage(-12000.0);
-  rightSide.moveVoltage(12000.0);
-  while (rot > -7) pros::delay(20);
-  leftSide.moveVoltage(0);
-  rightSide.moveVoltage(0);
-  pros::delay(250);
-	groupMoveTo(clawFront, 0, 0, PID(1, 0, 0), 200, 100);
-  pros::delay(250);
+  turnToAngle(-80, 1);
+  pros::delay(500);
+	groupMoveTo(clawFront, 0, PID(1, 0, 0), 200, 100);
+  clawFront.moveVoltage(12000.0);
 
   // Part A: Get in position
-  driveToPoint(0, 20, best);
+  goToPoint(-2, 23.5, backward);
   lift.moveVoltage(-12000.0 * 0.9);
   turnToAngle(-90);
   // Part B: Drive and get tower in grip
-  driveForward(-9, -90);
+  driveForward(-8, -90);
   groupMoveTo(clawBack, -2000);
   turnTargetError = 30;
   turnToAngle(-120);
@@ -38,14 +39,19 @@ void rightAuton(){
 }
 
 void leftAuton(){
+
+  yPos = 5;
+
   // Get First Tower
   groupMoveTo(clawFront, -1300, 0);
   // Drive to tower
   int prevDriveTargetTime = driveTargetTime; driveTargetTime = 1;
-	driveToPoint(9, 55.5, forward);
+	driveToPoint(9, 55.25, forward);
 	driveTargetTime = prevDriveTargetTime;
+  clawFront.moveVoltage(-12000.0);
   // Turn into tower
-  turnToAngle(-1, 0.3);
+  turnToAngle(-80, 1);
+  pros::delay(500);
   groupMoveTo(clawFront, 0, PID(1, 0, 0), 200, 100);
   clawFront.moveVoltage(12000.0);
 
@@ -55,13 +61,14 @@ void leftAuton(){
   driveToPoint(40, 61, backward);
   turnToAngle(-70, 1);
   driveForward(12);
-  turnToPoint(-9, 6, backward);
+  turnToPoint(-9, 7, backward);
   groupMoveTo(clawBack, 0, 0, PID(1, 0, 0), 200, 100);
 
-  driveToPoint(-9, 6, backward);
+  driveToPoint(-9, 7, backward);
   lift.moveVoltage(-12000.0 * 0.9);
-  turnToAngle(-77);
-  driveForward(-7, -77);
+  //turnToAngle(-77);
+  turnToPoint(14, 6, backward);
+  driveForward(-7);
   groupMoveTo(clawBack, -2400, PID(1, 0, 0), 200, 100);
   groupMoveTo(clawBack, -2200, 2, PID(1, 0, 0), 200, 100);
   driveForward(14);
