@@ -6,6 +6,8 @@ void rightAuton();
 
 void leftAuton();
 
+void leftNewAuton();
+
 void driveTest();
 
 void turnTest();

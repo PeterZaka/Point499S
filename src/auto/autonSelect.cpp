@@ -12,3 +12,8 @@ void changeToRightAuton(){
   lv_label_set_text(autonLabel, "Right Auton");
   autonFunc = rightAuton;
 }
+
+void changeToLeftNewAuton(){
+  lv_label_set_text(autonLabel, "new Auton");
+  autonFunc = leftNewAuton;
+}

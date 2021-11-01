@@ -10,3 +10,5 @@ extern lv_obj_t* autonLabel;
 void changeToLeftAuton();
 
 void changeToRightAuton();
+
+void changeToLeftNewAuton();
