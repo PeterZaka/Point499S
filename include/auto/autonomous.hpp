@@ -17,3 +17,5 @@ void diagonalTest();
 void curveTest();
 
 void reset();
+
+void skills();

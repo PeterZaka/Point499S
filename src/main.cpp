@@ -126,11 +126,15 @@ void opcontrol() {
 	ControllerButton clawFrontDownButton(ControllerId::partner, ControllerDigital::R2);
 	ControllerButton clawBackUpButton(ControllerId::partner, ControllerDigital::L1);
 	ControllerButton clawBackDownButton(ControllerId::partner, ControllerDigital::L2);
+	ControllerButton clawRegularButton(ControllerId::partner, ControllerDigital::up);
+	ControllerButton clawSlowButton(ControllerId::partner, ControllerDigital::down);
 
 	bool isDrivingStraight = false;
 	bool isLiftStopped = false;
 	bool isTank = true;
 	bool isBackward = false;
+
+	double clawSpeed = 1;
 
 	while (true) {
 		double leftYAxis = controller.getAnalog(ControllerAnalog::leftY);
@@ -189,6 +193,17 @@ void opcontrol() {
 			controller.rumble("-");
 			isBackward = true;
 		}
+
+		if (clawRegularButton.changedToPressed()) {
+			controllerPartner.rumble("..");
+			clawSpeed = 1;
+		}
+		if (clawSlowButton.changedToPressed()) {
+			controllerPartner.rumble("-");
+			clawSpeed = 0.5;
+		}
+
+
 		if (isTank) {
 			if (isBackward) {
 				double tempRightYAxis = rightYAxis;
@@ -222,12 +237,12 @@ void opcontrol() {
 			lift.moveVoltage(0.0);
 		}
 
-		if(clawFrontUpButton.isPressed()) clawFront.moveVoltage(12000.0 * 0.9);
-		else if(clawFrontDownButton.isPressed()) clawFront.moveVoltage(-12000.0 * 0.9);
+		if(clawFrontUpButton.isPressed()) clawFront.moveVoltage(12000.0 * clawSpeed);
+		else if(clawFrontDownButton.isPressed()) clawFront.moveVoltage(-12000.0 * clawSpeed);
 		else clawFront.moveVoltage(0);
 
-		if(clawBackUpButton.isPressed()) clawBack.moveVoltage(12000.0 * 0.9);
-		else if(clawBackDownButton.isPressed()) clawBack.moveVoltage(-12000.0 * 0.9);
+		if(clawBackUpButton.isPressed()) clawBack.moveVoltage(12000.0 * clawSpeed);
+		else if(clawBackDownButton.isPressed()) clawBack.moveVoltage(-12000.0 * clawSpeed);
 		else clawBack.moveVoltage(0);
 
 		if (testButton.isPressed()) autonFunc();

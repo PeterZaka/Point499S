@@ -78,6 +78,13 @@ void driveToPoint(double x, double y, movement Movement, double strength, bool i
       distance *= -1;
     }
 
+    // if (abs(rotation - rot) > 90 && abs(distance) > correctRotationError) {
+    //   int prevTurnTargetTime = turnTargetTime; turnTargetTime = 1;
+    //   std::cout << abs(rotation - rot) << std::endl;
+    //   turnToPoint(x, y);
+    //   turnTargetTime = prevTurnTargetTime;
+    // }
+
     drivePID.setTarget(distance, false);
     drivePID.update(0);
 
@@ -88,6 +95,8 @@ void driveToPoint(double x, double y, movement Movement, double strength, bool i
         if(strengthValue < 0) strengthValue *= -strengthValue;
         else strengthValue *= strengthValue;
       }
+      // if (abs(rotation - rot) > 45) strengthValue *= 5;
+      // std::cout << strengthValue << std::endl;
       strengthValue = std::clamp(strengthValue, -angleClamp, angleClamp);
       if (abs(distance) <= slowDownRotationError) strengthValue *= 0.1;
 
