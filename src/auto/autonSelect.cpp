@@ -13,7 +13,7 @@ void changeToRightAuton(){
   autonFunc = rightAuton;
 }
 
-void changeToLeftNewAuton(){
-  lv_label_set_text(autonLabel, "new Auton");
-  autonFunc = leftNewAuton;
+void changeToSkills(){
+  lv_label_set_text(autonLabel, "Skills");
+  autonFunc = skills;
 }

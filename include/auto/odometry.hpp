@@ -11,4 +11,6 @@ extern double xPos;
 extern double yPos;
 extern double rot;
 
+extern double prevRot;
+
 void calculateOdom();

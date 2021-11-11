@@ -11,7 +11,7 @@ double rot = 0;
 static double prevLeft = 0;
 static double prevRight = 0;
 static double prevBack = 0;
-static double prevRot = 0;
+double prevRot = 0;
 
 // https://github.com/OkapiLib/OkapiLib/blob/master/src/api/odometry/threeEncoderOdometry.cpp
 void calculateOdom(){

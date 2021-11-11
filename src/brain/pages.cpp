@@ -95,13 +95,13 @@ void init_home_page(){
   autonLabel = lv_label_create(AutonPage->lv_page, NULL);
   lv_obj_align(autonLabel, NULL, LV_ALIGN_CENTER, 0, 150);
 
-  changeToLeftNewAuton();
+  changeToSkills();
   Button leftBtn(AutonPage, 100, 0, 150, 100, "Left Auton");
   leftBtn.setFunction(changeToLeftAuton);
   Button rightBtn(AutonPage, 250, 0, 150, 100, "Right Auton");
   rightBtn.setFunction(changeToRightAuton);
-  Button lBtn(AutonPage, 250, 100, 150, 100, "new Auton");
-  lBtn.setFunction(changeToLeftNewAuton);
+  Button skillsBtn(AutonPage, 100, 100, 150, 100, "Skills");
+  skillsBtn.setFunction(changeToSkills);
 
   HomePage->show();
 }

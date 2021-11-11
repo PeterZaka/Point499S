@@ -46,3 +46,16 @@ double findDistanceTo(double startX, double startY, double endX, double endY){
     pow ( ( endY - startY ), 2.0)
   );
 }
+
+point findOffsetTarget(point start, point target, point offset, double extraDistance){
+	double d = sqrt(
+		pow ( offset.x, 2.0 ) +
+		pow ( offset.y, 2.0 ) ) + extraDistance;
+	double dt = atan2(offset.y, offset.x) - (
+		3.141592653589793 / 2.0 );
+	double t = atan2( target.y - start.y, target.x - start.x ) + dt;
+	point newTarget;
+	newTarget.x = target.x + ( d * cos(t) );
+	newTarget.y = target.y + ( d * sin(t) );
+	return newTarget;
+}

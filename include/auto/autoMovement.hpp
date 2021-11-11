@@ -32,9 +32,11 @@ void turnToAngle(double angle, double power);
 void turnToPoint(double x, double y, movement Movement=forward);
 
 void groupMoveTo(MotorGroup group, double pos, PID groupPID=PID(1,0,0), double targetError=50, double targetTime=10);
-void groupMoveTo(MotorGroup group, double pos, double distanceToStart, PID groupPID=PID(1,0,0), double targetError=50, double targetTime=10);
+pros::Task groupMoveTo(MotorGroup group, double pos, double distanceToStart, PID groupPID=PID(1,0,0), double targetError=50, double targetTime=10);
 
 void balance(PID balancePID);
+
+void grabTower(point tower, movement Movement=forward, point offset={7, -9});
 
 // ----- helper functions -----
 

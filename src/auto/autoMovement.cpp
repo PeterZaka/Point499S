@@ -146,6 +146,7 @@ void turnToAngle(double angle){
 }
 
 void turnToAngle(double angle, double power){
+  angle = findShortestRotation(rot, angle);
   if (rot > angle) {
     leftSide.moveVoltage(-12000.0 * power);
     rightSide.moveVoltage(12000.0 * power);
@@ -173,6 +174,7 @@ void turnToPoint(double x, double y, movement Movement){
 void groupMoveTo(MotorGroup group, double pos, PID groupPID, double targetError, double targetTime){
   double timeOnTarget = 0;
   groupPID.setTarget(pos);
+
   while (timeOnTarget < targetTime){
     groupPID.update(group.getPosition());
     group.moveVoltage(groupPID.value() * 120.0);
@@ -186,7 +188,7 @@ void groupMoveTo(MotorGroup group, double pos, PID groupPID, double targetError,
   group.moveVoltage(0);
 }
 
-void groupMoveTo(MotorGroup group, double pos, double distanceToStart, PID groupPID, double targetError, double targetTime){
+pros::Task groupMoveTo(MotorGroup group, double pos, double distanceToStart, PID groupPID, double targetError, double targetTime){
   double startPosX = xPos;
   double startPosY = yPos;
 
@@ -195,6 +197,7 @@ void groupMoveTo(MotorGroup group, double pos, double distanceToStart, PID group
     while(findDistanceTo(startPosX, startPosY, xPos, yPos) < distanceToStart) pros::delay(20);
     groupMoveTo(group, pos, groupPID, targetError, targetTime);
   });
+  return startTurn;
 }
 
 void balance(PID balancePID){
@@ -215,6 +218,18 @@ void balance(PID balancePID){
   }
   leftSide.moveVoltage(0);
   rightSide.moveVoltage(0);
+}
+
+void grabTower(point tower, movement Movement, point offset){
+  int prevDriveTargetTime = driveTargetTime; driveTargetTime = 1;
+  point point1 = findOffsetTarget({xPos, yPos}, tower, offset);
+  driveToPoint(point1.x, point1.y, Movement);
+  // point tower1 = findOffsetTarget({xPos, yPos}, tower, {7, 0});
+  // double angle = findRotationTo(xPos, yPos, tower1.x, tower1.y);
+  // angle = findShortestRotation(rot, angle);
+  // if (Movement == forward) turnToAngle(angle);
+  // if (Movement == backward) turnToAngle(angle + 180);
+  driveTargetTime = prevDriveTargetTime;
 }
 
 // ----- helper functions -----

@@ -2,9 +2,9 @@
 
 MotorGroup clawFront({-13});
 MotorGroup clawBack({-16});
-MotorGroup leftLift({-6});
+MotorGroup leftLift({-8});
 MotorGroup rightLift({10});
-MotorGroup lift({-6, 10});
+MotorGroup lift({-8, 10});
 PID rightLiftPID(0, 0, 0);
 PID liftPID(1, 0, 0);
 

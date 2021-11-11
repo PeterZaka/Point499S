@@ -11,4 +11,4 @@ void changeToLeftAuton();
 
 void changeToRightAuton();
 
-void changeToLeftNewAuton();
+void changeToSkills();
