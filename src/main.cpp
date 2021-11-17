@@ -90,31 +90,43 @@ void opcontrol() {
 	// 	}
 	// });
 
-	pros::Task debugTask([]()
-	{
-		ControllerButton printPosButton(ControllerDigital::A);
-		ControllerButton resetPosButton(ControllerDigital::Y);
-		while(1){
-			if (resetPosButton.changedToPressed()) {
-				isDebugging = true;
-				xPos = 0;
-				yPos = 0;
-				iSensor.tare();
-			}
-			if (isDebugging){
-				update_debug_page();
-				if (printPosButton.changedToPressed()){
-					printf("Pos: (%.2lf, %.2lf, %.2lf)\n", xPos, yPos, rot);
-					printf("Encoder: (%.2lf, %.2lf, %.2lf)\n\n", leftEncoder.get(), backEncoder.get(), rightEncoder.get());
-				}
-			}
-			pros::delay(50);
-		}
-	});
+	// pros::Task debugTask([]()
+	// {
+	// 	ControllerButton printPosButton(ControllerDigital::A);
+	// 	ControllerButton resetPosButton(ControllerDigital::Y);
+	// 	while(1){
+	// 		if (resetPosButton.changedToPressed()) {
+	// 			isDebugging = true;
+	// 			xPos = 0;
+	// 			yPos = 0;
+	// 			iSensor.tare();
+	// 		}
+	// 		if (isDebugging){
+	// 			update_debug_page();
+	// 			if (printPosButton.changedToPressed()){
+	// 				printf("Pos: (%.2lf, %.2lf, %.2lf)\n", xPos, yPos, rot);
+	// 				printf("Encoder: (%.2lf, %.2lf, %.2lf)\n\n", leftEncoder.get(), backEncoder.get(), rightEncoder.get());
+	// 			}
+	// 		}
+	// 		pros::delay(50);
+	// 	}
+	// });
+
 
 	// Master controller by default
 	Controller controller(ControllerId::master);
 	Controller controllerPartner(ControllerId::partner);
+
+	pros::Task temperatureTask([&](){
+		while(1){
+			controller.clear();
+			pros::delay(50);
+			controller.setText(0, 0, "Left Lift: " + std::to_string((int)leftLift.getTemperature()));
+			pros::delay(50);
+			controller.setText(1, 0, "Right Lift: " + std::to_string((int)rightLift.getTemperature()));
+			pros::delay(500);
+		}
+	});
 
 	ControllerButton liftUpButton(ControllerId::master, ControllerDigital::R1);
 	ControllerButton liftDownButton(ControllerId::master, ControllerDigital::R2);
@@ -129,8 +141,6 @@ void opcontrol() {
 	ControllerButton clawRegularButton(ControllerId::partner, ControllerDigital::up);
 	ControllerButton clawSlowButton(ControllerId::partner, ControllerDigital::down);
 
-	bool isDrivingStraight = false;
-	bool isLiftStopped = false;
 	bool isTank = true;
 	bool isBackward = false;
 
@@ -157,40 +167,6 @@ void opcontrol() {
 		if(abs(rightYAxis) < 0.1) rightYAxis = 0;
 		if(abs(rightXAxis) < 0.1) rightXAxis = 0;
 
-		bool isStraightArcade = (!isTank && abs(rightXAxis) < 0.1 && abs(leftYAxis) > 0);
-		bool isStraightTank = (abs(leftYAxis) > 0 && abs(rightYAxis) > 0 && // if moving jotsticks
-		 (abs(leftYAxis - rightYAxis) < 0.1));
-		if(isStraightArcade || isStraightTank){ // if joysticks in simillar range
-			if(isDrivingStraight == false){
-				isDrivingStraight = true;
-				anglePID.setTarget(rot);
-			} else {
-				anglePID.update(rot);
-			}
-		} else {
-			isDrivingStraight = false;
-		}
-
-		// isDrivingStraight = false;
-		//
-		// if(isDrivingStraight){
-		// 	if (isTank) {
-		// 		leftSide.moveVoltage((leftYAxis + anglePID.value() / 100.0) * 12000.0);
-		// 		rightSide.moveVoltage((rightYAxis - anglePID.value() / 100.0) * 12000.0);
-		// 	} else {
-		// 		leftSide.moveVoltage((leftYAxis + rightXAxis + anglePID.value() / 100.0) * 12000.0);
-		// 		rightSide.moveVoltage((leftYAxis - rightXAxis - anglePID.value() / 100.0) * 12000.0);
-		// 	}
-		// } else {
-		// 	if (isTank) {
-		// 		leftSide.moveVoltage((leftYAxis) * 12000.0);
-		// 		rightSide.moveVoltage((rightYAxis) * 12000.0);
-		// 	} else {
-		// 		leftSide.moveVoltage((leftYAxis + rightXAxis) * 12000.0);
-		// 		rightSide.moveVoltage((leftYAxis - rightXAxis) * 12000.0);
-		// 	}
-		// }
-
 		if (setForwardButton.changedToPressed()) {
 			controller.rumble("..");
 			isBackward = false;
@@ -208,7 +184,6 @@ void opcontrol() {
 			controllerPartner.rumble("-");
 			clawSpeed = 0.5;
 		}
-
 
 		if (isTank) {
 			if (isBackward) {
@@ -231,17 +206,9 @@ void opcontrol() {
 			rightSide.moveVoltage((leftYAxis - rightXAxis) * 12000.0);
 		}
 
-		if(liftUpButton.isPressed()){
-			lift.moveVoltage(12000.0 * liftPower);
-			isLiftStopped = false;
-		}
-		else if(liftDownButton.isPressed()){
-			lift.moveVoltage(-12000.0 * liftPower);
-			isLiftStopped = false;
-		}
-		else {
-			lift.moveVoltage(0.0);
-		}
+		if(liftUpButton.isPressed()) lift.moveVoltage(12000.0 * liftPower);
+		else if(liftDownButton.isPressed()) lift.moveVoltage(-12000.0 * liftPower);
+		else lift.moveVoltage(0.0);
 
 		if(clawFrontUpButton.isPressed()) clawFront.moveVoltage(12000.0 * clawSpeed);
 		else if(clawFrontDownButton.isPressed()) clawFront.moveVoltage(-12000.0 * clawSpeed);

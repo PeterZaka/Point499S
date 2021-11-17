@@ -75,18 +75,20 @@ void leftAuton(){
   // Get Middle Tower
   groupMoveTo(clawBack, -2000, 0);
   prevDriveTargetTime = driveTargetTime; driveTargetTime = 1;
-  goToPoint(25 + 29.5, 45 + 10.5, backward);
+  goToPoint(48, 58, backward);
   lift.moveVoltage(-12000.0);
-  grabTower({72, 72}, backward);
+  point tower1 = findOffsetTarget({xPos, yPos}, {72, 72}, {7, -10.5});
+  turnToPoint(tower1.x, tower1.y, backward);
+  grabTower({72, 72}, backward, {7, -10.5});
   // Turn into tower
   pros::delay(250);
-  leftSide.moveVoltage(-12000.0 * 0.3);
-  rightSide.moveVoltage(12000.0 * 0.05);
+  leftSide.moveVoltage(-12000.0 * 0.4);
+  rightSide.moveVoltage(12000.0 * 0.1);
   int startTime = pros::millis();
   while (!(clawBackButton.isPressed() || pros::millis() > startTime + 3000)) pros::delay(20);
   leftSide.moveVoltage(0);
   rightSide.moveVoltage(0);
-  pros::delay(250);
+  pros::delay(1000);
   clawBack.moveVoltage(12000.0);
   pros::delay(1000);
 
@@ -183,65 +185,130 @@ void skills(){
   rot = 90;
   prevRot = 90 * (pi / 180);
 
+  // Get left red
   groupMoveTo(clawFront, -1300, 0);
   lift.moveVoltage(-12000.0 * 0.9);
   driveForward(15);
-
   // Turn into tower
   pros::delay(250);
   clawFront.moveVoltage(-12000.0);
   leftSide.moveVoltage(12000.0 * 0.05);
   rightSide.moveVoltage(12000.0 * 0.5);
   double startRot = rot;
-  while (!(clawFrontButton.isPressed() || rot < startRot - 30)) pros::delay(20);
-  clawFront.moveVoltage(0);
+  while (!(clawFrontButton.isPressed() || rot < startRot - 80)) pros::delay(20);
   leftSide.moveVoltage(0);
   rightSide.moveVoltage(0);
   pros::Task liftTask = groupMoveTo(lift, 1300, 0, PID(0.1, 0.001, 0, 10000, -1), -1);
   pros::delay(250);
 
-  // move left neutral tower
+  // move left neutral tower to top right
   int prevDriveTargetTime = driveTargetTime; driveTargetTime = 1;
   driveForward(-10);
-  pros::delay(1000);
-  driveToPoint(xPos + 5, yPos + 10, forward);
-  turnToAngle(180, 0.5);
-  driveToPoint(24, 60, backward);
-  driveToPoint(82, 110, backward);
+  // pros::delay(1000);
+  driveToPoint(xPos + 2, yPos + 10, forward);
+  pros::delay(250);
+  double angle = findRotationTo(xPos, yPos, 18, 60) + 180;
+  turnToAngle(angle, 0.5);
+  pros::delay(500);
+  driveToPoint(18, 60, backward);
+  driveTargetTime = 1000;
+  int prevDriveTargetError = driveTargetError; driveTargetError = 10;
+  goToPoint(76, 110, backward);
+  driveTargetError = prevDriveTargetError; driveTargetTime = 1;
   liftTask.suspend();
 
-  // score
-  driveToPoint(74, 100, forward);
+  // score left red on platform
+  driveToPoint(72, 100, forward);
   lift.moveVoltage(12000.0);
   turnToAngle(0);
   driveTargetTime = 1000;
-  int prevDriveTargetError = driveTargetError; driveTargetError = 5;
-  driveForward(23);
+  prevDriveTargetError = driveTargetError; driveTargetError = 15;
+  driveForward(30);
   driveTargetError = prevDriveTargetError; driveTargetTime = 1;
   clawFront.moveVoltage(12000.0);
   pros::delay(1000);
   driveToPoint(72, 96, backward);
   lift.moveVoltage(-12000.0);
 
-  // get tower
+  // get right blue
   groupMoveTo(clawFront, -1300, 0);
-  grabTower({12, 108}, forward, {2, -15});
+  goToPoint(36, 108);
+  grabTower({12, 108}, forward, {2, -2});
+  leftSide.moveVoltage(12000.0 * 0.05);
   rightSide.moveVoltage(12000.0 * 0.5);
   while (rot > findShortestRotation(rot, -90)) pros::delay(20);
+  leftSide.moveVoltage(0);
   rightSide.moveVoltage(0);
   // Turn into tower
   pros::delay(250);
-  clawFront.moveVoltage(-12000.0);
   leftSide.moveVoltage(12000.0 * 0.05);
   rightSide.moveVoltage(12000.0 * 0.5);
   startRot = rot;
-  while (!(clawFrontButton.isPressed() || rot < startRot - 30)) pros::delay(20);
+  while (!(clawFrontButton.isPressed() || rot < startRot - 80)) pros::delay(20);
+  clawFront.moveVoltage(-12000.0);
   leftSide.moveVoltage(0);
   rightSide.moveVoltage(0);
   liftTask = groupMoveTo(lift, 1300, 0, PID(0.1, 0.001, 0, 10000, -1), -1);
-  pros::delay(250);
-  clawFront.moveVoltage(0);
+  pros::delay(1000);
 
-  driveToPoint(60, 96, backward);
-  driveToPoint(122, 24, backward);
+  // move middle neutral
+  driveToPoint(48, 96, backward);
+  driveToPoint(108, 24, backward);
+
+  // score left red on platform
+  driveForward(24);
+  driveToPoint(72, 48, forward);
+  liftTask.suspend();
+  lift.moveVoltage(12000.0);
+  turnToAngle(180);
+  driveTargetTime = 1000;
+  prevDriveTargetError = driveTargetError; driveTargetError = 15;
+  driveForward(35);
+  driveTargetError = prevDriveTargetError; driveTargetTime = 1;
+  clawFront.moveVoltage(12000.0);
+  pros::delay(1000);
+  driveToPoint(72, 50, backward);
+  lift.moveVoltage(-12000.0);
+
+  // get right red
+  groupMoveTo(clawFront, -1300, 0);
+  driveTargetTime = 1000;
+  prevDriveTargetError = driveTargetError; driveTargetError = 15;
+  grabTower({132, 36}, forward, {2, -10});
+  driveTargetError = prevDriveTargetError; driveTargetTime = 1;
+  leftSide.moveVoltage(12000.0 * 0.05);
+  rightSide.moveVoltage(12000.0 * 0.5);
+  while (rot > findShortestRotation(rot, -90) && !clawFrontButton.isPressed()) pros::delay(20);
+  leftSide.moveVoltage(0);
+  rightSide.moveVoltage(0);
+  // Turn into tower
+  pros::delay(250);
+  leftSide.moveVoltage(12000.0 * 0.05);
+  rightSide.moveVoltage(12000.0 * 0.5);
+  startRot = rot;
+  while (!(clawFrontButton.isPressed() || rot < startRot - 80)) pros::delay(20);
+  clawFront.moveVoltage(-12000.0);
+  leftSide.moveVoltage(0);
+  rightSide.moveVoltage(0);
+  liftTask = groupMoveTo(lift, 1300, 0, PID(0.1, 0.001, 0, 10000, -1), -1);
+  pros::delay(1000);
+
+  // move right neutral
+  driveToPoint(108, 48, backward);
+  driveToPoint(108, 100, backward);
+
+  // score right red on platform
+  driveForward(5);
+  driveToPoint(74, 100, forward);
+  lift.moveVoltage(12000.0);
+  turnToAngle(0);
+  driveTargetTime = 1000;
+  prevDriveTargetError = driveTargetError; driveTargetError = 10;
+  driveForward(23);
+  driveTargetError = prevDriveTargetError; driveTargetTime = 1;
+  clawFront.moveVoltage(12000.0);
+  pros::delay(1000);
+  driveToPoint(72, 96, backward);
+  lift.moveVoltage(-12000.0);
+  pros::delay(10000);
 }
