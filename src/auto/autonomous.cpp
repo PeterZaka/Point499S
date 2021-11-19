@@ -48,8 +48,9 @@ void rightAuton(){
 
 void leftAuton(){
 
-  // xPos = 29.5;
-	// yPos = 15.5;
+  xPos = 29.5;
+  // 15.5
+	yPos = 15.5;
 
   // grabTower({36, 72});
   // return;
@@ -73,17 +74,20 @@ void leftAuton(){
   pros::delay(1000);
 
   // Get Middle Tower
-  groupMoveTo(clawBack, -2000, 0);
+  groupMoveTo(clawBack, -1700, 0);
   prevDriveTargetTime = driveTargetTime; driveTargetTime = 1;
   goToPoint(48, 58, backward);
+  goToPoint(64, 58, backward);
   lift.moveVoltage(-12000.0);
-  point tower1 = findOffsetTarget({xPos, yPos}, {72, 72}, {7, -10.5});
-  turnToPoint(tower1.x, tower1.y, backward);
-  grabTower({72, 72}, backward, {7, -10.5});
+  // point tower1 = findOffsetTarget({xPos, yPos}, {72, 72}, {7, -10.5});
+  // prevDriveTargetTime = driveTargetTime; driveTargetTime = 1;
+  // turnToPoint(tower1.x, tower1.y, backward);
+  grabTower({72, 72}, backward, {5, -10.5});
   // Turn into tower
   pros::delay(250);
   leftSide.moveVoltage(-12000.0 * 0.4);
   rightSide.moveVoltage(12000.0 * 0.1);
+  clawBack.moveVoltage(-12000.0 * 0.125);
   int startTime = pros::millis();
   while (!(clawBackButton.isPressed() || pros::millis() > startTime + 3000)) pros::delay(20);
   leftSide.moveVoltage(0);
@@ -91,6 +95,7 @@ void leftAuton(){
   pros::delay(1000);
   clawBack.moveVoltage(12000.0);
   pros::delay(1000);
+  lift.moveVoltage(0);
 
   driveToPoint(10 + 29.5, 30 + 10.5);
   driveToPoint(0 + 29.5, 13 + 10.5);
@@ -188,17 +193,18 @@ void skills(){
   // Get left red
   groupMoveTo(clawFront, -1300, 0);
   lift.moveVoltage(-12000.0 * 0.9);
-  driveForward(15);
+  driveForward(13);
   // Turn into tower
   pros::delay(250);
-  clawFront.moveVoltage(-12000.0);
+  clawFront.moveVoltage(-12000.0 * 0.25);
   leftSide.moveVoltage(12000.0 * 0.05);
   rightSide.moveVoltage(12000.0 * 0.5);
   double startRot = rot;
   while (!(clawFrontButton.isPressed() || rot < startRot - 80)) pros::delay(20);
+  clawFront.moveVoltage(-12000.0);
   leftSide.moveVoltage(0);
   rightSide.moveVoltage(0);
-  pros::Task liftTask = groupMoveTo(lift, 1300, 0, PID(0.1, 0.001, 0, 10000, -1), -1);
+  pros::Task liftTask = groupMoveTo(lift, 1000, 0, PID(0.1, 0.001, 0, 10000, -1), -1);
   pros::delay(250);
 
   // move left neutral tower to top right
@@ -206,37 +212,51 @@ void skills(){
   driveForward(-10);
   // pros::delay(1000);
   driveToPoint(xPos + 2, yPos + 10, forward);
-  pros::delay(250);
+  //pros::delay(250);
   double angle = findRotationTo(xPos, yPos, 18, 60) + 180;
   turnToAngle(angle, 0.5);
-  pros::delay(500);
+  pros::delay(250);
   driveToPoint(18, 60, backward);
   driveTargetTime = 1000;
-  int prevDriveTargetError = driveTargetError; driveTargetError = 10;
-  goToPoint(76, 110, backward);
+  double prevDriveTargetError = driveTargetError; driveTargetError = 30;
+  double prevTurnTargetError = turnTargetError; turnTargetError = 3;
+  turnToPoint(78, 110, backward);
+  pros::Task speedTask([&](){
+    driveStrength = 0.5;
+    pros::delay(1000);
+    driveStrength = 1;
+  });
+  driveToPoint(78, 112, backward);
   driveTargetError = prevDriveTargetError; driveTargetTime = 1;
+  turnTargetError = prevTurnTargetError;
   liftTask.suspend();
 
   // score left red on platform
-  driveToPoint(72, 100, forward);
+  driveToPoint(70, 100, forward);
   lift.moveVoltage(12000.0);
   turnToAngle(0);
   driveTargetTime = 1000;
-  prevDriveTargetError = driveTargetError; driveTargetError = 15;
+  prevDriveTargetError = driveTargetError; driveTargetError = 25;
   driveForward(30);
   driveTargetError = prevDriveTargetError; driveTargetTime = 1;
   clawFront.moveVoltage(12000.0);
   pros::delay(1000);
-  driveToPoint(72, 96, backward);
+  driveForward(-24);
   lift.moveVoltage(-12000.0);
+  pros::delay(500);
 
   // get right blue
   groupMoveTo(clawFront, -1300, 0);
-  goToPoint(36, 108);
-  grabTower({12, 108}, forward, {2, -2});
+  driveToPoint(36, 114, forward);
+  pros::Task moveTask([&](){
+    grabTower({12, 108}, forward, {2, -12});
+    while(true) pros::delay(1000);
+  });
+  pros::delay(2000);
+  moveTask.suspend();
   leftSide.moveVoltage(12000.0 * 0.05);
   rightSide.moveVoltage(12000.0 * 0.5);
-  while (rot > findShortestRotation(rot, -90)) pros::delay(20);
+  while (rot > findShortestRotation(rot, -90) && !clawFrontButton.isPressed()) pros::delay(20);
   leftSide.moveVoltage(0);
   rightSide.moveVoltage(0);
   // Turn into tower
@@ -248,12 +268,13 @@ void skills(){
   clawFront.moveVoltage(-12000.0);
   leftSide.moveVoltage(0);
   rightSide.moveVoltage(0);
-  liftTask = groupMoveTo(lift, 1300, 0, PID(0.1, 0.001, 0, 10000, -1), -1);
+  liftTask = groupMoveTo(lift, 1000, 0, PID(0.1, 0.001, 0, 10000, -1), -1);
   pros::delay(1000);
+  // drive backwards after get tower
 
   // move middle neutral
   driveToPoint(48, 96, backward);
-  driveToPoint(108, 24, backward);
+  driveToPoint(114, 36, backward);
 
   // score left red on platform
   driveForward(24);
@@ -262,8 +283,8 @@ void skills(){
   lift.moveVoltage(12000.0);
   turnToAngle(180);
   driveTargetTime = 1000;
-  prevDriveTargetError = driveTargetError; driveTargetError = 15;
-  driveForward(35);
+  prevDriveTargetError = driveTargetError; driveTargetError = 25;
+  driveForward(30);
   driveTargetError = prevDriveTargetError; driveTargetTime = 1;
   clawFront.moveVoltage(12000.0);
   pros::delay(1000);
@@ -290,7 +311,7 @@ void skills(){
   clawFront.moveVoltage(-12000.0);
   leftSide.moveVoltage(0);
   rightSide.moveVoltage(0);
-  liftTask = groupMoveTo(lift, 1300, 0, PID(0.1, 0.001, 0, 10000, -1), -1);
+  liftTask = groupMoveTo(lift, 1000, 0, PID(0.1, 0.001, 0, 10000, -1), -1);
   pros::delay(1000);
 
   // move right neutral
@@ -299,12 +320,12 @@ void skills(){
 
   // score right red on platform
   driveForward(5);
-  driveToPoint(74, 100, forward);
+  driveToPoint(68, 96, forward);
   lift.moveVoltage(12000.0);
   turnToAngle(0);
   driveTargetTime = 1000;
-  prevDriveTargetError = driveTargetError; driveTargetError = 10;
-  driveForward(23);
+  prevDriveTargetError = driveTargetError; driveTargetError = 25;
+  driveForward(30);
   driveTargetError = prevDriveTargetError; driveTargetTime = 1;
   clawFront.moveVoltage(12000.0);
   pros::delay(1000);

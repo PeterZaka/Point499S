@@ -1,5 +1,6 @@
 #include "auto/autoMovement.hpp"
 
+double driveStrength = 1; // 0 to 1 (0% to 100%)
 int driveTargetTime = 250; // amount of time (in milliseconds) needed within target error for driving
 double driveTargetError = 3; // be within distance (in inches) to be on target
 int turnTargetTime = 250; // amount of time (in milliseconds) needed within target error for turning
@@ -32,8 +33,8 @@ void driveForward(double distance, double rotation){
 
     drivePID.update(distanceFromStart);
     anglePID.update(rot);
-    leftSide.moveVoltage( (drivePID.value() + anglePID.value()) * 120.0);
-    rightSide.moveVoltage( (drivePID.value() - anglePID.value()) * 120.0);
+    leftSide.moveVoltage( (drivePID.value() + anglePID.value()) * 120.0 * driveStrength);
+    rightSide.moveVoltage( (drivePID.value() - anglePID.value()) * 120.0 * driveStrength);
 
     if (abs(drivePID.error) < driveTargetError)
       timeOnTarget += 20;
@@ -100,12 +101,12 @@ void driveToPoint(double x, double y, movement Movement, double strength, bool i
       strengthValue = std::clamp(strengthValue, -angleClamp, angleClamp);
       if (abs(distance) <= slowDownRotationError) strengthValue *= 0.1;
 
-      leftSide.moveVoltage( std::clamp( (drivePID.value() + strengthValue) * 120.0, -12000.0, 12000.0) );
-      rightSide.moveVoltage( std::clamp( (drivePID.value() - strengthValue) * 120.0, -12000.0, 12000.0) );
+      leftSide.moveVoltage( std::clamp( (drivePID.value() + strengthValue) * 120.0, -12000.0, 12000.0)  * driveStrength);
+      rightSide.moveVoltage( std::clamp( (drivePID.value() - strengthValue) * 120.0, -12000.0, 12000.0)  * driveStrength);
 
     } else {
-      leftSide.moveVoltage(drivePID.value() * 120.0);
-      rightSide.moveVoltage(drivePID.value() * 120.0);
+      leftSide.moveVoltage( std::clamp( (drivePID.value()) * 120.0, -12000.0, 12000.0)  * driveStrength);
+      rightSide.moveVoltage( std::clamp( (drivePID.value()) * 120.0, -12000.0, 12000.0)  * driveStrength);
     }
 
     if (abs(drivePID.error) < driveTargetError)
