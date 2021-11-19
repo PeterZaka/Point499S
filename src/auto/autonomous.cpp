@@ -278,7 +278,7 @@ void skills(){
 
   // score left red on platform
   driveForward(24);
-  driveToPoint(72, 48, forward);
+  driveToPoint(68, 48, forward);
   liftTask.suspend();
   lift.moveVoltage(12000.0);
   turnToAngle(180);
@@ -293,6 +293,7 @@ void skills(){
 
   // get right red
   groupMoveTo(clawFront, -1300, 0);
+  driveToPoint(100, 36, forward);
   driveTargetTime = 1000;
   prevDriveTargetError = driveTargetError; driveTargetError = 15;
   grabTower({132, 36}, forward, {2, -10});

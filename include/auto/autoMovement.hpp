@@ -9,6 +9,7 @@
 #include "auto/odometry.hpp"
 #include "brain/pages.hpp"
 
+extern double driveStrength; // 0 to 1 (0% to 100%)
 extern int driveTargetTime; // amount of time (in milliseconds) needed within target error for driving
 extern double driveTargetError; // be within distance (in inches) to be on target
 extern int turnTargetTime; // amount of time (in milliseconds) needed within target error for turning
