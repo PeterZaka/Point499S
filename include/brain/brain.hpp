@@ -1,9 +1,9 @@
 #pragma once
 
-#include "pros/apix.h"
-#include "brain/lvglHelper.hpp"
-#include "brain/pages.hpp"
+#include "brain/autonSelect.hpp"
+
+#include "brainClasses/Button.hpp"
+#include "brainClasses/Page.hpp"
+#include "brainClasses/Style.hpp"
 
 void autonSelectScreenInitialize();
-
-void brainPrint(std::string words);

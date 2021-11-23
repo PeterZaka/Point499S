@@ -1,16 +1,16 @@
-#inlude "brainClasses/Style.hpp"
+#include "brainClasses/Style.hpp"
 
-void setReleased(lv_color_t main_color, lv_color_t border_color, lv_color_t text_color,
+void Style::setReleased(lv_color_t main_color, lv_color_t border_color, lv_color_t text_color,
                       int radius, int border_width){
   released = Style::make_style(main_color, border_color, text_color, radius, border_width);
 }
 
-void setPressed(lv_color_t main_color, lv_color_t border_color, lv_color_t text_color,
+void Style::setPressed(lv_color_t main_color, lv_color_t border_color, lv_color_t text_color,
                       int radius, int border_width){
   pressed = Style::make_style(main_color, border_color, text_color, radius, border_width);
 }
 
-static make_style::Style(lv_color_t main_color, lv_color_t border_color, lv_color_t text_color,
+lv_style_t Style::make_style(lv_color_t main_color, lv_color_t border_color, lv_color_t text_color,
                       int radius, int border_width){
   lv_style_t style;
   lv_style_copy(&style, &lv_style_plain);

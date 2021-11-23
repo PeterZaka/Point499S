@@ -7,7 +7,6 @@
 #include "chassis.hpp"
 #include "debug.hpp"
 #include "auto/odometry.hpp"
-#include "brain/pages.hpp"
 
 extern double driveStrength; // 0 to 1 (0% to 100%)
 extern int driveTargetTime; // amount of time (in milliseconds) needed within target error for driving

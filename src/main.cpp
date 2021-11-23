@@ -36,13 +36,12 @@ void competition_initialize() {}
 
 void autonomous() {
 
-	pros::Task calculateOdomTask([]()
-		{
+	pros::Task calculateOdomTask([](){
 		while(1){
 			calculateOdom();
 			pros::delay(10);
 		}
-		});
+	});
 
 		// pros::Task debugTask([]()
 		// {
@@ -58,30 +57,14 @@ void autonomous() {
 
 void opcontrol() {
 
-	clawBack.setBrakeMode(AbstractMotor::brakeMode::hold);
-
-	pros::Task calculateOdomTask([]()
-		{
+	pros::Task calculateOdomTask([](){
 		while(1){
 			calculateOdom();
 			pros::delay(10);
 		}
-		});
+	});
 
-	// pros::Task printTask([]()
-	// 	{
-	// 	while(1){
-	// 		if (isDebugging) {
-	// 			printf("\n");
-	// 			std::cout << "x: " << xPos << std::endl;
-	// 			std::cout << "y: " << yPos << std::endl;
-	// 			std::cout << "rot: " << rot << std::endl;
-	// 		}
-	// 		pros::delay(5000 * 1);
-	// 	}
-	// 	});
-
-	// pros::Task adebugTask([]()
+	// pros::Task debugTask([]()
 	// {
 	// 	while(1){
 	// 		printf("Pos: (%.2lf, %.2lf, %.2lf)\n", xPos, yPos, rot);
@@ -89,29 +72,6 @@ void opcontrol() {
 	// 		pros::delay(1000);
 	// 	}
 	// });
-
-	// pros::Task debugTask([]()
-	// {
-	// 	ControllerButton printPosButton(ControllerDigital::A);
-	// 	ControllerButton resetPosButton(ControllerDigital::Y);
-	// 	while(1){
-	// 		if (resetPosButton.changedToPressed()) {
-	// 			isDebugging = true;
-	// 			xPos = 0;
-	// 			yPos = 0;
-	// 			iSensor.tare();
-	// 		}
-	// 		if (isDebugging){
-	// 			update_debug_page();
-	// 			if (printPosButton.changedToPressed()){
-	// 				printf("Pos: (%.2lf, %.2lf, %.2lf)\n", xPos, yPos, rot);
-	// 				printf("Encoder: (%.2lf, %.2lf, %.2lf)\n\n", leftEncoder.get(), backEncoder.get(), rightEncoder.get());
-	// 			}
-	// 		}
-	// 		pros::delay(50);
-	// 	}
-	// });
-
 
 	// Master controller by default
 	Controller controller(ControllerId::master);
@@ -130,9 +90,9 @@ void opcontrol() {
 
 	ControllerButton liftUpButton(ControllerId::master, ControllerDigital::R1);
 	ControllerButton liftDownButton(ControllerId::master, ControllerDigital::R2);
-	ControllerButton testButton(ControllerId::master, ControllerDigital::A);
 	ControllerButton setForwardButton(ControllerId::master, ControllerDigital::up);
 	ControllerButton setBackwardButton(ControllerId::master, ControllerDigital::down);
+	ControllerButton testButton(ControllerId::master, ControllerDigital::A);
 
 	ControllerButton clawFrontUpButton(ControllerId::partner, ControllerDigital::R1);
 	ControllerButton clawFrontDownButton(ControllerId::partner, ControllerDigital::R2);
@@ -145,12 +105,6 @@ void opcontrol() {
 	bool isBackward = false;
 
 	double clawSpeed = 1;
-
-	// xPos = 8.5;
-	// yPos = 8.5;
-
-	// xPos = 29.5;
-	// yPos = 15.5;
 
 	while (true) {
 		double leftYAxis = controller.getAnalog(ControllerAnalog::leftY);
@@ -198,16 +152,8 @@ void opcontrol() {
 			rightSide.moveVoltage((leftYAxis - rightXAxis) * 12000.0);
 		}
 
-		if (isTank) {
-			leftSide.moveVoltage((leftYAxis) * 12000.0);
-			rightSide.moveVoltage((rightYAxis) * 12000.0);
-		} else {
-			leftSide.moveVoltage((leftYAxis + rightXAxis) * 12000.0);
-			rightSide.moveVoltage((leftYAxis - rightXAxis) * 12000.0);
-		}
-
-		if(liftUpButton.isPressed()) lift.moveVoltage(12000.0 * liftPower);
-		else if(liftDownButton.isPressed()) lift.moveVoltage(-12000.0 * liftPower);
+		if(liftUpButton.isPressed()) lift.moveVoltage(12000.0);
+		else if(liftDownButton.isPressed()) lift.moveVoltage(-12000.0);
 		else lift.moveVoltage(0.0);
 
 		if(clawFrontUpButton.isPressed()) clawFront.moveVoltage(12000.0 * clawSpeed);
@@ -219,29 +165,6 @@ void opcontrol() {
 		else clawBack.moveVoltage(0);
 
 		if (testButton.isPressed()) autonFunc();
-
-		switch (Test){
-			case drive:
-				pros::delay(3000);
-				driveTest();
-				break;
-			case turn:
-				pros::delay(3000);
-				turnTest();
-				break;
-			case diagonal:
-				pros::delay(3000);
-				diagonalTest();
-				break;
-			case curve:
-				pros::delay(3000);
-				curveTest();
-				break;
-			default:
-				break;
-		}
-
-		if (Test != none) Test = none;
 
 		pros::delay(10);
 	}

@@ -1,24 +1,27 @@
 #include "brain.hpp"
-// https://github.com/lvgl/lv_demos/tree/v5.3/lv_tutorial
+
 void autonSelectScreenInitialize(){
-  init_button_styles();
-  init_home_page();
-  init_test_page();
-  init_debug_page();
-  init_auton_page();
-  init_auton_make_page();
-}
+  Page* HomePage = new Page();
+  Page* AutonPage = new Page();
 
-void brainPrint(std::string words){
-    /*Create a Label on the currently active screen*/
-  lv_obj_t* label1 =  lv_label_create(lv_scr_act(), NULL);
+  // Home Page
+  Button autonBtn(HomePage, 0, 100, 100, 100, "Auton");
+  autonBtn.setFunction(AutonPage->show);
 
-  /*Modify the Label's text*/
-  lv_label_set_text(label1, words.c_str());
+  // Auton Page
+  Button homeBtn(AutonPage, 0, 0, 100, 100, "Home");
+  homeBtn.setFunction(HomePage->show);
 
-  /* Align the Label to the center
-   * NULL means align on parent (which is the screen now)
-   * 0, 0 at the end means an x, y offset after alignment*/
-  lv_obj_align(label1, NULL, LV_ALIGN_CENTER, 0, 0);
+  autonLabel = lv_label_create(AutonPage->lv_page, NULL);
+  lv_obj_align(autonLabel, NULL, LV_ALIGN_CENTER, 0, 150);
 
+  changeToLeftAuton();
+  Button leftBtn(AutonPage, 100, 0, 150, 100, "Left Auton");
+  leftBtn.setFunction(changeToLeftAuton);
+  Button rightBtn(AutonPage, 250, 0, 150, 100, "Right Auton");
+  rightBtn.setFunction(changeToRightAuton);
+  Button skillsBtn(AutonPage, 100, 100, 150, 100, "Skills");
+  skillsBtn.setFunction(changeToSkills);
+
+  HomePage->show();
 }
