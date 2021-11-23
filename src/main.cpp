@@ -44,14 +44,14 @@ void autonomous() {
 		}
 		});
 
-		pros::Task debugTask([]()
-		{
-			while(1){
-				printf("Pos: (%.2lf, %.2lf, %.2lf)\n", xPos, yPos, rot);
-				printf("Encoder: (%.2lf, %.2lf, %.2lf)\n\n", leftEncoder.get(), backEncoder.get(), rightEncoder.get());
-				pros::delay(1000);
-			}
-		});
+		// pros::Task debugTask([]()
+		// {
+		// 	while(1){
+		// 		printf("Pos: (%.2lf, %.2lf, %.2lf)\n", xPos, yPos, rot);
+		// 		printf("Encoder: (%.2lf, %.2lf, %.2lf)\n\n", leftEncoder.get(), backEncoder.get(), rightEncoder.get());
+		// 		pros::delay(1000);
+		// 	}
+		// });
 
 		autonFunc();
 }
@@ -81,14 +81,14 @@ void opcontrol() {
 	// 	}
 	// 	});
 
-	pros::Task adebugTask([]()
-	{
-		while(1){
-			printf("Pos: (%.2lf, %.2lf, %.2lf)\n", xPos, yPos, rot);
-			printf("Encoder: (%.2lf, %.2lf, %.2lf)\n\n", leftEncoder.get(), backEncoder.get(), rightEncoder.get());
-			pros::delay(1000);
-		}
-	});
+	// pros::Task adebugTask([]()
+	// {
+	// 	while(1){
+	// 		printf("Pos: (%.2lf, %.2lf, %.2lf)\n", xPos, yPos, rot);
+	// 		printf("Encoder: (%.2lf, %.2lf, %.2lf)\n\n", leftEncoder.get(), backEncoder.get(), rightEncoder.get());
+	// 		pros::delay(1000);
+	// 	}
+	// });
 
 	// pros::Task debugTask([]()
 	// {

@@ -76,8 +76,10 @@ void leftAuton(){
   // Get Middle Tower
   groupMoveTo(clawBack, -1700, 0);
   prevDriveTargetTime = driveTargetTime; driveTargetTime = 1;
+  double prevTurnTargetError = turnTargetError; turnTargetError = 5;
   goToPoint(48, 58, backward);
   goToPoint(64, 58, backward);
+  turnTargetError = prevTurnTargetError;
   lift.moveVoltage(-12000.0);
   // point tower1 = findOffsetTarget({xPos, yPos}, {72, 72}, {7, -10.5});
   // prevDriveTargetTime = driveTargetTime; driveTargetTime = 1;
@@ -226,7 +228,7 @@ void skills(){
     pros::delay(1000);
     driveStrength = 1;
   });
-  driveToPoint(78, 112, backward);
+  driveToPoint(74, 112, backward);
   driveTargetError = prevDriveTargetError; driveTargetTime = 1;
   turnTargetError = prevTurnTargetError;
   liftTask.suspend();
@@ -247,20 +249,22 @@ void skills(){
 
   // get right blue
   groupMoveTo(clawFront, -1300, 0);
-  driveToPoint(36, 114, forward);
+  turnToAngle(-90);
+  driveForward(36);
+  // driveToPoint(36, 114, forward);
   pros::Task moveTask([&](){
-    grabTower({12, 108}, forward, {2, -12});
+    grabTower({12, 108}, forward, {2, -6});
     while(true) pros::delay(1000);
   });
   pros::delay(2000);
   moveTask.suspend();
-  leftSide.moveVoltage(12000.0 * 0.05);
+  leftSide.moveVoltage(12000.0 * -0.3);
   rightSide.moveVoltage(12000.0 * 0.5);
-  while (rot > findShortestRotation(rot, -90) && !clawFrontButton.isPressed()) pros::delay(20);
+  while (rot > findShortestRotation(rot, -70) && !clawFrontButton.isPressed()) pros::delay(20);
   leftSide.moveVoltage(0);
   rightSide.moveVoltage(0);
   // Turn into tower
-  pros::delay(250);
+  // pros::delay(250);
   leftSide.moveVoltage(12000.0 * 0.05);
   rightSide.moveVoltage(12000.0 * 0.5);
   startRot = rot;
@@ -276,9 +280,9 @@ void skills(){
   driveToPoint(48, 96, backward);
   driveToPoint(114, 36, backward);
 
-  // score left red on platform
+  // score right blue on platform
   driveForward(24);
-  driveToPoint(68, 48, forward);
+  driveToPoint(74, 48, forward);
   liftTask.suspend();
   lift.moveVoltage(12000.0);
   turnToAngle(180);
