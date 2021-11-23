@@ -1,4 +1,4 @@
-#include "brain/autonSelect.hpp"
+#include "brain/autonPage.hpp"
 
 std::function<void()> autonFunc;
 lv_obj_t* autonLabel;

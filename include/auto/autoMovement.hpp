@@ -4,8 +4,6 @@
 
 #include "math.hpp"
 #include "robot-config.hpp"
-#include "chassis.hpp"
-#include "debug.hpp"
 #include "auto/odometry.hpp"
 
 extern double driveStrength; // 0 to 1 (0% to 100%)

@@ -1,5 +1,12 @@
 #include "robot-config.hpp"
 
+Motor topLeftMotor(-2);
+Motor topRightMotor(1);
+Motor backLeftMotor(-4);
+Motor backRightMotor(3);
+MotorGroup leftSide({topLeftMotor, backLeftMotor});
+MotorGroup rightSide({topRightMotor, backRightMotor});
+
 MotorGroup clawFront({-13});
 MotorGroup clawBack({-17});
 MotorGroup leftLift({-8});
@@ -11,7 +18,6 @@ PID liftPID(1, 0, 0);
 ADIEncoder leftEncoder('G', 'H');
 ADIEncoder rightEncoder('E', 'F', true);
 ADIEncoder backEncoder('A', 'B');
-Potentiometer clawFrontPot(10);
 ADIButton clawFrontButton('D');
 ADIButton clawBackButton('C');
 

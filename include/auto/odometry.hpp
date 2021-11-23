@@ -1,7 +1,6 @@
 #pragma once
 
 #include "robot-config.hpp"
-#include "chassis.hpp"
 
 extern double wheelDiameter;
 extern double wheelTrack;

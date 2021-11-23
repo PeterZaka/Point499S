@@ -75,12 +75,10 @@ void opcontrol(void);
 
 
 #include "auto/pid.hpp"
-#include "debug.hpp"
 
 #include "auto/autonomous.hpp"
 
 #include "robot-config.hpp"
-#include "chassis.hpp"
 #include "auto/autoMovement.hpp"
 
 #include "brain/brain.hpp"

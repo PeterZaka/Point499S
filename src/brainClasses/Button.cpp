@@ -1,10 +1,11 @@
 #include "brainClasses/Button.hpp"
 
 int Button::next_id = 0;
-std::unordered_map<int, std::function<void()>> Button::id_function;
+std::unordered_map<int, std::vector<std::function<void()>>> Button::id_function;
 
 static lv_res_t click_function(lv_obj_t* btn){
-  Button::id_function[lv_obj_get_free_num(btn)]();
+  std::vector<std::function<void()>> functions = Button::id_function[lv_obj_get_free_num(btn)];
+  for (auto &f: functions) f();
   return LV_RES_OK;
 }
 
@@ -22,7 +23,11 @@ Button::Button(Page* page, lv_coord_t x, lv_coord_t y, lv_coord_t width, lv_coor
 }
 
 void Button::setFunction(std::function<void()> func){
-  Button::id_function[lv_obj_get_free_num(lv_btn)] = func;
+  Button::id_function[lv_obj_get_free_num(lv_btn)] = {func};
+}
+
+void Button::setFunctions(std::vector<std::function<void()>> funcs){
+  Button::id_function[lv_obj_get_free_num(lv_btn)] = funcs;
 }
 
 void Button::setStyle(Style style){
