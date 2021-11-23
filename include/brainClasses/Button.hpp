@@ -2,6 +2,7 @@
 
 #include "pros/apix.h"
 #include "brainClasses/Page.hpp"
+#include "brainClasses/Style.hpp"
 #include <map>
 #include <functional>
 
@@ -13,6 +14,8 @@ public:
          std::string text);
 
   void setFunction(std::function<void()> func);
+  
+  void setStyle(Style style);
 
   static int next_id;
   static std::unordered_map<int, std::function<void()>> id_function;

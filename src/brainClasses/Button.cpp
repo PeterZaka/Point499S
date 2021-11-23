@@ -24,3 +24,8 @@ Button::Button(Page* page, lv_coord_t x, lv_coord_t y, lv_coord_t width, lv_coor
 void Button::setFunction(std::function<void()> func){
   Button::id_function[lv_obj_get_free_num(lv_btn)] = func;
 }
+
+void Button::setStyle(Style style){
+  lv_btn_set_style(lv_btn, LV_BTN_STYLE_REL, &style.released);
+  lv_btn_set_style(lv_btn, LV_BTN_STATE_PR, &style.pressed);
+}

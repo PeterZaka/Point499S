@@ -90,8 +90,8 @@ void init_home_page(){
 
   // Auton Page
   Button homeBtn(AutonPage, 0, 0, 100, 100, "Home");
-
   homeBtn.setFunction(HomePage->show);
+  
   autonLabel = lv_label_create(AutonPage->lv_page, NULL);
   lv_obj_align(autonLabel, NULL, LV_ALIGN_CENTER, 0, 150);
 
