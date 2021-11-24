@@ -29,7 +29,7 @@ pros::Task temperatureUpdateTask([]{
   pros::delay(1000);
 });
 
-void initalize_temperature(lv_obj_t* temperaturePage){
+void initalize_temperature_page(lv_obj_t* temperaturePage){
   temperatureUpdateTask.suspend();
 
   leftLiftTempLabel = lv_label_create(temperaturePage, NULL);

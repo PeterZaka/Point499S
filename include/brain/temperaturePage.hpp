@@ -13,7 +13,7 @@ extern lv_obj_t* topRightTempLabel;
 extern lv_obj_t* backLeftTempLabel;
 extern lv_obj_t* backRightTempLabel;
 
-void initalize_temperature(lv_obj_t* temperaturePage);
+void initalize_temperature_page(lv_obj_t* temperaturePage);
 
 void startTemperatureUpdateTask();
 

@@ -2,15 +2,15 @@
 
 #define NO_COLOR LV_COLOR_TRANSP
 
-static std::vector<Button> buttons;
-static Style yellow_style = Style();
-
 static const double SCREENWIDTH = 450;
 static const double SCREENHEIGHT = 210;
 static const double WIDTHOFFSET = 100;
 static const double HEIGHTOFFSET = 0;
 static const double WIDTHRATIO = (SCREENWIDTH - WIDTHOFFSET) / VISION_FOV_WIDTH;
 static const double HEIGHTRATIO = (SCREENHEIGHT - HEIGHTOFFSET) / VISION_FOV_HEIGHT;
+
+static std::vector<Button> buttons;
+static Style yellow_style = Style();
 
 static void update_vision(){
   for (int i = 0; i < vision.get_object_count(); i++){
@@ -34,7 +34,7 @@ pros::Task visionUpdateTask([]{
   pros::delay(250);
 });
 
-void initalize_vision(lv_obj_t* visionPage){
+void initalize_vision_page(lv_obj_t* visionPage){
   visionUpdateTask.suspend();
 
   yellow_style.setBoth(LV_COLOR_YELLOW, NO_COLOR, NO_COLOR, 0, 0);

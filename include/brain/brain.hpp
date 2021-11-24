@@ -3,6 +3,7 @@
 #include "brain/autonPage.hpp"
 #include "brain/temperaturePage.hpp"
 #include "brain/visionPage.hpp"
+#include "brain/odometryPage.hpp"
 
 #include "brainClasses/Button.hpp"
 #include "brainClasses/Page.hpp"

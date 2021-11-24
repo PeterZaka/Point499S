@@ -7,7 +7,7 @@
 
 extern pros::Task visionUpdateTask;
 
-void initalize_vision(lv_obj_t* visionPage);
+void initalize_vision_page(lv_obj_t* visionPage);
 
 void startVisionUpdateTask();
 

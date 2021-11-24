@@ -18,7 +18,7 @@ void autonSelectScreenInitialize(){
   visionBtn.setFunctions({VisionPage->show, startVisionUpdateTask});
 
   Button odometryBtn(HomePage, 300, 100, 100, 100, "Odometry");
-  odometryBtn.setFunction(OdometryPage->show);
+  odometryBtn.setFunctions({OdometryPage->show, startOdometryUpdateTask});
 
 
   // ------- Auton Page -------
@@ -41,14 +41,23 @@ void autonSelectScreenInitialize(){
   Button temperatureToHomeBtn(TemperaturePage, 0, 0, 100, 100, "Home");
   temperatureToHomeBtn.setFunctions({HomePage->show, endTemperatureUpdateTask});
 
-  initalize_temperature(TemperaturePage->lv_page);
+  initalize_temperature_page(TemperaturePage->lv_page);
 
 
   // ------- Vision Page -------
   Button visionToHomeBtn(VisionPage, 0, 0, 100, 100, "Home");
   visionToHomeBtn.setFunctions({HomePage->show, endVisionUpdateTask});
 
-  initalize_vision(VisionPage->lv_page);
+  initalize_vision_page(VisionPage->lv_page);
+
+
+  // ------- Odometry Page -------
+  Button odometryToHomeBtn(OdometryPage, 0, 0, 100, 100, "Home");
+  odometryToHomeBtn.setFunctions({HomePage->show, endOdometryUpdateTask});
+
+  initalize_odometry_page(OdometryPage->lv_page);
+
+
 
   HomePage->show();
 }
