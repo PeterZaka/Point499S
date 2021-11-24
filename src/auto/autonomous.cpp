@@ -49,7 +49,6 @@ void rightAuton(){
 void leftAuton(){
 
   xPos = 29.5;
-  // 15.5
 	yPos = 15.5;
 
   // grabTower({36, 72});
@@ -59,7 +58,7 @@ void leftAuton(){
   groupMoveTo(clawFront, -1300, 0);
   // Drive to tower
   driveTargetTime = 0;
-	driveToPoint(8.5 + 29.5, 55.25 + 10.5, forward);
+	driveToPoint(38, 65.75, forward);
   // Turn into tower
   pros::delay(250);
   clawFront.moveVoltage(-12000.0);
@@ -99,85 +98,9 @@ void leftAuton(){
   pros::delay(1000);
   lift.moveVoltage(0);
 
-  driveToPoint(10 + 29.5, 30 + 10.5);
-  driveToPoint(0 + 29.5, 13 + 10.5);
+  driveToPoint(39.5, 40.5);
+  driveToPoint(29.5, 23.5);
   driveTargetTime = prevDriveTargetTime;
-}
-
-// Old Auton
-// void leftAuton(){
-//
-//     yPos = 5;
-//
-//     // Get First Tower
-//     groupMoveTo(clawFront, -1300, 0);
-//     // Drive to tower
-//     int prevDriveTargetTime = driveTargetTime; driveTargetTime = 0;
-//   	driveToPoint(8.5, 55.25, forward);
-//     // Turn into tower
-//     pros::delay(250);
-//     clawFront.moveVoltage(-12000.0);
-//     leftSide.moveVoltage(12000.0 * 0.05);
-//     rightSide.moveVoltage(12000.0 * 0.7);
-//     double startRot = rot;
-//     while (!(clawFrontButton.isPressed() || rot < startRot - 30)) pros::delay(20);
-//     leftSide.moveVoltage(0);
-//     rightSide.moveVoltage(0);
-//     pros::delay(250);
-//     clawFront.moveVoltage(12000.0);
-//     pros::delay(1000);
-//
-//     // Get Middle Tower
-//     groupMoveTo(clawBack, -2000, 0);
-//     prevDriveTargetTime = driveTargetTime; driveTargetTime = 0;
-//     goToPoint(25, 45, backward);
-//     turnToPoint(50, 60, backward);
-//     lift.moveVoltage(-12000.0);
-//     driveForward(-findDistanceTo(xPos, yPos, 50, 60) + 2);
-//     // Turn into tower
-//     pros::delay(250);
-//     leftSide.moveVoltage(-12000.0 * 0.3);
-//     rightSide.moveVoltage(12000.0 * 0.05);
-//     int startTime = pros::millis();
-//     while (!(clawBackButton.isPressed() || pros::millis() > startTime + 3000)) pros::delay(20);
-//     leftSide.moveVoltage(0);
-//     rightSide.moveVoltage(0);
-//     pros::delay(250);
-//     clawBack.moveVoltage(12000.0);
-//     pros::delay(1000);
-//
-//     driveToPoint(10, 30);
-//     driveToPoint(0, 13);
-//     driveTargetTime = prevDriveTargetTime;
-// }
-
-void driveTest(){
-  driveForward(48);
-}
-
-void turnTest(){
-  turnToAngle(90);
-  turnToAngle(-90);
-  turnToAngle(0);
-  turnToAngle(-10);
-  turnToAngle(-30);
-  turnToAngle(0);
-}
-
-void diagonalTest(){
-  driveToPoint(24, 24);
-  driveToPoint(0, 0);
-  turnToAngle(0);
-}
-
-void curveTest(){
-  driveToPoint(24, 0, forward, 10);
-  reset();
-}
-
-void reset(){
-  goToPoint(0, 0);
-  turnToAngle(0);
 }
 
 void skills(){
