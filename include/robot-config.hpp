@@ -23,10 +23,14 @@ extern PID liftPID;
 extern ADIEncoder leftEncoder;
 extern ADIEncoder rightEncoder;
 extern ADIEncoder backEncoder;
+
 extern ADIButton clawFrontButton;
 extern ADIButton clawBackButton;
 
 extern pros::Imu iSensor;
+
+extern pros::Vision vision;
+extern pros::vision_signature SIG_YELLOW;
 
 extern PID drivePID;
 extern PID anglePID;

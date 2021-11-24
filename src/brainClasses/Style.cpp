@@ -10,6 +10,12 @@ void Style::setPressed(lv_color_t main_color, lv_color_t border_color, lv_color_
   pressed = Style::make_style(main_color, border_color, text_color, radius, border_width);
 }
 
+void Style::setBoth(lv_color_t main_color, lv_color_t border_color, lv_color_t text_color,
+                      int radius, int border_width){
+  pressed = Style::make_style(main_color, border_color, text_color, radius, border_width);
+  released = Style::make_style(main_color, border_color, text_color, radius, border_width);
+}
+
 lv_style_t Style::make_style(lv_color_t main_color, lv_color_t border_color, lv_color_t text_color,
                       int radius, int border_width){
   lv_style_t style;

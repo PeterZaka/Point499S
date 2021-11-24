@@ -5,12 +5,15 @@
 class Style {
 
 public:
-  Style();
+  Style() = default;
 
   void setReleased(lv_color_t main_color, lv_color_t border_color, lv_color_t text_color,
                       int radius, int border_width);
-  
+
   void setPressed(lv_color_t main_color, lv_color_t border_color, lv_color_t text_color,
+                      int radius, int border_width);
+
+  void setBoth(lv_color_t main_color, lv_color_t border_color, lv_color_t text_color,
                       int radius, int border_width);
 
   lv_style_t released;

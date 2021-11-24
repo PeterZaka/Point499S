@@ -13,12 +13,14 @@ void on_center_button() {
 
 
 void initialize() {
+	iSensor.reset();
+	vision.set_signature(1, &SIG_YELLOW);
+
 	autonSelectScreenInitialize();
 
 	clawFront.setBrakeMode(AbstractMotor::brakeMode::hold);
 	clawBack.setBrakeMode(AbstractMotor::brakeMode::hold);
 
-	iSensor.reset();
 	pros::delay(20);
 	while(iSensor.is_calibrating()){
 		printf("calibrating...\n");

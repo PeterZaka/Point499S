@@ -11,6 +11,9 @@ class Button {
 
 public:
 
+  Button(lv_obj_t* lv_page, lv_coord_t x, lv_coord_t y, lv_coord_t width, lv_coord_t height,
+         std::string text);
+
   Button(Page* page , lv_coord_t x, lv_coord_t y, lv_coord_t width, lv_coord_t height,
          std::string text);
 
@@ -20,11 +23,10 @@ public:
 
   void setStyle(Style style);
 
-  static int next_id;
-  static std::unordered_map<int, std::vector<std::function<void()>>> id_function;
-
-private:
   lv_obj_t* lv_btn;
   lv_obj_t* label;
+
+  static int next_id;
+  static std::unordered_map<int, std::vector<std::function<void()>>> id_function;
 
 };

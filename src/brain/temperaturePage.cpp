@@ -13,7 +13,7 @@ static const char* temperatureString(std::string words, double celsius){
   return (words + std::to_string((int)((9.0/5.0) * celsius + 32))).c_str();
 }
 
-pros::Task temperatureUpdateTask([](){
+static void updateTemperature(){
   lv_label_set_text(leftLiftTempLabel, temperatureString("Left Lift: ", leftLift.getTemperature()));
   lv_label_set_text(leftLiftTempLabel, temperatureString("Right Lift: ", rightLift.getTemperature()));
   lv_label_set_text(leftLiftTempLabel, temperatureString("Front Claw: ", clawFront.getTemperature()));
@@ -22,10 +22,16 @@ pros::Task temperatureUpdateTask([](){
   lv_label_set_text(leftLiftTempLabel, temperatureString("TR Wheel: ", topRightMotor.getTemperature()));
   lv_label_set_text(leftLiftTempLabel, temperatureString("BL Wheel: ", backLeftMotor.getTemperature()));
   lv_label_set_text(leftLiftTempLabel, temperatureString("BR Wheel: ", backRightMotor.getTemperature()));
+}
+
+pros::Task temperatureUpdateTask([]{
+  updateTemperature();
   pros::delay(1000);
 });
 
-void initalize_temperature_labels(lv_obj_t* temperaturePage){
+void initalize_temperature(lv_obj_t* temperaturePage){
+  temperatureUpdateTask.suspend();
+
   leftLiftTempLabel = lv_label_create(temperaturePage, NULL);
   rightLiftTempLabel = lv_label_create(temperaturePage, NULL);
   frontClawTempLabel = lv_label_create(temperaturePage, NULL);
