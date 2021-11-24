@@ -90,12 +90,19 @@ void opcontrol() {
 		}
 	});
 
+	// ------- Main -------
 	ControllerButton liftUpButton(ControllerId::master, ControllerDigital::R1);
 	ControllerButton liftDownButton(ControllerId::master, ControllerDigital::R2);
 	ControllerButton setForwardButton(ControllerId::master, ControllerDigital::up);
 	ControllerButton setBackwardButton(ControllerId::master, ControllerDigital::down);
 	ControllerButton testButton(ControllerId::master, ControllerDigital::A);
+	// 1 controller only
+	ControllerButton singleClawFrontUpButton(ControllerId::master, ControllerDigital::L1);
+	ControllerButton singleClawFrontDownButton(ControllerId::master, ControllerDigital::L2);
+	ControllerButton singleClawBackUpButton(ControllerId::master, ControllerDigital::X);
+	ControllerButton singleClawBackDownButton(ControllerId::master, ControllerDigital::B);
 
+	// ------- Partner -------
 	ControllerButton clawFrontUpButton(ControllerId::partner, ControllerDigital::R1);
 	ControllerButton clawFrontDownButton(ControllerId::partner, ControllerDigital::R2);
 	ControllerButton clawBackUpButton(ControllerId::partner, ControllerDigital::L1);
@@ -158,15 +165,36 @@ void opcontrol() {
 		else if(liftDownButton.isPressed()) lift.moveVoltage(-12000.0);
 		else lift.moveVoltage(0.0);
 
-		if(clawFrontUpButton.isPressed()) clawFront.moveVoltage(12000.0 * clawSpeed);
-		else if(clawFrontDownButton.isPressed()) clawFront.moveVoltage(-12000.0 * clawSpeed);
-		else clawFront.moveVoltage(0);
+		if (controllerPartner.isConnected()) {
+			if(clawFrontUpButton.isPressed()) clawFront.moveVoltage(12000.0 * clawSpeed);
+			else if(clawFrontDownButton.isPressed()) clawFront.moveVoltage(-12000.0 * clawSpeed);
+			else clawFront.moveVoltage(0);
 
-		if(clawBackUpButton.isPressed()) clawBack.moveVoltage(12000.0 * clawSpeed);
-		else if(clawBackDownButton.isPressed()) clawBack.moveVoltage(-12000.0 * clawSpeed);
-		else clawBack.moveVoltage(0);
+			if(clawBackUpButton.isPressed()) clawBack.moveVoltage(12000.0 * clawSpeed);
+			else if(clawBackDownButton.isPressed()) clawBack.moveVoltage(-12000.0 * clawSpeed);
+			else clawBack.moveVoltage(0);
+		}
+		else {
+			if(singleClawFrontUpButton.isPressed()) clawFront.moveVoltage(12000.0);
+			else if(singleClawFrontDownButton.isPressed()) clawFront.moveVoltage(-12000.0);
+			else clawFront.moveVoltage(0);
 
-		if (testButton.isPressed()) autonFunc();
+			if(singleClawBackUpButton.isPressed()) clawBack.moveVoltage(12000.0);
+			else if(singleClawBackDownButton.isPressed()) clawBack.moveVoltage(-12000.0);
+			else clawBack.moveVoltage(0);
+		}
+
+		if (testButton.changedToPressed()) {
+			controller.rumble(".");
+			pros::Task testingTask(autonFunc);
+			while (testingTask.get_state() == pros::E_TASK_STATE_RUNNING){
+				if (clawFrontButton.changedToPressed()) controller.rumble("..");
+				if (clawBackButton.changedToPressed()) controller.rumble("..");
+				if (testButton.changedToPressed()) testingTask.remove();
+				pros::delay(20);
+			}
+			controller.rumble(".");
+		}
 
 		pros::delay(10);
 	}
