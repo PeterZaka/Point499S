@@ -1,12 +1,23 @@
 #include "auto/autoMovement.hpp"
 
-double driveStrength = 1; // 0 to 1 (0% to 100%)
-int driveTargetTime = 250; // amount of time (in milliseconds) needed within target error for driving
-double driveTargetError = 3; // be within distance (in inches) to be on target
-int turnTargetTime = 250; // amount of time (in milliseconds) needed within target error for turning
-double turnTargetError = 1; // be within distance (in degrees) to be on target
-double correctRotationError = 3; // be outside distance (in inches) to change rotation
-double slowDownRotationError = 8;
+// ------- Drive -------
+double prevDriveStrength = driveStrength;
+double prevDriveTargetTime = driveTargetTime;
+double prevDriveTargetError = driveTargetError;
+// Stop
+double prevDriveStopTime = driveStopTime;
+double prevDriveStopError = driveStopError;
+double prevDriveStopInterval = driveStopInterval;
+
+// ------- Turn -------
+double prevTurnTargetTime = turnTargetTime;
+double prevTurnTargetError = turnTargetError;
+double prevCorrectRotationError = correctRotationError;
+double prevSlowDownRotationError = slowDownRotationError;
+// Stop
+double prevTurnStopTime = turnStopTime;
+double prevTurnStopError = turnStopError;
+double prevTurnStopInterval = turnStopInterval;
 
 void goToPoint(double x, double y, movement Movement){
   turnToPoint(x, y, Movement);
@@ -14,7 +25,10 @@ void goToPoint(double x, double y, movement Movement){
 }
 
 void driveForward(double distance, double rotation){
-  int timeOnTarget = 0;
+  double timeOnTarget = 0;
+  double timeStopped = 0;
+  double prevXPos = xPos;
+  double prevYPos = yPos;
   double startX = xPos;
   double startY = yPos;
   drivePID.setTarget(distance);
@@ -27,7 +41,8 @@ void driveForward(double distance, double rotation){
   bool isBackward = false;
   if (distance < 0) isBackward = true;
 
-  while (timeOnTarget < driveTargetTime){
+  double timePassed = 0;
+  while (timeOnTarget <= driveTargetTime && timeStopped <= driveStopTime){
     double distanceFromStart = findDistanceTo(xPos, yPos, startX, startY);
     if (isBackward) distanceFromStart *= -1;
 
@@ -37,9 +52,21 @@ void driveForward(double distance, double rotation){
     rightSide.moveVoltage( (drivePID.value() - anglePID.value()) * 120.0 * driveStrength);
 
     if (abs(drivePID.error) < driveTargetError)
-      timeOnTarget += 20;
+      timeOnTarget += 0.02;
     else
       timeOnTarget = 0;
+
+    if (timePassed >= driveStopInterval){
+      if (findDistanceTo(prevXPos, prevYPos, xPos, yPos) < driveStopError)
+        timeStopped += timePassed;
+      else
+        timeStopped = 0;
+      prevXPos = xPos;
+      prevYPos = yPos;
+      timePassed = 0;
+    }
+
+    timePassed += 0.02;
     pros::delay(20);
   }
   leftSide.moveVoltage(0);
@@ -47,8 +74,11 @@ void driveForward(double distance, double rotation){
   // if (isDebugging) printf("End: (%.2lf, %.2lf, %.2lf)\n", xPos, yPos, rot);
 }
 
-void driveToPoint(double x, double y, movement Movement, double strength, bool isExponential, double angleClamp){
-  int timeOnTarget = 0;
+void driveToPoint(double x, double y, movement Movement, double strength, double angleClamp){
+  double timeOnTarget = 0;
+  double timeStopped = 0;
+  double prevXPos = xPos;
+  double prevYPos = yPos;
   movement prevBestMovement = best;
   movement bestMovement = best;
   drivePID.reset();
@@ -57,8 +87,8 @@ void driveToPoint(double x, double y, movement Movement, double strength, bool i
   //   printf("Target: (%.2lf, %.2lf)\n", x, y);
   // }
 
-  double prevRotation;
-  while (timeOnTarget < driveTargetTime){
+  double timePassed = 0;
+  while (timeOnTarget <= driveTargetTime && timeStopped <= driveStopTime){
     double distance = findDistanceTo(xPos, yPos, x, y);
     double rotation = findRotationTo(xPos, yPos, x, y);
 
@@ -84,13 +114,6 @@ void driveToPoint(double x, double y, movement Movement, double strength, bool i
 
     if (abs(distance) > correctRotationError){
       double strengthValue = strength * (rotation - rot);
-      if(isExponential)
-      {
-        if(strengthValue < 0) strengthValue *= -strengthValue;
-        else strengthValue *= strengthValue;
-      }
-      // if (abs(rotation - rot) > 45) strengthValue *= 5;
-      // std::cout << strengthValue << std::endl;
       strengthValue = std::clamp(strengthValue, -angleClamp, angleClamp);
       if (abs(distance) <= slowDownRotationError) strengthValue *= 0.1;
 
@@ -103,9 +126,21 @@ void driveToPoint(double x, double y, movement Movement, double strength, bool i
     }
 
     if (abs(drivePID.error) < driveTargetError)
-      timeOnTarget += 20;
+      timeOnTarget += 0.02;
     else
       timeOnTarget = 0;
+
+    if (timePassed >= driveStopInterval){
+      if (findDistanceTo(prevXPos, prevYPos, xPos, yPos) < driveStopError)
+        timeStopped += timePassed;
+      else
+        timeStopped = 0;
+      prevXPos = xPos;
+      prevYPos = yPos;
+      timePassed = 0;
+    }
+
+    timePassed += 0.02;
     pros::delay(20);
   }
   leftSide.moveVoltage(0);
@@ -114,7 +149,9 @@ void driveToPoint(double x, double y, movement Movement, double strength, bool i
 }
 
 void turnToAngle(double angle){
-  int timeOnTarget = 0;
+  double timeOnTarget = 0;
+  double timeStopped = 0;
+  double prevRot = rot;
   angle = findShortestRotation(rot, angle);
   turnPID.setTarget(angle);
   // if (isDebugging){
@@ -122,15 +159,27 @@ void turnToAngle(double angle){
   //   printf("Target: %.2lf rot\n", angle);
   // }
 
-  while (timeOnTarget < turnTargetTime){
+  double timePassed = 0;
+  while (timeOnTarget <= turnTargetTime && timeStopped <= turnStopTime){
     turnPID.update(rot);
     leftSide.moveVoltage(turnPID.value() * 120.0);
     rightSide.moveVoltage(-turnPID.value() * 120.0);
 
     if (abs(turnPID.error) < turnTargetError)
-      timeOnTarget += 20;
+      timeOnTarget += 0.02;
     else
       timeOnTarget = 0;
+
+    if (timePassed >= turnStopInterval){
+      if (abs(prevRot - rot) < turnStopError)
+        timeStopped += timePassed;
+      else
+        timeStopped = 0;
+      prevRot = rot;
+      timePassed = 0;
+    }
+
+    timePassed += 0.02;
     pros::delay(20);
   }
   leftSide.moveVoltage(0);
@@ -169,12 +218,12 @@ void groupMoveTo(MotorGroup group, double pos, PID groupPID, double targetError,
   double timeOnTarget = 0;
   groupPID.setTarget(pos);
 
-  while (timeOnTarget < targetTime){
+  while (timeOnTarget <= targetTime){
     groupPID.update(group.getPosition());
     group.moveVoltage(groupPID.value() * 120.0);
 
     if (abs(groupPID.error) < targetError)
-      timeOnTarget += 20;
+      timeOnTarget += 0.02;
     else
       timeOnTarget = 0;
     pros::delay(20);
@@ -215,7 +264,7 @@ void balance(PID balancePID){
 }
 
 void grabTower(point tower, movement Movement, point offset){
-  int prevDriveTargetTime = driveTargetTime; driveTargetTime = 1;
+  driveTargetTime = 0;
   point point1 = findOffsetTarget({xPos, yPos}, tower, offset);
   driveToPoint(point1.x, point1.y, Movement);
   // point tower1 = findOffsetTarget({xPos, yPos}, tower, {7, 0});

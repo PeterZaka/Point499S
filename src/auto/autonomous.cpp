@@ -7,7 +7,7 @@ void rightAuton(){
   // Get First Tower
   groupMoveTo(clawFront, -1300, 0);
   // Drive to tower
-  int prevDriveTargetTime = driveTargetTime; driveTargetTime = 1;
+  driveTargetTime = 0;
 	driveToPoint(-1, 54.5, forward);
 	driveTargetTime = prevDriveTargetTime;
   pros::delay(250);
@@ -58,7 +58,7 @@ void leftAuton(){
   // Get First Tower
   groupMoveTo(clawFront, -1300, 0);
   // Drive to tower
-  int prevDriveTargetTime = driveTargetTime; driveTargetTime = 1;
+  driveTargetTime = 0;
 	driveToPoint(8.5 + 29.5, 55.25 + 10.5, forward);
   // Turn into tower
   pros::delay(250);
@@ -75,14 +75,14 @@ void leftAuton(){
 
   // Get Middle Tower
   groupMoveTo(clawBack, -1700, 0);
-  prevDriveTargetTime = driveTargetTime; driveTargetTime = 1;
-  double prevTurnTargetError = turnTargetError; turnTargetError = 5;
+  driveTargetTime = 0;
+  turnTargetError = 5;
   goToPoint(48, 58, backward);
   goToPoint(64, 58, backward);
   turnTargetError = prevTurnTargetError;
   lift.moveVoltage(-12000.0);
   // point tower1 = findOffsetTarget({xPos, yPos}, {72, 72}, {7, -10.5});
-  // prevDriveTargetTime = driveTargetTime; driveTargetTime = 1;
+  // prevDriveTargetTime = driveTargetTime; driveTargetTime = 0;
   // turnToPoint(tower1.x, tower1.y, backward);
   grabTower({72, 72}, backward, {5, -10.5});
   // Turn into tower
@@ -112,7 +112,7 @@ void leftAuton(){
 //     // Get First Tower
 //     groupMoveTo(clawFront, -1300, 0);
 //     // Drive to tower
-//     int prevDriveTargetTime = driveTargetTime; driveTargetTime = 1;
+//     int prevDriveTargetTime = driveTargetTime; driveTargetTime = 0;
 //   	driveToPoint(8.5, 55.25, forward);
 //     // Turn into tower
 //     pros::delay(250);
@@ -129,7 +129,7 @@ void leftAuton(){
 //
 //     // Get Middle Tower
 //     groupMoveTo(clawBack, -2000, 0);
-//     prevDriveTargetTime = driveTargetTime; driveTargetTime = 1;
+//     prevDriveTargetTime = driveTargetTime; driveTargetTime = 0;
 //     goToPoint(25, 45, backward);
 //     turnToPoint(50, 60, backward);
 //     lift.moveVoltage(-12000.0);
@@ -210,7 +210,7 @@ void skills(){
   pros::delay(250);
 
   // move left neutral tower to top right
-  int prevDriveTargetTime = driveTargetTime; driveTargetTime = 1;
+  driveTargetTime = 0;
   driveForward(-10);
   // pros::delay(1000);
   driveToPoint(xPos + 2, yPos + 10, forward);
@@ -220,8 +220,8 @@ void skills(){
   pros::delay(250);
   driveToPoint(18, 60, backward);
   driveTargetTime = 1000;
-  double prevDriveTargetError = driveTargetError; driveTargetError = 30;
-  double prevTurnTargetError = turnTargetError; turnTargetError = 3;
+  driveTargetError = 30;
+  turnTargetError = 3;
   turnToPoint(78, 110, backward);
   pros::Task speedTask([&](){
     driveStrength = 0.5;
@@ -229,7 +229,8 @@ void skills(){
     driveStrength = 1;
   });
   driveToPoint(74, 112, backward);
-  driveTargetError = prevDriveTargetError; driveTargetTime = 1;
+  driveTargetTime = 0;
+  driveTargetError = prevDriveTargetError;
   turnTargetError = prevTurnTargetError;
   liftTask.suspend();
 
@@ -238,9 +239,10 @@ void skills(){
   lift.moveVoltage(12000.0);
   turnToAngle(0);
   driveTargetTime = 1000;
-  prevDriveTargetError = driveTargetError; driveTargetError = 25;
+  driveTargetError = 25;
   driveForward(30);
-  driveTargetError = prevDriveTargetError; driveTargetTime = 1;
+  driveTargetTime = 0;
+  driveTargetError = prevDriveTargetError;
   clawFront.moveVoltage(12000.0);
   pros::delay(1000);
   driveForward(-24);
@@ -287,9 +289,10 @@ void skills(){
   lift.moveVoltage(12000.0);
   turnToAngle(180);
   driveTargetTime = 1000;
-  prevDriveTargetError = driveTargetError; driveTargetError = 25;
+  driveTargetError = 25;
   driveForward(30);
-  driveTargetError = prevDriveTargetError; driveTargetTime = 1;
+  driveTargetTime = 0;
+  driveTargetError = prevDriveTargetError;
   clawFront.moveVoltage(12000.0);
   pros::delay(1000);
   driveToPoint(72, 50, backward);
@@ -299,9 +302,10 @@ void skills(){
   groupMoveTo(clawFront, -1300, 0);
   driveToPoint(100, 36, forward);
   driveTargetTime = 1000;
-  prevDriveTargetError = driveTargetError; driveTargetError = 15;
+  driveTargetError = 15;
   grabTower({132, 36}, forward, {2, -10});
-  driveTargetError = prevDriveTargetError; driveTargetTime = 1;
+  driveTargetTime = 0;
+  driveTargetError = prevDriveTargetError;
   leftSide.moveVoltage(12000.0 * 0.05);
   rightSide.moveVoltage(12000.0 * 0.5);
   while (rot > findShortestRotation(rot, -90) && !clawFrontButton.isPressed()) pros::delay(20);
@@ -329,9 +333,10 @@ void skills(){
   lift.moveVoltage(12000.0);
   turnToAngle(0);
   driveTargetTime = 1000;
-  prevDriveTargetError = driveTargetError; driveTargetError = 25;
+  driveTargetError = 25;
   driveForward(30);
-  driveTargetError = prevDriveTargetError; driveTargetTime = 1;
+  driveTargetTime = 0;
+  driveTargetError = prevDriveTargetError;
   clawFront.moveVoltage(12000.0);
   pros::delay(1000);
   driveToPoint(72, 96, backward);

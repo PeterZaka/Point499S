@@ -3,16 +3,28 @@
 #include <cmath>
 
 #include "math.hpp"
+#include "auton-config.hpp"
 #include "robot-config.hpp"
 #include "auto/odometry.hpp"
 
-extern double driveStrength; // 0 to 1 (0% to 100%)
-extern int driveTargetTime; // amount of time (in milliseconds) needed within target error for driving
-extern double driveTargetError; // be within distance (in inches) to be on target
-extern int turnTargetTime; // amount of time (in milliseconds) needed within target error for turning
-extern double turnTargetError; // be within distance (in degrees) to be on target
-extern double correctRotationError; // be outside distance (in inches) to change rotation
-extern double slowDownRotationError;
+// ------- Drive -------
+extern double prevDriveStrength;
+extern double prevDriveTargetTime;
+extern double prevDriveTargetError;
+// Stop
+extern double prevDriveStopTime;
+extern double prevDriveStopError;
+extern double prevDriveStopInterval;
+
+// ------- Turn -------
+extern double prevTurnTargetTime;
+extern double prevTurnTargetError;
+extern double prevCorrectRotationError;
+extern double prevSlowDownRotationError;
+// Stop
+extern double prevTurnStopTime;
+extern double prevTurnStopError;
+extern double prevTurnStopInterval;
 
 enum movement{
   forward,
@@ -23,14 +35,14 @@ enum movement{
 void goToPoint(double x, double y, movement Movement=forward);
 
 void driveForward(double distance, double rotation=rot);
-void driveToPoint(double x, double y, movement Movement=best, double strength=5, bool isExponential=false, double angleClamp=200);
+void driveToPoint(double x, double y, movement Movement=best, double strength=5, double angleClamp=200);
 
 void turnToAngle(double angle);
 void turnToAngle(double angle, double power);
 void turnToPoint(double x, double y, movement Movement=forward);
 
-void groupMoveTo(MotorGroup group, double pos, PID groupPID=PID(1,0,0), double targetError=50, double targetTime=10);
-pros::Task groupMoveTo(MotorGroup group, double pos, double distanceToStart, PID groupPID=PID(1,0,0), double targetError=50, double targetTime=10);
+void groupMoveTo(MotorGroup group, double pos, PID groupPID=PID(1,0,0), double targetError=50, double targetTime=0.01);
+pros::Task groupMoveTo(MotorGroup group, double pos, double distanceToStart, PID groupPID=PID(1,0,0), double targetError=50, double targetTime=0.01);
 
 void balance(PID balancePID);
 
