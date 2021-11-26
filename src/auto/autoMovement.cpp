@@ -33,10 +33,10 @@ void driveForward(double distance, double rotation){
   double startY = yPos;
   drivePID.setTarget(distance);
   anglePID.setTarget(rotation);
-  // if (isDebugging){
-  //   printf("\ndriveForward - Start: (%.2lf, %.2lf, %.2lf)\n", xPos, yPos, rot);
-  //   printf("Target: %.2lf in, %.2lf rot)\n", distance, rotation);
-  // }
+  if (DebugDriveForward){
+    printf("\ndriveForward - Start: (%.2lf, %.2lf, %.2lf)\n", xPos, yPos, rot);
+    printf("Target: %.2lf in, %.2lf rot)\n", distance, rotation);
+  }
 
   bool isBackward = false;
   if (distance < 0) isBackward = true;
@@ -71,7 +71,11 @@ void driveForward(double distance, double rotation){
   }
   leftSide.moveVoltage(0);
   rightSide.moveVoltage(0);
-  // if (isDebugging) printf("End: (%.2lf, %.2lf, %.2lf)\n", xPos, yPos, rot);
+  if (DebugDriveForward) {
+    if (timeStopped > driveStopTime) printf("Stopped at: ");
+    else printf("Reached target at: ");
+    printf("(%.2lf, %.2lf, %.2lf)\n", xPos, yPos, rot);
+  }
 }
 
 void driveToPoint(double x, double y, movement Movement, double strength, double angleClamp){
@@ -82,10 +86,10 @@ void driveToPoint(double x, double y, movement Movement, double strength, double
   movement prevBestMovement = best;
   movement bestMovement = best;
   drivePID.reset();
-  // if (isDebugging){
-  //   printf("\ndrivetoPoint - Start: (%.2lf, %.2lf, %.2lf)\n", xPos, yPos, rot);
-  //   printf("Target: (%.2lf, %.2lf)\n", x, y);
-  // }
+  if (DebugDriveToPoint){
+    printf("\ndrivetoPoint - Start: (%.2lf, %.2lf, %.2lf)\n", xPos, yPos, rot);
+    printf("Target: (%.2lf, %.2lf)\n", x, y);
+  }
 
   double timePassed = 0;
   while (timeOnTarget <= driveTargetTime && timeStopped <= driveStopTime){
@@ -145,7 +149,11 @@ void driveToPoint(double x, double y, movement Movement, double strength, double
   }
   leftSide.moveVoltage(0);
   rightSide.moveVoltage(0);
-  // if (isDebugging) printf("End: (%.2lf, %.2lf, %.2lf)\n", xPos, yPos, rot);
+  if (DebugDriveToPoint) {
+    if (timeStopped > driveStopTime) printf("Stopped at: ");
+    else printf("Reached target at: ");
+    printf("(%.2lf, %.2lf, %.2lf)\n", xPos, yPos, rot);
+  }
 }
 
 void turnToAngle(double angle){
@@ -154,10 +162,10 @@ void turnToAngle(double angle){
   double prevRot = rot;
   angle = findShortestRotation(rot, angle);
   turnPID.setTarget(angle);
-  // if (isDebugging){
-  //   printf("\nturnToAngle - Start: %.2lf\n", rot);
-  //   printf("Target: %.2lf rot\n", angle);
-  // }
+  if (DebugTurn){
+    printf("\nturnToAngle - Start: %.2lf\n", rot);
+    printf("Target: %.2lf rot\n", angle);
+  }
 
   double timePassed = 0;
   while (timeOnTarget <= turnTargetTime && timeStopped <= turnStopTime){
@@ -185,7 +193,11 @@ void turnToAngle(double angle){
   leftSide.moveVoltage(0);
   rightSide.moveVoltage(0);
 
-  // if (isDebugging) printf("End: %.2lf\n", rot);
+  if (DebugTurn) {
+    if (timeStopped > driveStopTime) printf("Stopped at: ");
+    else printf("Reached target at: ");
+    printf("End: %.2lf\n", rot);
+  }
 }
 
 void turnToAngle(double angle, double power){
@@ -205,10 +217,10 @@ void turnToAngle(double angle, double power){
 
 void turnToPoint(double x, double y, movement Movement){
   double angle = findRotationTo(xPos, yPos, x, y);
-  // if (isDebugging){
-  //   printf("\nturnToPoint - Start: (%.2lf, %.2lf, %.2lf)\n", xPos, yPos, rot);
-  //   printf("Target: (%.2lf, %.2lf, %.2lf)\n", x, y, angle);
-  // }
+  if (DebugTurn){
+    printf("\nturnToPoint - Start: (%.2lf, %.2lf, %.2lf)\n", xPos, yPos, rot);
+    printf("Target: (%.2lf, %.2lf, %.2lf)\n", x, y, angle);
+  }
   if (Movement == backward) angle += 180;
   if (Movement == best) findBestRotation(angle, Movement);
   turnToAngle(angle);
@@ -218,6 +230,10 @@ void groupMoveTo(MotorGroup group, double pos, PID groupPID, double targetError,
   double timeOnTarget = 0;
   groupPID.setTarget(pos);
 
+  if (DebugGroupMoveTo){
+    printf("\ngroupMoveTo - Start: %.2lf\n", group.getPosition());
+    printf("Target: %.2lf\n", pos);
+  }
   while (timeOnTarget <= targetTime){
     groupPID.update(group.getPosition());
     group.moveVoltage(groupPID.value() * 120.0);
@@ -229,6 +245,8 @@ void groupMoveTo(MotorGroup group, double pos, PID groupPID, double targetError,
     pros::delay(20);
   }
   group.moveVoltage(0);
+
+  if (DebugGroupMoveTo) printf("End: %.2lf\n", group.getPosition());
 }
 
 pros::Task groupMoveTo(MotorGroup group, double pos, double distanceToStart, PID groupPID, double targetError, double targetTime){

@@ -3,6 +3,7 @@
 #include <cmath>
 
 #include "math.hpp"
+#include "debug.hpp"
 #include "auton-config.hpp"
 #include "robot-config.hpp"
 #include "auto/odometry.hpp"
