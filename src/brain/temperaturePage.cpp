@@ -2,7 +2,7 @@
 
 lv_obj_t* leftLiftTempLabel;
 lv_obj_t* rightLiftTempLabel;
-lv_obj_t* frontClawTempLabel;
+// lv_obj_t* frontClawTempLabel;
 lv_obj_t* backClawTempLabel;
 lv_obj_t* topLeftMotorTempLabel;
 lv_obj_t* topRightTempLabel;
@@ -16,7 +16,7 @@ static const char* temperatureString(std::string words, double celsius){
 static void updateTemperature(){
   lv_label_set_text(leftLiftTempLabel, temperatureString("Left Lift: ", leftLift.getTemperature()));
   lv_label_set_text(leftLiftTempLabel, temperatureString("Right Lift: ", rightLift.getTemperature()));
-  lv_label_set_text(leftLiftTempLabel, temperatureString("Front Claw: ", clawFront.getTemperature()));
+  // lv_label_set_text(leftLiftTempLabel, temperatureString("Front Claw: ", clawFront.getTemperature()));
   lv_label_set_text(leftLiftTempLabel, temperatureString("Back Claw: ", clawBack.getTemperature()));
   lv_label_set_text(leftLiftTempLabel, temperatureString("TL Wheel: ", topLeftMotor.getTemperature()));
   lv_label_set_text(leftLiftTempLabel, temperatureString("TR Wheel: ", topRightMotor.getTemperature()));
@@ -34,7 +34,7 @@ void initalize_temperature_page(lv_obj_t* temperaturePage){
 
   leftLiftTempLabel = lv_label_create(temperaturePage, NULL);
   rightLiftTempLabel = lv_label_create(temperaturePage, NULL);
-  frontClawTempLabel = lv_label_create(temperaturePage, NULL);
+  // frontClawTempLabel = lv_label_create(temperaturePage, NULL);
   backClawTempLabel = lv_label_create(temperaturePage, NULL);
   topLeftMotorTempLabel = lv_label_create(temperaturePage, NULL);
   topRightTempLabel = lv_label_create(temperaturePage, NULL);
@@ -42,7 +42,7 @@ void initalize_temperature_page(lv_obj_t* temperaturePage){
   backRightTempLabel = lv_label_create(temperaturePage, NULL);
   lv_obj_align(leftLiftTempLabel, NULL, LV_ALIGN_IN_TOP_LEFT, 10, 100);
   lv_obj_align(rightLiftTempLabel, NULL, LV_ALIGN_IN_TOP_LEFT, 10, 125);
-  lv_obj_align(frontClawTempLabel, NULL, LV_ALIGN_IN_TOP_LEFT, 10, 150);
+  // lv_obj_align(frontClawTempLabel, NULL, LV_ALIGN_IN_TOP_LEFT, 10, 150);
   lv_obj_align(backClawTempLabel, NULL, LV_ALIGN_IN_TOP_LEFT, 10, 175);
   lv_obj_align(topLeftMotorTempLabel, NULL, LV_ALIGN_IN_TOP_LEFT, 200, 100);
   lv_obj_align(topRightTempLabel, NULL, LV_ALIGN_IN_TOP_LEFT, 200, 125);

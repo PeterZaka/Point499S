@@ -7,13 +7,13 @@ Motor backRightMotor(3);
 MotorGroup leftSide({topLeftMotor, backLeftMotor});
 MotorGroup rightSide({topRightMotor, backRightMotor});
 
-MotorGroup clawFront({-13});
+pros::ADIDigitalOut clawFront({1, 'A'}, false);
 MotorGroup clawBack({-17});
 MotorGroup leftLift({-8});
 MotorGroup rightLift({10});
 MotorGroup lift({-8, 10});
-PID rightLiftPID(0, 0, 0);
-PID liftPID(1, 0, 0);
+
+pros::ADIDigitalOut liftBoost({1, 'B'}, false);
 
 ADIEncoder leftEncoder('G', 'H');
 ADIEncoder rightEncoder('E', 'F', true);

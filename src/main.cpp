@@ -18,7 +18,6 @@ void initialize() {
 
 	autonSelectScreenInitialize();
 
-	clawFront.setBrakeMode(AbstractMotor::brakeMode::hold);
 	clawBack.setBrakeMode(AbstractMotor::brakeMode::hold);
 
 	pros::delay(20);
@@ -95,10 +94,12 @@ void opcontrol() {
 	ControllerButton liftDownButton(ControllerId::master, ControllerDigital::R2);
 	ControllerButton setForwardButton(ControllerId::master, ControllerDigital::up);
 	ControllerButton setBackwardButton(ControllerId::master, ControllerDigital::down);
+	ControllerButton enableBoostButton(ControllerId::master, ControllerDigital::L1);
+	ControllerButton disableBoostButton(ControllerId::master, ControllerDigital::L2);
 	ControllerButton testButton(ControllerId::master, ControllerDigital::A);
 	// 1 controller only
-	ControllerButton singleClawFrontUpButton(ControllerId::master, ControllerDigital::L1);
-	ControllerButton singleClawFrontDownButton(ControllerId::master, ControllerDigital::L2);
+	ControllerButton singleClawFrontUpButton(ControllerId::master, ControllerDigital::right);
+	ControllerButton singleClawFrontDownButton(ControllerId::master, ControllerDigital::left);
 	ControllerButton singleClawBackUpButton(ControllerId::master, ControllerDigital::X);
 	ControllerButton singleClawBackDownButton(ControllerId::master, ControllerDigital::B);
 
@@ -112,6 +113,7 @@ void opcontrol() {
 
 	bool isTank = true;
 	bool isBackward = false;
+	bool isLiftBoostEnabled = true;
 
 	double clawSpeed = 1;
 
@@ -133,17 +135,22 @@ void opcontrol() {
 		if (setForwardButton.changedToPressed()) {
 			controller.rumble("..");
 			isBackward = false;
-		}
-		if (setBackwardButton.changedToPressed()) {
+		} else if (setBackwardButton.changedToPressed()) {
 			controller.rumble("-");
 			isBackward = true;
+		}
+		if (enableBoostButton.changedToPressed()) {
+			controller.rumble(".");
+			isLiftBoostEnabled = true;
+		} else if (disableBoostButton.changedToPressed()) {
+			controller.rumble(".");
+			isLiftBoostEnabled = false;
 		}
 
 		if (clawRegularButton.changedToPressed()) {
 			controllerPartner.rumble("..");
 			clawSpeed = 1;
-		}
-		if (clawSlowButton.changedToPressed()) {
+		} else if (clawSlowButton.changedToPressed()) {
 			controllerPartner.rumble("-");
 			clawSpeed = 0.5;
 		}
@@ -161,23 +168,28 @@ void opcontrol() {
 			rightSide.moveVoltage((leftYAxis - rightXAxis) * 12000.0);
 		}
 
-		if(liftUpButton.isPressed()) lift.moveVoltage(12000.0);
-		else if(liftDownButton.isPressed()) lift.moveVoltage(-12000.0);
-		else lift.moveVoltage(0.0);
+		if(liftUpButton.isPressed()){
+			liftBoost.set_value(true);
+			lift.moveVoltage(12000.0);
+		} else if(liftDownButton.isPressed()){
+			liftBoost.set_value(false);
+			lift.moveVoltage(-12000.0);
+		} else {
+			liftBoost.set_value(false);
+			lift.moveVoltage(0.0);
+		}
 
 		if (controllerPartner.isConnected()) {
-			if(clawFrontUpButton.isPressed()) clawFront.moveVoltage(12000.0 * clawSpeed);
-			else if(clawFrontDownButton.isPressed()) clawFront.moveVoltage(-12000.0 * clawSpeed);
-			else clawFront.moveVoltage(0);
+			if(clawFrontUpButton.isPressed()) clawFront.set_value(false);
+			else if(clawFrontDownButton.isPressed()) clawFront.set_value(true);
 
 			if(clawBackUpButton.isPressed()) clawBack.moveVoltage(12000.0 * clawSpeed);
 			else if(clawBackDownButton.isPressed()) clawBack.moveVoltage(-12000.0 * clawSpeed);
 			else clawBack.moveVoltage(0);
 		}
 		else {
-			if(singleClawFrontUpButton.isPressed()) clawFront.moveVoltage(12000.0);
-			else if(singleClawFrontDownButton.isPressed()) clawFront.moveVoltage(-12000.0);
-			else clawFront.moveVoltage(0);
+			if(singleClawFrontUpButton.isPressed()) clawFront.set_value(false);
+			else if(singleClawFrontDownButton.isPressed()) clawFront.set_value(true);
 
 			if(singleClawBackUpButton.isPressed()) clawBack.moveVoltage(12000.0);
 			else if(singleClawBackDownButton.isPressed()) clawBack.moveVoltage(-12000.0);

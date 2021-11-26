@@ -12,13 +12,13 @@ extern Motor backRightMotor;
 extern MotorGroup leftSide;
 extern MotorGroup rightSide;
 
-extern MotorGroup clawFront;
+extern pros::ADIDigitalOut clawFront;
 extern MotorGroup clawBack;
 extern MotorGroup leftLift;
 extern MotorGroup rightLift;
 extern MotorGroup lift;
-extern PID rightLiftPID;
-extern PID liftPID;
+
+extern pros::ADIDigitalOut liftBoost;
 
 extern ADIEncoder leftEncoder;
 extern ADIEncoder rightEncoder;
