@@ -12,6 +12,9 @@ static const double HEIGHTRATIO = (SCREENHEIGHT - HEIGHTOFFSET) / VISION_FOV_HEI
 static std::vector<Button> buttons;
 static Style yellow_style = Style();
 
+static lv_obj_t* objectPositionLabel;
+static lv_obj_t* objectSizeLabel;
+
 static void update_vision(){
   for (int i = 0; i < vision.get_object_count(); i++){
      pros::vision_object_s_t object = vision.get_by_size(i);
@@ -27,6 +30,14 @@ static void update_vision(){
     Button btn = buttons[i];
     lv_obj_set_hidden(btn.lv_btn, true);
   }
+
+  if (vision.get_object_count() > 0) {
+    pros::vision_object_s_t object = vision.get_by_size(0);
+    lv_label_set_text(objectPositionLabel,
+      ("(" + std::to_string(object.x_middle_coord) + ", " + std::to_string(object.y_middle_coord) + ")").c_str());
+    lv_label_set_text(objectPositionLabel,
+      ("(" + std::to_string(object.width) + ", " + std::to_string(object.height) + ")").c_str());
+  }
 }
 
 pros::Task visionUpdateTask([]{
@@ -36,6 +47,11 @@ pros::Task visionUpdateTask([]{
 
 void initalize_vision_page(lv_obj_t* visionPage){
   visionUpdateTask.suspend();
+
+  objectPositionLabel = lv_label_create(visionPage, NULL);
+  objectSizeLabel = lv_label_create(visionPage, NULL);
+  lv_obj_align(objectPositionLabel, NULL, LV_ALIGN_IN_TOP_LEFT, 0, 125);
+  lv_obj_align(objectSizeLabel, NULL, LV_ALIGN_IN_TOP_LEFT, 0, 150);
 
   yellow_style.setBoth(LV_COLOR_YELLOW, NO_COLOR, NO_COLOR, 0, 0);
 

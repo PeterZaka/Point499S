@@ -78,13 +78,17 @@ void opcontrol() {
 	Controller controller(ControllerId::master);
 	Controller controllerPartner(ControllerId::partner);
 
-	pros::Task temperatureTask([&](){
+	bool isLiftBoostEnabled = true;
+
+	pros::Task controllerPrintTask([&](){
 		while(1){
 			controller.clear();
 			pros::delay(50);
 			controller.setText(0, 0, "Left Lift: " + std::to_string((int)leftLift.getTemperature()));
 			pros::delay(50);
 			controller.setText(1, 0, "Right Lift: " + std::to_string((int)rightLift.getTemperature()));
+			pros::delay(50);
+			controller.setText(2, 0, "Boost Enabled: " + std::to_string(isLiftBoostEnabled));
 			pros::delay(500);
 		}
 	});
@@ -113,7 +117,6 @@ void opcontrol() {
 
 	bool isTank = true;
 	bool isBackward = false;
-	bool isLiftBoostEnabled = true;
 
 	double clawSpeed = 1;
 

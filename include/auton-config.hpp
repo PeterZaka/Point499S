@@ -18,3 +18,8 @@ extern double slowDownRotationError;
 extern double turnStopTime;
 extern double turnStopError;
 extern double turnStopInterval;
+
+// ------- Color -------
+extern double minColorWidth;
+extern double minColorHeight;
+extern double colorStrength;

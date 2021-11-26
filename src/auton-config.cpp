@@ -43,3 +43,9 @@ double turnStopError = 0.05;
 
 // Turn Stop Interval - Time interval to measure if stopped
 double turnStopInterval = 0.25;
+
+
+// ------- Color -------
+double minColorWidth = 50;
+double minColorHeight = 50;
+double colorStrength = 0.2;

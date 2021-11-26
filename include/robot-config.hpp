@@ -17,7 +17,6 @@ extern MotorGroup clawBack;
 extern MotorGroup leftLift;
 extern MotorGroup rightLift;
 extern MotorGroup lift;
-
 extern pros::ADIDigitalOut liftBoost;
 
 extern ADIEncoder leftEncoder;
@@ -35,3 +34,4 @@ extern pros::vision_signature SIG_YELLOW;
 extern PID drivePID;
 extern PID anglePID;
 extern PID turnPID;
+extern PID colorPID;
