@@ -1,6 +1,7 @@
 #pragma once
 
 #include "pros/apix.h"
+#include "brainClasses/Button.hpp"
 #include "robot-config.hpp"
 
 extern pros::Task temperatureUpdateTask;

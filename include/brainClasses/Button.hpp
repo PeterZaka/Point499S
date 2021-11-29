@@ -7,6 +7,8 @@
 #include <map>
 #include <functional>
 
+extern bool isAllInit;
+
 class Button {
 
 public:

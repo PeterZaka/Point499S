@@ -10,9 +10,6 @@ Page::Page(){
 }
 
 void Page::showPage(){
-  std::cout << Page::allPages.size() << std::endl;
   for (auto p: Page::allPages) lv_obj_set_hidden(p, true);
-  std::cout << "Hidden" << std::endl;
   lv_obj_set_hidden(lv_page, false);
-  std::cout << "Show" << std::endl;
 }

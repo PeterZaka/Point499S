@@ -9,24 +9,29 @@ lv_obj_t* topRightTempLabel;
 lv_obj_t* backLeftTempLabel;
 lv_obj_t* backRightTempLabel;
 
-static const char* temperatureString(std::string words, double celsius){
-  return (words + std::to_string((int)((9.0/5.0) * celsius + 32))).c_str();
+static std::string temperatureString(std::string words, double celsius){
+  return (words + std::to_string((int)((9.0/5.0) * celsius + 32)));
 }
 
 static void updateTemperature(){
-  lv_label_set_text(leftLiftTempLabel, temperatureString("Left Lift: ", leftLift.getTemperature()));
-  lv_label_set_text(leftLiftTempLabel, temperatureString("Right Lift: ", rightLift.getTemperature()));
-  // lv_label_set_text(leftLiftTempLabel, temperatureString("Front Claw: ", clawFront.getTemperature()));
-  lv_label_set_text(leftLiftTempLabel, temperatureString("Back Claw: ", clawBack.getTemperature()));
-  lv_label_set_text(leftLiftTempLabel, temperatureString("TL Wheel: ", topLeftMotor.getTemperature()));
-  lv_label_set_text(leftLiftTempLabel, temperatureString("TR Wheel: ", topRightMotor.getTemperature()));
-  lv_label_set_text(leftLiftTempLabel, temperatureString("BL Wheel: ", backLeftMotor.getTemperature()));
-  lv_label_set_text(leftLiftTempLabel, temperatureString("BR Wheel: ", backRightMotor.getTemperature()));
+  if (!isAllInit) return;
+
+  lv_label_set_text(leftLiftTempLabel, temperatureString("Left Lift: ", leftLift.getTemperature()).c_str());
+  lv_label_set_text(rightLiftTempLabel, temperatureString("Right Lift: ", rightLift.getTemperature()).c_str());
+  // lv_label_set_text(frontClawTempLabel, temperatureString("Front Claw: ", clawFront.getTemperature()).c_str());
+  lv_label_set_text(backClawTempLabel, temperatureString("Back Claw: ", clawBack.getTemperature()).c_str());
+  lv_label_set_text(topLeftMotorTempLabel, temperatureString("TL Wheel: ", topLeftMotor.getTemperature()).c_str());
+  lv_label_set_text(topRightTempLabel, temperatureString("TR Wheel: ", topRightMotor.getTemperature()).c_str());
+  lv_label_set_text(backLeftTempLabel, temperatureString("BL Wheel: ", backLeftMotor.getTemperature()).c_str());
+  lv_label_set_text(backRightTempLabel, temperatureString("BR Wheel: ", backRightMotor.getTemperature()).c_str());
+  // temperatureString("BR Wheel: ", backRightMotor.getTemperature())
 }
 
 pros::Task temperatureUpdateTask([]{
-  updateTemperature();
-  pros::delay(1000);
+  while (true) {
+    updateTemperature();
+    pros::delay(1000);
+  }
 });
 
 void initalize_temperature_page(lv_obj_t* temperaturePage){

@@ -1,10 +1,13 @@
 #include "brainClasses/Button.hpp"
 
+bool isAllInit = false;
+
 int Button::next_id = 0;
 std::unordered_map<int, std::vector<std::function<void()>>> Button::id_function;
 
 static lv_res_t click_function(lv_obj_t* btn){
   std::vector<std::function<void()>> functions = Button::id_function[lv_obj_get_free_num(btn)];
+  if (functions.size() == 0) return LV_RES_OK;
   for (auto &f: functions) f();
   return LV_RES_OK;
 }

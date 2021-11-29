@@ -22,6 +22,8 @@ static lv_obj_t* yPosLabel;
 static lv_obj_t* rotLabel;
 
 static void update_odometry(){
+  if (!isAllInit) return;
+
   lv_label_set_text(xPosLabel, ("x: " + std::to_string(xPos)).c_str());
   lv_label_set_text(yPosLabel, ("y: " + std::to_string(yPos)).c_str());
   lv_label_set_text(rotLabel, ("r: " + std::to_string(rot)).c_str());
@@ -30,8 +32,10 @@ static void update_odometry(){
 }
 
 pros::Task odometryUpdateTask([]{
-  update_odometry();
-  pros::delay(50);
+  while (true) {
+    update_odometry();
+    pros::delay(50);
+  }
 });
 
 void initalize_odometry_page(lv_obj_t* odometryPage){

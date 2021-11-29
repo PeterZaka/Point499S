@@ -16,6 +16,8 @@ static lv_obj_t* objectPositionLabel;
 static lv_obj_t* objectSizeLabel;
 
 static void update_vision(){
+  if (!isAllInit) return;
+
   for (int i = 0; i < vision.get_object_count(); i++){
      pros::vision_object_s_t object = vision.get_by_size(i);
      if (i >= buttons.size()) buttons.emplace_back(lv_scr_act(), 0, 0, 0, 0, "");
@@ -41,8 +43,10 @@ static void update_vision(){
 }
 
 pros::Task visionUpdateTask([]{
-  update_vision();
-  pros::delay(250);
+  while (true) {
+    update_vision();
+    pros::delay(250);
+  }
 });
 
 void initalize_vision_page(lv_obj_t* visionPage){
