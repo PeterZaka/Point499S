@@ -28,7 +28,7 @@ void autonSelectScreenInitialize(){
   autonLabel = lv_label_create(AutonPage->lv_page, NULL);
   lv_obj_align(autonLabel, NULL, LV_ALIGN_CENTER, 0, 150);
 
-  changeToLeftAuton();
+  changeToSkills();
   Button leftBtn(AutonPage, 100, 0, 150, 100, "Left Auton");
   leftBtn.setFunction(changeToLeftAuton);
   Button rightBtn(AutonPage, 250, 0, 150, 100, "Right Auton");

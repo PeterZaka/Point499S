@@ -30,4 +30,4 @@ pros::vision_signature SIG_YELLOW = pros::Vision::signature_from_utility(1, 0, 0
 PID drivePID(10, 0, 0);
 PID anglePID(2, 0, 0);
 PID turnPID(1.7, 0.2, 0, 10, 1);
-PID colorPID(1, 0, 0);
+PID colorPID(0.5, 0, 0);

@@ -5,4 +5,6 @@
 
 bool isColorDetected(pros::vision_signature sig);
 
+void turnToColor(pros::vision_signature sig, double targetError, double targetTime);
+
 void dirveToColor(pros::vision_signature sig);

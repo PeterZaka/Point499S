@@ -18,3 +18,7 @@ void PrintDebugTime(std::string tag) {
 void PrintPosition(std::string tag) {
   printf("%s(%.2lf, %.2lf, %.2lf)\n", tag.c_str(), xPos, yPos, rot);
 }
+
+void Wait(double seconds){
+  pros::delay(seconds * 1000);
+}

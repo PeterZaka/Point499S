@@ -18,7 +18,7 @@ static lv_obj_t* objectSizeLabel;
 static void update_vision(){
   for (int i = 0; i < vision.get_object_count(); i++){
      pros::vision_object_s_t object = vision.get_by_size(i);
-     if (i >= buttons.size()) buttons.push_back(Button(lv_scr_act(), 0, 0, 0, 0, ""));
+     if (i >= buttons.size()) buttons.emplace_back(lv_scr_act(), 0, 0, 0, 0, "");
      Button btn = buttons[i];
      lv_obj_set_hidden(btn.lv_btn, false);
 

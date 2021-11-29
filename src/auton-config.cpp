@@ -46,6 +46,11 @@ double turnStopInterval = 0.25;
 
 
 // ------- Color -------
+// Min Color Width - Minimum width for an object to be detected
 double minColorWidth = 50;
+
+// Min Color Height - Minimum height for an object to be detected
 double minColorHeight = 50;
-double colorStrength = 0.2;
+
+// Color Strength - Max strength of how much it steers to color, 0 to 1 (0% to 100%)
+double colorStrength = 1;

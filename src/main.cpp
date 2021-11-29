@@ -78,17 +78,33 @@ void opcontrol() {
 	Controller controller(ControllerId::master);
 	Controller controllerPartner(ControllerId::partner);
 
-	bool isLiftBoostEnabled = true;
+	bool isLiftBoostEnabled = false;
 
 	pros::Task controllerPrintTask([&](){
 		while(1){
 			controller.clear();
+
+			// pros::delay(50);
+			// controller.setText(0, 0, "Left Lift: " + std::to_string(leftLift.getTemperature()));
+			// pros::delay(50);
+			// controller.setText(1, 0, "Right Lift: " + std::to_string(rightLift.getTemperature()));
+			// pros::delay(50);
+			// controller.setText(2, 0, "Boost Enabled: " + std::to_string(isLiftBoostEnabled));
+
+			// pros::delay(50);
+			// controller.setText(0, 0, "x: " + std::to_string(xPos));
+			// pros::delay(50);
+			// controller.setText(1, 0, "y: " + std::to_string(yPos));
+			// pros::delay(50);
+			// controller.setText(2, 0, "rot: " + std::to_string(rot));
+
 			pros::delay(50);
-			controller.setText(0, 0, "Left Lift: " + std::to_string((int)leftLift.getTemperature()));
+			controller.setText(0, 0, "l: " + std::to_string(leftEncoder.get()));
 			pros::delay(50);
-			controller.setText(1, 0, "Right Lift: " + std::to_string((int)rightLift.getTemperature()));
+			controller.setText(1, 0, "r: " + std::to_string(rightEncoder.get()));
 			pros::delay(50);
-			controller.setText(2, 0, "Boost Enabled: " + std::to_string(isLiftBoostEnabled));
+			controller.setText(2, 0, "rot: " + std::to_string(calculatedRot * (180/pi)));
+
 			pros::delay(500);
 		}
 	});
@@ -101,6 +117,7 @@ void opcontrol() {
 	ControllerButton enableBoostButton(ControllerId::master, ControllerDigital::L1);
 	ControllerButton disableBoostButton(ControllerId::master, ControllerDigital::L2);
 	ControllerButton testButton(ControllerId::master, ControllerDigital::A);
+	ControllerButton debugButton(ControllerId::master, ControllerDigital::Y);
 	// 1 controller only
 	ControllerButton singleClawFrontUpButton(ControllerId::master, ControllerDigital::right);
 	ControllerButton singleClawFrontDownButton(ControllerId::master, ControllerDigital::left);
@@ -120,6 +137,10 @@ void opcontrol() {
 
 	double clawSpeed = 1;
 
+	xPos = 16;
+	yPos = 16;
+
+	StartDebugTime("Y Pressed: ");
 	while (true) {
 		double leftYAxis = controller.getAnalog(ControllerAnalog::leftY);
 		double rightYAxis = controller.getAnalog(ControllerAnalog::rightY);
@@ -199,12 +220,24 @@ void opcontrol() {
 			else clawBack.moveVoltage(0);
 		}
 
+		if (debugButton.changedToPressed()) {
+			printf("\n");
+			PrintDebugTime("Y Pressed: ");
+			PrintPosition();
+		}
+
 		if (testButton.changedToPressed()) {
 			controller.rumble(".");
+			StartDebugTime("Y Pressed: ");
 			pros::Task testingTask(autonFunc);
 			while (testingTask.get_state() == pros::E_TASK_STATE_RUNNING){
 				if (clawFrontButton.changedToPressed()) controller.rumble("..");
 				if (clawBackButton.changedToPressed()) controller.rumble("..");
+				if (debugButton.changedToPressed()) {
+					printf("\n");
+					PrintDebugTime("Y Pressed: ");
+					PrintPosition();
+				}
 				if (testButton.changedToPressed()) testingTask.remove();
 				pros::delay(20);
 			}

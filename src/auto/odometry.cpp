@@ -7,6 +7,7 @@ double backDistance = 3;
 double xPos = 0;
 double yPos = 0;
 double rot = 0;
+double calculatedRot = 0;
 
 static double prevLeft = 0;
 static double prevRight = 0;
@@ -22,7 +23,7 @@ void calculateOdom(){
   prevRight = rightEncoder.get();
   prevBack = backEncoder.get();
 
-  //double deltaTheta = (deltaL - deltaR) / wheelTrack;
+  calculatedRot += (deltaL - deltaR) / wheelTrack;
   double deltaY = (deltaR + deltaL) / 2;
   double deltaX = deltaB;
 

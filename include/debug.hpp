@@ -16,3 +16,5 @@ void StartDebugTime(std::string tag="");
 void PrintDebugTime(std::string tag="");
 
 void PrintPosition(std::string tag="");
+
+void Wait(double seconds);
