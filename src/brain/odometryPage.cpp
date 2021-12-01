@@ -15,6 +15,7 @@ static Style red_tower_style;
 static Style tile1_style;
 static Style tile2_style;
 static Style platform_style;
+static Style robot_style;
 
 static lv_obj_t* robot;
 static lv_obj_t* xPosLabel;
@@ -51,23 +52,24 @@ void initalize_odometry_page(lv_obj_t* odometryPage){
   yellow_tower_style.setBoth(LV_COLOR_YELLOW, NO_COLOR, NO_COLOR, 100, 0);
   blue_tower_style.setBoth(LV_COLOR_BLUE, NO_COLOR, NO_COLOR, 100, 0);
   red_tower_style.setBoth(LV_COLOR_RED, NO_COLOR, NO_COLOR, 100, 0);
-  tile1_style.setBoth(LV_COLOR_GRAY, LV_COLOR_BLACK, NO_COLOR, 0, 10);
-  tile2_style.setBoth(LV_COLOR_NAVY, LV_COLOR_BLACK, NO_COLOR, 0, 10);
-  platform_style.setBoth(LV_COLOR_BLACK, LV_COLOR_BLACK, NO_COLOR, 0, 0);
+  tile1_style.setBoth(LV_COLOR_GRAY, LV_COLOR_BLACK, NO_COLOR, 0, 1);
+  tile2_style.setBoth(LV_COLOR_NAVY, LV_COLOR_BLACK, NO_COLOR, 0, 1);
+  platform_style.setBoth(LV_COLOR_BLACK, LV_COLOR_BLACK, NO_COLOR, 0, 1);
+  robot_style.setBoth(LV_COLOR_WHITE, LV_COLOR_BLACK, NO_COLOR, 100, 1);
 
   for (int i = 0; i < 6; i++){
     for (int j = 0; j < 6; j++){
       Button tile = Button(odometryPage, (144.0 / 6.0) * i * WIDTHRATIO + WIDTHOFFSET, (144.0 / 6.0) * j * HEIGHTRATIO + HEIGHTOFFSET,
-                                          144.0 / 6.0, 144.0 / 6.0, "");
-      if ((i == 0 && j == 2) || (i == 0 && j == 3) || (i == 5 && j == 2) || (i == 5 && j == 3)) tile.setStyle(platform_style);
-      else if (i + j % 2 == 0) tile.setStyle(tile1_style);
+                                          144.0 / 6.0 * WIDTHRATIO, 144.0 / 6.0 * HEIGHTRATIO, "");
+      if ((i == 2 && j == 0) || (i == 3 && j == 0) || (i == 2 && j == 5) || (i == 3 && j == 5)) tile.setStyle(platform_style);
+      else if ((i + j) % 2 == 0) tile.setStyle(tile1_style);
       else tile.setStyle(tile2_style);
     }
   }
   // yellow towers
   double tower_width_offset = 13.0 / 2.0;
   double tower_height_offset = 13.0 / 2.0;
-  Button(odometryPage, 72 * WIDTHRATIO + WIDTHOFFSET - tower_width_offset, 72 * HEIGHTRATIO + HEIGHTOFFSET - tower_height_offset, 13 * WIDTHRATIO, 13 * HEIGHTRATIO, "").setStyle(yellow_tower_style);
+  Button(odometryPage, 72 * WIDTHRATIO + WIDTHOFFSET - tower_width_offset, 72 * HEIGHTRATIO + HEIGHTOFFSET - tower_height_offset, 13 * WIDTHRATIO, 13 * HEIGHTRATIO, "").setStyle(yellow_tower_style);;
   Button(odometryPage, 36 * WIDTHRATIO + WIDTHOFFSET - tower_width_offset, 72 * HEIGHTRATIO + HEIGHTOFFSET - tower_height_offset, 13 * WIDTHRATIO, 13 * HEIGHTRATIO, "").setStyle(yellow_tower_style);
   Button(odometryPage, 108 * WIDTHRATIO + WIDTHOFFSET - tower_width_offset, 72 * HEIGHTRATIO + HEIGHTOFFSET - tower_height_offset, 13 * WIDTHRATIO, 13 * HEIGHTRATIO, "").setStyle(yellow_tower_style);
   // blue towers
@@ -77,7 +79,10 @@ void initalize_odometry_page(lv_obj_t* odometryPage){
   Button(odometryPage, 12 * WIDTHRATIO + WIDTHOFFSET - tower_width_offset, 36 * HEIGHTRATIO + HEIGHTOFFSET - tower_height_offset, 13 * WIDTHRATIO, 13 * HEIGHTRATIO, "").setStyle(red_tower_style);
   Button(odometryPage, 102 * WIDTHRATIO + WIDTHOFFSET - tower_width_offset, 12 * HEIGHTRATIO + HEIGHTOFFSET - tower_height_offset, 13 * WIDTHRATIO, 13 * HEIGHTRATIO, "").setStyle(red_tower_style);
 
-  robot = Button(odometryPage, 0, 0, 18 * WIDTHRATIO, 18 * HEIGHTRATIO, "").lv_btn;
+  Button robot_button(odometryPage, 0, 0, 18 * WIDTHRATIO, 18 * HEIGHTRATIO, "");
+  robot_button.setStyle(robot_style);
+  robot = robot_button.lv_btn;
+
 }
 
 void startOdometryUpdateTask(){

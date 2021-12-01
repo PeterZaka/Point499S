@@ -14,7 +14,10 @@ void on_center_button() {
 
 void initialize() {
 	iSensor.reset();
+
+	vision.set_white_balance(33);
 	vision.set_signature(1, &SIG_YELLOW);
+	vision.set_signature(2, &SIG_RED);
 
 	autonSelectScreenInitialize();
 

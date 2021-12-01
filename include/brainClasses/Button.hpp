@@ -23,7 +23,7 @@ public:
 
   void setFunctions(std::vector<std::function<void()>> funcs);
 
-  void setStyle(Style style);
+  void setStyle(Style& style);
 
   lv_obj_t* lv_btn;
   lv_obj_t* label;

@@ -46,7 +46,7 @@ void Button::setFunctions(std::vector<std::function<void()>> funcs){
   Button::id_function[lv_obj_get_free_num(lv_btn)] = funcs;
 }
 
-void Button::setStyle(Style style){
+void Button::setStyle(Style& style){
   lv_btn_set_style(lv_btn, LV_BTN_STYLE_REL, &style.released);
   lv_btn_set_style(lv_btn, LV_BTN_STATE_PR, &style.pressed);
 }

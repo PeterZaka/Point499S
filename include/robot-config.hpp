@@ -30,6 +30,7 @@ extern pros::Imu iSensor;
 
 extern pros::Vision vision;
 extern pros::vision_signature SIG_YELLOW;
+extern pros::vision_signature SIG_RED;
 
 extern PID drivePID;
 extern PID anglePID;
