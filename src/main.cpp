@@ -15,7 +15,6 @@ void on_center_button() {
 void initialize() {
 	iSensor.reset();
 
-	vision.set_white_balance(33);
 	vision.set_signature(1, &SIG_YELLOW);
 	vision.set_signature(2, &SIG_RED);
 
@@ -233,7 +232,8 @@ void opcontrol() {
 			controller.rumble(".");
 			StartDebugTime("Y Pressed: ");
 			pros::Task testingTask(autonFunc);
-			while (testingTask.get_state() == pros::E_TASK_STATE_RUNNING){
+			std::cout << testingTask.get_state() << std::endl;
+			while (testingTask.get_state() == pros::E_TASK_STATE_READY){
 				if (clawFrontButton.changedToPressed()) controller.rumble("..");
 				if (clawBackButton.changedToPressed()) controller.rumble("..");
 				if (debugButton.changedToPressed()) {
@@ -244,6 +244,7 @@ void opcontrol() {
 				if (testButton.changedToPressed()) testingTask.remove();
 				pros::delay(20);
 			}
+			std::cout << testingTask.get_state() << std::endl;
 			controller.rumble(".");
 		}
 

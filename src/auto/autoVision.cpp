@@ -22,8 +22,8 @@ void turnToColor(pros::vision_signature sig, double targetError, double targetTi
     }
     if (!(object.signature == sig.id && object.width >= minColorWidth && object.height >= minColorHeight)) break;
 
-    colorPID.update(object.x_middle_coord + VISION_FOV_WIDTH / 2);
-    leftSide.moveVoltage( std::clamp( (colorPID.value() * colorStrength * 120.0), -12000.0, 12000.0));
+    colorPID.update((-object.x_middle_coord + VISION_FOV_WIDTH) - (VISION_FOV_WIDTH / 2));
+    leftSide.moveVoltage( std::clamp( (colorPID.value() * colorStrength * -120.0), -12000.0, 12000.0));
     rightSide.moveVoltage( std::clamp( (colorPID.value() * colorStrength * 120.0), -12000.0, 12000.0));
 
     if (abs(object.x_middle_coord + VISION_FOV_WIDTH / 2) < targetError)
@@ -37,7 +37,7 @@ void turnToColor(pros::vision_signature sig, double targetError, double targetTi
   rightSide.moveVoltage(0);
 }
 
-void dirveToColor(pros::vision_signature sig){
+void driveToColor(pros::vision_signature sig){
   colorPID.setTarget(0);
   while (vision.get_object_count() != 0 && !clawFrontButton.isPressed()) {
     pros::vision_object_s_t object = vision.get_by_size(0);
@@ -47,9 +47,9 @@ void dirveToColor(pros::vision_signature sig){
     }
     if (!(object.signature == sig.id && object.width >= minColorWidth && object.height >= minColorHeight)) break;
 
-    colorPID.update(object.x_middle_coord + VISION_FOV_WIDTH / 2);
-    leftSide.moveVoltage( std::clamp( 12000.0 + (colorPID.value() * colorStrength * 120.0), -12000.0, 12000.0));
-    rightSide.moveVoltage( std::clamp( 12000.0 - (colorPID.value() * colorStrength * 120.0), -12000.0, 12000.0));
+    colorPID.update((-object.x_middle_coord + VISION_FOV_WIDTH) - (VISION_FOV_WIDTH / 2));
+    leftSide.moveVoltage( std::clamp( 12000.0 - (colorPID.value() * colorStrength * 120.0), -12000.0, 12000.0));
+    rightSide.moveVoltage( std::clamp( 12000.0 + (colorPID.value() * colorStrength * 120.0), -12000.0, 12000.0));
 
     pros::delay(20);
   }
