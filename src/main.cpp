@@ -139,8 +139,8 @@ void opcontrol() {
 
 	double clawSpeed = 1;
 
-	// xPos = 16;
-	// yPos = 16;
+	xPos = 24+14.5/2;
+	yPos = 17.25/2;
 
 	StartDebugTime("Y Pressed: ");
 	while (true) {

@@ -104,11 +104,7 @@ void leftAuton(){
 }
 
 void skills(){
-  while (!isColorDetected(SIG_YELLOW)) {
-    leftSide.moveVoltage(12000.0 * 0.5);
-    rightSide.moveVoltage(-12000.0 * 0.5);
-  }
-  driveToColor(SIG_YELLOW);
+  turnToColor(SIG_YELLOW, 0, 1);
 }
 
 // void skills(){
