@@ -104,7 +104,27 @@ void leftAuton(){
 }
 
 void skills(){
-  turnToColor(SIG_YELLOW, 0, 1);
+  xPos = 24+14.5/2;
+	yPos = 17.25/2;
+
+  iSensor.set_rotation(90);
+  rot = 90;
+  prevRot = 90 * (pi / 180);
+
+  driveTargetTime = 0;
+  driveForward(5);
+  clawFront.set_value(true); // Had left red tower in claw
+
+  driveToPoint(24, 24);
+  driveToPoint(2 *24, 2 *24);
+  driveToPoint(2.5 *24, 4 *24);
+  lift.moveVoltage(12000);
+  driveToPoint((2.5+3)/2.0 * 24, (4+5)/2.0 *24); // drive to middle point
+  // wait until lift is ready
+  driveToPoint(3 *24, 5 *24);
+
+  clawFront.set_value(false);
+
 }
 
 // void skills(){

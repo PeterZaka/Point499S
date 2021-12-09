@@ -13,4 +13,8 @@ extern double calculatedRot;
 
 extern double prevRot;
 
+extern double deltaL;
+extern double deltaR;
+extern double deltaB;
+
 void calculateOdom();

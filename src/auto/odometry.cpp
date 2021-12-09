@@ -2,7 +2,7 @@
 
 double wheelDiameter = 2.75;
 double wheelTrack = 4.8888;
-double backDistance = 3;
+double backDistance = 5;
 
 // 4 and 3
 // increase track
@@ -17,11 +17,16 @@ static double prevRight = 0;
 static double prevBack = 0;
 double prevRot = 0;
 
+double deltaL = 0;
+double deltaR = 0;
+double deltaB = 0;
+
+
 // https://github.com/OkapiLib/OkapiLib/blob/master/src/api/odometry/threeEncoderOdometry.cpp
 void calculateOdom(){
-  double deltaL = (leftEncoder.get() - prevLeft) / 360 * wheelDiameter * pi;
-  double deltaR = (rightEncoder.get() - prevRight) / 360 * wheelDiameter * pi;
-  double deltaB = (backEncoder.get() - prevBack) / 360 * wheelDiameter * pi;
+  deltaL = (leftEncoder.get() - prevLeft) / 360 * wheelDiameter * pi;
+  deltaR = (rightEncoder.get() - prevRight) / 360 * wheelDiameter * pi;
+  deltaB = (backEncoder.get() - prevBack) / 360 * wheelDiameter * pi;
   prevLeft = leftEncoder.get();
   prevRight = rightEncoder.get();
   prevBack = backEncoder.get();
@@ -31,8 +36,11 @@ void calculateOdom(){
   double deltaX = deltaB;
 
   rot = iSensor.get_rotation() * (pi / 180);
-  double deltaTheta = rot - prevRot;
+  double deltaTheta = -(rot - prevRot);
   prevRot = rot;
+
+  // printf("%.2lf\n", deltaTheta);
+  // printf("%.2lf\n\n", (deltaL - deltaR) / wheelTrack);
 
   double localX;
   double localY;
@@ -41,7 +49,7 @@ void calculateOdom(){
     localY = deltaY;
   } else {
     localX = 2 * sin(deltaTheta / 2) *
-      (deltaB / deltaTheta + backDistance);
+      (deltaB / deltaTheta - backDistance);
     localY = 2 * sin(deltaTheta / 2) *
       (deltaR / deltaTheta + wheelTrack / 2);
   }

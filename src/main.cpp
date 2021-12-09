@@ -105,7 +105,13 @@ void opcontrol() {
 			// pros::delay(50);
 			// controller.setText(1, 0, "r: " + std::to_string(rightEncoder.get()));
 			// pros::delay(50);
+			// controller.setText(2, 0, "b: " + std::to_string(backEncoder.get()));
 			// controller.setText(2, 0, "rot: " + std::to_string(calculatedRot * (180/pi)));
+
+			// pros::delay(50);
+			// controller.setText(0, 0, "r - p: " + std::to_string(rot - prevRot));
+			// pros::delay(50);
+			// controller.setText(1, 0, "c: " + std::to_string((deltaL - deltaR) / wheelTrack));
 
 			pros::delay(500);
 		}
