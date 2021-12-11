@@ -192,6 +192,127 @@ void skills(){
   doUntil(t(driveToPoint(0.5 *24, 4.5 *24, backward)), r(clawBackButton.isPressed()));
   // Back claw
   liftTask.resume();
+
+
+  // --------------------- SLIDE 4 ---------------------
+  // 1: Push left neutral to ready
+  // 2: Drop blue to ready
+  // 3: Score blue
+  // 4: Retrieve blue
+  // 5: Score blue
+  // 6: Retrieve neutral
+  // 7: Score neutral
+
+  // 1: Push left neutral to ready
+  driveToPoint(1 *24, 3.375 *24, forward);
+  driveToPoint(3.25 *24, 1.5 *24, forward);
+
+  // 2: Drop blue to ready
+  driveToPoint(2.75 *24, 1.5 *24, backward);
+  // Back claw release
+
+  // 3: Score blue
+  driveToPoint(3 *24, 1.5 *24);
+  liftTask.suspend();
+  lift.moveVoltage(12000);
+  turnToAngle(180);
+  // wait until lift
+  driveToPoint(3 *24, 1 *24, forward);
+  clawFront.set_value(false);
+
+  // 4: Retrieve blue
+  driveForward(-3);
+  lift.moveVoltage(-12000);
+  driveForward(-5);
+  turnToAngle(-90);
+  // wait until lift
+  doUntil(t(driveToPoint(2 *24, 1.5 *24, forward)), r(clawFrontButton.isPressed()));
+  clawFront.set_value(true);
+
+  // 5: Score blue
+  lift.moveVoltage(12000);
+  turnToPoint(3 *24, 1 *24);
+  // wait until lift
+  driveToPoint(3 *24, 1 *24, forward);
+  clawFront.set_value(false);
+
+  // 6: Retrieve neutral
+  driveForward(-3);
+  lift.moveVoltage(-12000);
+  driveForward(-5);
+  turnToAngle(90);
+  // wait until lift
+  doUntil(t(driveToPoint(3 *24, 1.5 *24, forward)), r(clawFrontButton.isPressed()));
+  clawFront.set_value(true);
+
+  // 7: Score neutral
+  lift.moveVoltage(12000);
+  turnToPoint(3 *24, 1 *24);
+  // wait until lift
+  driveToPoint(3 *24, 1 *24, forward);
+  clawFront.set_value(false);
+
+
+  // --------------------- SLIDE 5 ---------------------
+  // 1: Get right red with back claw
+  // 2: Get right neutral
+  // 3: Drop red in ready
+  // 4: Score neutral
+
+  // 1: Get right red with back claw
+  driveForward(-3);
+  lift.moveVoltage(-12000);
+  driveForward(-5);
+  driveToPoint(5 *24, 2 *24);
+  turnToPoint(5.5 *24, 1.5 *24, backward);
+  doUntil(t(driveToPoint(5.5 *24, 1.5 *24, backward)), r(clawBackButton.isPressed()));
+  // back clawBack
+
+  // 2: Get right neutral
+  doUntil(t(driveToPoint(4.5 *24, 3 *24, forward)), r(clawFrontButton.isPressed()));
+  clawFront.set_value(true);
+  liftTask.resume();
+
+  // 3: Drop red in ready
+  driveToPoint(2.5 *24, 1.5 *24, backward);
+  // release back
+
+  // 4: Score neutral
+  liftTask.suspend();
+  lift.moveVoltage(12000);
+  turnToPoint(3 *24, 1 *24);
+  // wait until lift
+  driveToPoint(3 *24, 1 *24, forward);
+  clawFront.set_value(false);
+
+  // --------------------- SLIDE 6 ---------------------
+  // 1: Retrieve red
+  // 2: Score red
+
+  // 1: Retrieve red
+  driveForward(-3);
+  lift.moveVoltage(-12000);
+  driveForward(-5);
+  turnToAngle(-90);
+  // wait until lift
+  doUntil(t(driveToPoint(2 *24, 1.5 *24, forward)), r(clawFrontButton.isPressed()));
+  clawFront.set_value(true);
+
+  // 2: Score red
+  liftTask.resume();
+  driveToPoint((xPos+3)/2 *24, 3 *24, forward);
+  liftTask.suspend();
+  lift.moveVoltage(12000);
+  driveToPoint((xPos+3)/2 *24, 4.5 *24, forward);
+  // wait until lift
+  driveToPoint(3 *24, 5 *24, forward);
+  clawFront.set_value(false);
+
+
+  // ending
+  driveForward(-3);
+  lift.moveVoltage(-12000);
+  driveForward(-10);
 }
 
 // void skills(){
