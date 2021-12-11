@@ -67,20 +67,9 @@ void opcontrol() {
 		}
 	});
 
-	// pros::Task debugTask([]()
-	// {
-	// 	while(1){
-	// 		printf("Pos: (%.2lf, %.2lf, %.2lf)\n", xPos, yPos, rot);
-	// 		printf("Encoder: (%.2lf, %.2lf, %.2lf)\n\n", leftEncoder.get(), backEncoder.get(), rightEncoder.get());
-	// 		pros::delay(1000);
-	// 	}
-	// });
-
 	// Master controller by default
 	Controller controller(ControllerId::master);
 	Controller controllerPartner(ControllerId::partner);
-
-	bool isLiftBoostEnabled = false;
 
 	pros::Task controllerPrintTask([&](){
 		while(1){
@@ -93,25 +82,27 @@ void opcontrol() {
 			// pros::delay(50);
 			// controller.setText(2, 0, "Boost Enabled: " + std::to_string(isLiftBoostEnabled));
 
-			pros::delay(50);
-			controller.setText(0, 0, "x: " + std::to_string(xPos));
-			pros::delay(50);
-			controller.setText(1, 0, "y: " + std::to_string(yPos));
-			pros::delay(50);
-			controller.setText(2, 0, "rot: " + std::to_string(rot));
+			// pros::delay(50);
+			// controller.setText(0, 0, "x: " + std::to_string(xPos));
+			// pros::delay(50);
+			// controller.setText(1, 0, "y: " + std::to_string(yPos));
+			// pros::delay(50);
+			// controller.setText(2, 0, "rot: " + std::to_string(rot));
 
-			// pros::delay(50);
-			// controller.setText(0, 0, "l: " + std::to_string(leftEncoder.get()));
-			// pros::delay(50);
-			// controller.setText(1, 0, "r: " + std::to_string(rightEncoder.get()));
-			// pros::delay(50);
-			// controller.setText(2, 0, "b: " + std::to_string(backEncoder.get()));
+			pros::delay(50);
+			controller.setText(0, 0, "l: " + std::to_string(leftEncoder.get()));
+			pros::delay(50);
+			controller.setText(1, 0, "r: " + std::to_string(rightEncoder.get()));
+			pros::delay(50);
+			controller.setText(2, 0, "b: " + std::to_string(backEncoder.get()));
 			// controller.setText(2, 0, "rot: " + std::to_string(calculatedRot * (180/pi)));
 
 			// pros::delay(50);
 			// controller.setText(0, 0, "r - p: " + std::to_string(rot - prevRot));
 			// pros::delay(50);
 			// controller.setText(1, 0, "c: " + std::to_string((deltaL - deltaR) / wheelTrack));
+			// pros::delay(50);
+			// controller.setText(2, 0, "liftP: " + std::to_string(liftPot.get()));
 
 			pros::delay(500);
 		}
@@ -122,8 +113,6 @@ void opcontrol() {
 	ControllerButton liftDownButton(ControllerId::master, ControllerDigital::R2);
 	ControllerButton setForwardButton(ControllerId::master, ControllerDigital::up);
 	ControllerButton setBackwardButton(ControllerId::master, ControllerDigital::down);
-	ControllerButton enableBoostButton(ControllerId::master, ControllerDigital::L1);
-	ControllerButton disableBoostButton(ControllerId::master, ControllerDigital::L2);
 	ControllerButton testButton(ControllerId::master, ControllerDigital::A);
 	ControllerButton debugButton(ControllerId::master, ControllerDigital::Y);
 	// 1 controller only
@@ -170,13 +159,6 @@ void opcontrol() {
 		} else if (setBackwardButton.changedToPressed()) {
 			controller.rumble("-");
 			isBackward = true;
-		}
-		if (enableBoostButton.changedToPressed()) {
-			controller.rumble(".");
-			isLiftBoostEnabled = true;
-		} else if (disableBoostButton.changedToPressed()) {
-			controller.rumble(".");
-			isLiftBoostEnabled = false;
 		}
 
 		if (clawRegularButton.changedToPressed()) {
@@ -238,7 +220,6 @@ void opcontrol() {
 			controller.rumble(".");
 			StartDebugTime("Y Pressed: ");
 			pros::Task testingTask(autonFunc);
-			std::cout << testingTask.get_state() << std::endl;
 			while (testingTask.get_state() == pros::E_TASK_STATE_READY){
 				if (clawFrontButton.changedToPressed()) controller.rumble("..");
 				if (clawBackButton.changedToPressed()) controller.rumble("..");
@@ -250,7 +231,6 @@ void opcontrol() {
 				if (testButton.changedToPressed()) testingTask.remove();
 				pros::delay(20);
 			}
-			std::cout << testingTask.get_state() << std::endl;
 			controller.rumble(".");
 		}
 

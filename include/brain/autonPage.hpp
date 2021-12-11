@@ -3,12 +3,12 @@
 #include "pros/apix.h"
 #include "auto/autonomous.hpp"
 #include <functional>
+#include <map>
 
+extern std::map<std::string, std::function<void()>> autonSelectionMap;
 extern std::function<void()> autonFunc;
 extern lv_obj_t* autonLabel;
 
-void changeToLeftAuton();
+void initalize_auton_page(lv_obj_t* autonPage);
 
-void changeToRightAuton();
-
-void changeToSkills();
+std::function<void()> changeAutonFunc(std::string auton);

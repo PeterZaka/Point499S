@@ -293,6 +293,14 @@ void grabTower(point tower, movement Movement, point offset){
   driveTargetTime = prevDriveTargetTime;
 }
 
+void doUntil(std::function<void()> Do, std::function<bool()> Until){
+  pros::Task doTask(Do);
+  while (doTask.get_state() == pros::E_TASK_STATE_READY){
+    if (Until()) doTask.remove();
+    pros::delay(20);
+  }
+}
+
 // ----- helper functions -----
 
 void findBestRotation(double& angle, movement& Movement){

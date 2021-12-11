@@ -25,16 +25,17 @@ void autonSelectScreenInitialize(){
   Button autonToHomeBtn(AutonPage, 0, 0, 100, 100, "Home");
   autonToHomeBtn.setFunction(HomePage->show);
 
-  autonLabel = lv_label_create(AutonPage->lv_page, NULL);
-  lv_obj_align(autonLabel, NULL, LV_ALIGN_CENTER, 0, 150);
+  initalize_auton_page(AutonPage->lv_page);
 
-  changeToSkills();
-  Button leftBtn(AutonPage, 100, 0, 150, 100, "Left Auton");
-  leftBtn.setFunction(changeToLeftAuton);
-  Button rightBtn(AutonPage, 250, 0, 150, 100, "Right Auton");
-  rightBtn.setFunction(changeToRightAuton);
-  Button skillsBtn(AutonPage, 100, 100, 150, 100, "Skills");
-  skillsBtn.setFunction(changeToSkills);
+  changeAutonFunc("Test")();
+  Button leftBtn(AutonPage, 100, 0, 150, 80, "Left Auton");
+  leftBtn.setFunction(changeAutonFunc("Left Auton"));
+  Button rightBtn(AutonPage, 250, 0, 150, 80, "Right Auton");
+  rightBtn.setFunction(changeAutonFunc("Right Auton"));
+  Button skillsBtn(AutonPage, 100, 80, 150, 80, "Skills");
+  skillsBtn.setFunction(changeAutonFunc("Skills"));
+  Button testBtn(AutonPage, 250, 80, 150, 80, "Test");
+  testBtn.setFunction(changeAutonFunc("Test"));
 
 
   // ------- Temperature Page -------

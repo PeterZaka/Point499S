@@ -7,17 +7,21 @@ Motor backRightMotor(3);
 MotorGroup leftSide({topLeftMotor, backLeftMotor});
 MotorGroup rightSide({topRightMotor, backRightMotor});
 
-pros::ADIDigitalOut clawFront({1, 'A'}, false);
-MotorGroup clawBack({-17});
-MotorGroup leftLift({-8});
-MotorGroup rightLift({10});
-MotorGroup lift({-8, 10});
+Motor leftLift(-8);
+Motor rightLift(10);
+MotorGroup lift({leftLift, rightLift});
 
+MotorGroup clawBack({-17});
+
+
+pros::ADIDigitalOut clawFront({1, 'A'}, false);
 pros::ADIDigitalOut liftBoost({1, 'B'}, false);
 
 ADIEncoder leftEncoder('G', 'H');
 ADIEncoder rightEncoder('E', 'F', true);
 ADIEncoder backEncoder('A', 'B');
+
+Potentiometer liftPot({1, 'C'});
 
 ADIButton clawFrontButton('D');
 ADIButton clawBackButton('C');

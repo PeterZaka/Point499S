@@ -36,7 +36,7 @@ void calculateOdom(){
   double deltaX = deltaB;
 
   rot = iSensor.get_rotation() * (pi / 180);
-  double deltaTheta = -(rot - prevRot);
+  double deltaTheta = rot - prevRot;
   prevRot = rot;
 
   // printf("%.2lf\n", deltaTheta);
@@ -49,7 +49,7 @@ void calculateOdom(){
     localY = deltaY;
   } else {
     localX = 2 * sin(deltaTheta / 2) *
-      (deltaB / deltaTheta - backDistance);
+      (deltaB / deltaTheta + backDistance);
     localY = 2 * sin(deltaTheta / 2) *
       (deltaR / deltaTheta + wheelTrack / 2);
   }

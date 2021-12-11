@@ -12,16 +12,21 @@ extern Motor backRightMotor;
 extern MotorGroup leftSide;
 extern MotorGroup rightSide;
 
-extern pros::ADIDigitalOut clawFront;
-extern MotorGroup clawBack;
-extern MotorGroup leftLift;
-extern MotorGroup rightLift;
+extern Motor leftLift;
+extern Motor rightLift;
 extern MotorGroup lift;
+
+extern MotorGroup clawBack;
+
+extern pros::ADIDigitalOut clawFront;
 extern pros::ADIDigitalOut liftBoost;
+
 
 extern ADIEncoder leftEncoder;
 extern ADIEncoder rightEncoder;
 extern ADIEncoder backEncoder;
+
+extern Potentiometer liftPot;
 
 extern ADIButton clawFrontButton;
 extern ADIButton clawBackButton;
