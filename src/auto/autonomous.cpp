@@ -6,109 +6,68 @@
 void testAuton(){
   driveForward(5000);
   driveForward(-24);
+
+  while (true) Wait(1);
 }
 
 void rightAuton(){
 
-  yPos = 5;
+  xPos = 4.5 *24;
+  yPos = 24 - 17.25/2.0;
 
-  // Get First Tower
-  // groupMoveTo(clawFront, -1300, 0);
-  // Drive to tower
-  driveTargetTime = 0;
-	driveToPoint(-1, 54.5, forward);
-	driveTargetTime = prevDriveTargetTime;
-  pros::delay(250);
-  // clawFront.moveVoltage(-12000.0);
-  leftSide.moveVoltage(12000.0 * 0.05);
-  rightSide.moveVoltage(12000.0 * 0.7);
-  double startRot = rot;
-  while (!(clawFrontButton.isPressed() || rot < startRot - 30)) pros::delay(20);
-  leftSide.moveVoltage(0);
-  rightSide.moveVoltage(0);
-  pros::delay(250);
-  // clawFront.moveVoltage(12000.0);
-  pros::delay(1000);
+  driveTargetTime = 0; // Don't stop
 
-  // Part A: Get in position
-  goToPoint(-2, 23.5, backward);
-  lift.moveVoltage(-12000.0 * 0.9);
-  turnToAngle(-87);
-  // Part B: Drive and get tower in grip
-  driveForward(-8, -87);
-  groupMoveTo(clawBack, -2000);
-  pros::delay(250);
-  leftSide.moveVoltage(-12000.0 * 0.45);
-  rightSide.moveVoltage(12000.0 * 0.1);
-  int startTime = pros::millis();
-  while (!(clawBackButton.isPressed() || pros::millis() > startTime + 2000)) pros::delay(20);
-  leftSide.moveVoltage(0);
-  rightSide.moveVoltage(0);
-  // Part C: Secure tower in grip
-  groupMoveTo(clawBack, -2200, 0);
-  driveForward(-1);
-  groupMoveTo(lift, 700, 0, PID(15, 0, 0), 50, 10000);
-  pros::delay(500);
+  doUntil(t(driveToPoint(4.5 *24, 3 *24, forward)), r(clawFrontButton.isPressed()));
+  clawFront.set_value(true);
 
-  // Drive to end position
-  driveToPoint(-26, 24, best);
+  driveStopError = 0; // Disable stop detection
+
+  doUntil(t(driveToPoint(3 *24, 3 *24, backward)), r(clawBackButton.isPressed()));
+  clawBack.set_value(true);
+
+  driveToPoint((xPos+4 *24)/2.0, (yPos+1.5 *24)/2.0);
+  pros::Task moveTowerToTop([]{
+    backArm.moveVoltage(12000.0);
+    Wait(3);
+    clawBack.set_value(false);
+    backArm.moveVoltage(-12000.0);
+  });
+
+  driveToPoint(4 *24, 1.5 *24);
+  turnToPoint(5.5 *24, 1.5 *24, backward);
+  doUntil(t(driveToPoint(5.5 *24, 1.5 *24, backward)), r(clawBackButton.isPressed()));
+  clawBack.set_value(true);
 }
 
 void leftAuton(){
 
   xPos = 29.5;
-	yPos = 15.5;
+	yPos = 24 - 17.25/2.0;
 
-  // grabTower({36, 72});
-  // return;
+  driveTargetTime = 0; // Don't stop
 
-  // Get First Tower
-  // groupMoveTo(clawFront, -1300, 0);
-  // Drive to tower
-  driveTargetTime = 0;
-	driveToPoint(38, 65.75, forward);
-  // Turn into tower
-  pros::delay(250);
-  // clawFront.moveVoltage(-12000.0);
-  leftSide.moveVoltage(12000.0 * 0.05);
-  rightSide.moveVoltage(12000.0 * 0.7);
-  double startRot = rot;
-  while (!(clawFrontButton.isPressed() || rot < startRot - 30)) pros::delay(20);
-  leftSide.moveVoltage(0);
-  rightSide.moveVoltage(0);
-  pros::delay(250);
-  // clawFront.moveVoltage(12000.0);
-  pros::delay(1000);
+  doUntil(t(driveToPoint(1.5 *24, 3 *24, forward)), r(clawFrontButton.isPressed()));
+  clawFront.set_value(true);
 
-  // Get Middle Tower
-  groupMoveTo(clawBack, -1700, 0);
-  driveTargetTime = 0;
-  turnTargetError = 5;
-  goToPoint(48, 58, backward);
-  goToPoint(64, 58, backward);
-  turnTargetError = prevTurnTargetError;
-  lift.moveVoltage(-12000.0);
-  // point tower1 = findOffsetTarget({xPos, yPos}, {72, 72}, {7, -10.5});
-  // prevDriveTargetTime = driveTargetTime; driveTargetTime = 0;
-  // turnToPoint(tower1.x, tower1.y, backward);
-  grabTower({72, 72}, backward, {5, -10.5});
-  // Turn into tower
-  pros::delay(250);
-  leftSide.moveVoltage(-12000.0 * 0.4);
-  rightSide.moveVoltage(12000.0 * 0.1);
-  clawBack.moveVoltage(-12000.0 * 0.125);
-  int startTime = pros::millis();
-  while (!(clawBackButton.isPressed() || pros::millis() > startTime + 3000)) pros::delay(20);
-  leftSide.moveVoltage(0);
-  rightSide.moveVoltage(0);
-  pros::delay(1000);
-  clawBack.moveVoltage(12000.0);
-  pros::delay(1000);
-  lift.moveVoltage(0);
+  driveStopError = 0; // Disable stop detection
 
-  driveToPoint(39.5, 40.5);
-  driveToPoint(29.5, 23.5);
-  driveTargetTime = prevDriveTargetTime;
+  doUntil(t(driveToPoint(3 *24, 3 *24, backward)), r(clawBackButton.isPressed()));
+  clawBack.set_value(true);
+
+  driveToPoint((xPos+1.5 *24)/2.0, (yPos+1.5 *24)/2.0);
+  pros::Task moveTowerToTop([]{
+    backArm.moveVoltage(12000.0);
+    Wait(3);
+    clawBack.set_value(false);
+    backArm.moveVoltage(-12000.0);
+  });
+
+  driveToPoint(1.5 *24, 1.5 *24);
+  driveToPoint(1 *24, 0.5 *24);
+
+  turnToPoint(1.75 *24, 0.5 *24, backward);
+  doUntil(t(driveToPoint(1.75 *24, 0.5 *24, backward)), r(clawBackButton.isPressed()));
+  clawBack.set_value(true);
 }
 
 void skills(){
@@ -116,8 +75,8 @@ void skills(){
   pros::Task liftTask(groupMoveTo(lift, 1000, 0, PID(0.1, 0.001, 0, 10000, -1), -1));
   liftTask.suspend();
 
-  xPos = 24+14.5/2;
-	yPos = 17.25/2;
+  xPos = 24+14.5/2.0;
+	yPos = 17.25/2.0;
 
   iSensor.set_rotation(90);
   rot = 90;
@@ -300,10 +259,10 @@ void skills(){
 
   // 2: Score red
   liftTask.resume();
-  driveToPoint((xPos+3)/2 *24, 3 *24, forward);
+  driveToPoint((xPos+3 *24)/2.0, 3 *24, forward);
   liftTask.suspend();
   lift.moveVoltage(12000);
-  driveToPoint((xPos+3)/2 *24, 4.5 *24, forward);
+  driveToPoint((xPos+3 *24)/2.0, 4.5 *24, forward);
   // wait until lift
   driveToPoint(3 *24, 5 *24, forward);
   clawFront.set_value(false);
@@ -315,6 +274,109 @@ void skills(){
   driveForward(-10);
 }
 
+// void rightAuton(){
+//
+//   yPos = 5;
+//
+//   // Get First Tower
+//   // groupMoveTo(clawFront, -1300, 0);
+//   // Drive to tower
+//   driveTargetTime = 0;
+// 	driveToPoint(-1, 54.5, forward);
+// 	driveTargetTime = prevDriveTargetTime;
+//   pros::delay(250);
+//   // clawFront.moveVoltage(-12000.0);
+//   leftSide.moveVoltage(12000.0 * 0.05);
+//   rightSide.moveVoltage(12000.0 * 0.7);
+//   double startRot = rot;
+//   while (!(clawFrontButton.isPressed() || rot < startRot - 30)) pros::delay(20);
+//   leftSide.moveVoltage(0);
+//   rightSide.moveVoltage(0);
+//   pros::delay(250);
+//   // clawFront.moveVoltage(12000.0);
+//   pros::delay(1000);
+//
+//   // Part A: Get in position
+//   goToPoint(-2, 23.5, backward);
+//   lift.moveVoltage(-12000.0 * 0.9);
+//   turnToAngle(-87);
+//   // Part B: Drive and get tower in grip
+//   driveForward(-8, -87);
+//   groupMoveTo(clawBack, -2000);
+//   pros::delay(250);
+//   leftSide.moveVoltage(-12000.0 * 0.45);
+//   rightSide.moveVoltage(12000.0 * 0.1);
+//   int startTime = pros::millis();
+//   while (!(clawBackButton.isPressed() || pros::millis() > startTime + 2000)) pros::delay(20);
+//   leftSide.moveVoltage(0);
+//   rightSide.moveVoltage(0);
+//   // Part C: Secure tower in grip
+//   groupMoveTo(clawBack, -2200, 0);
+//   driveForward(-1);
+//   groupMoveTo(lift, 700, 0, PID(15, 0, 0), 50, 10000);
+//   pros::delay(500);
+//
+//   // Drive to end position
+//   driveToPoint(-26, 24, best);
+// }
+//
+// void leftAuton(){
+//
+//   xPos = 29.5;
+// 	yPos = 15.5;
+//
+//   // grabTower({36, 72});
+//   // return;
+//
+//   // Get First Tower
+//   // groupMoveTo(clawFront, -1300, 0);
+//   // Drive to tower
+//   driveTargetTime = 0;
+// 	driveToPoint(38, 65.75, forward);
+//   // Turn into tower
+//   pros::delay(250);
+//   // clawFront.moveVoltage(-12000.0);
+//   leftSide.moveVoltage(12000.0 * 0.05);
+//   rightSide.moveVoltage(12000.0 * 0.7);
+//   double startRot = rot;
+//   while (!(clawFrontButton.isPressed() || rot < startRot - 30)) pros::delay(20);
+//   leftSide.moveVoltage(0);
+//   rightSide.moveVoltage(0);
+//   pros::delay(250);
+//   // clawFront.moveVoltage(12000.0);
+//   pros::delay(1000);
+//
+//   // Get Middle Tower
+//   groupMoveTo(clawBack, -1700, 0);
+//   driveTargetTime = 0;
+//   turnTargetError = 5;
+//   goToPoint(48, 58, backward);
+//   goToPoint(64, 58, backward);
+//   turnTargetError = prevTurnTargetError;
+//   lift.moveVoltage(-12000.0);
+//   // point tower1 = findOffsetTarget({xPos, yPos}, {72, 72}, {7, -10.5});
+//   // prevDriveTargetTime = driveTargetTime; driveTargetTime = 0;
+//   // turnToPoint(tower1.x, tower1.y, backward);
+//   grabTower({72, 72}, backward, {5, -10.5});
+//   // Turn into tower
+//   pros::delay(250);
+//   leftSide.moveVoltage(-12000.0 * 0.4);
+//   rightSide.moveVoltage(12000.0 * 0.1);
+//   clawBack.moveVoltage(-12000.0 * 0.125);
+//   int startTime = pros::millis();
+//   while (!(clawBackButton.isPressed() || pros::millis() > startTime + 3000)) pros::delay(20);
+//   leftSide.moveVoltage(0);
+//   rightSide.moveVoltage(0);
+//   pros::delay(1000);
+//   clawBack.moveVoltage(12000.0);
+//   pros::delay(1000);
+//   lift.moveVoltage(0);
+//
+//   driveToPoint(39.5, 40.5);
+//   driveToPoint(29.5, 23.5);
+//   driveTargetTime = prevDriveTargetTime;
+// }
+//
 // void skills(){
 //
 //   // xPos = 72;

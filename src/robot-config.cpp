@@ -11,11 +11,10 @@ Motor leftLift(-8);
 Motor rightLift(10);
 MotorGroup lift({leftLift, rightLift});
 
-MotorGroup clawBack({-17});
-
+MotorGroup backArm({12});
 
 pros::ADIDigitalOut clawFront({1, 'A'}, false);
-pros::ADIDigitalOut liftBoost({1, 'B'}, false);
+pros::ADIDigitalOut clawBack({1, 'B'}, false);
 
 ADIEncoder leftEncoder('G', 'H');
 ADIEncoder rightEncoder('E', 'F', true);

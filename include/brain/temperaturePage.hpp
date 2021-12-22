@@ -7,8 +7,9 @@
 extern pros::Task temperatureUpdateTask;
 extern lv_obj_t* leftLiftTempLabel;
 extern lv_obj_t* rightLiftTempLabel;
-extern lv_obj_t* frontClawTempLabel;
-extern lv_obj_t* backClawTempLabel;
+// extern lv_obj_t* frontClawTempLabel;
+// extern lv_obj_t* backClawTempLabel;
+extern lv_obj_t* backArmTempLabel;
 extern lv_obj_t* topLeftMotorTempLabel;
 extern lv_obj_t* topRightTempLabel;
 extern lv_obj_t* backLeftTempLabel;

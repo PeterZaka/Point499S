@@ -20,12 +20,10 @@ void initialize() {
 
 	autonSelectScreenInitialize();
 
-	clawBack.setBrakeMode(AbstractMotor::brakeMode::hold);
-
 	pros::delay(20);
+	printf("calibrating...\n");
 	while(iSensor.is_calibrating()){
-		printf("calibrating...\n");
-		pros::delay(200);
+		pros::delay(50);
 	}
 	printf("done calibrating\n");
 }
@@ -116,18 +114,20 @@ void opcontrol() {
 	ControllerButton testButton(ControllerId::master, ControllerDigital::A);
 	ControllerButton debugButton(ControllerId::master, ControllerDigital::Y);
 	// 1 controller only
-	ControllerButton singleClawFrontUpButton(ControllerId::master, ControllerDigital::right);
-	ControllerButton singleClawFrontDownButton(ControllerId::master, ControllerDigital::left);
-	ControllerButton singleClawBackUpButton(ControllerId::master, ControllerDigital::X);
-	ControllerButton singleClawBackDownButton(ControllerId::master, ControllerDigital::B);
+	ControllerButton singleClawFrontOpenButton(ControllerId::master, ControllerDigital::right);
+	ControllerButton singleClawFrontCloseButton(ControllerId::master, ControllerDigital::left);
+	ControllerButton singleClawBackOpenButton(ControllerId::master, ControllerDigital::X);
+	ControllerButton singleClawBackCloseButton(ControllerId::master, ControllerDigital::B);
+	ControllerButton singleBackArmUpButton(ControllerId::partner, ControllerDigital::L1);
+	ControllerButton singleBackArmDownButton(ControllerId::partner, ControllerDigital::L2);
 
 	// ------- Partner -------
-	ControllerButton clawFrontUpButton(ControllerId::partner, ControllerDigital::R1);
-	ControllerButton clawFrontDownButton(ControllerId::partner, ControllerDigital::R2);
-	ControllerButton clawBackUpButton(ControllerId::partner, ControllerDigital::L1);
-	ControllerButton clawBackDownButton(ControllerId::partner, ControllerDigital::L2);
-	ControllerButton clawRegularButton(ControllerId::partner, ControllerDigital::up);
-	ControllerButton clawSlowButton(ControllerId::partner, ControllerDigital::down);
+	ControllerButton clawFrontOpenButton(ControllerId::partner, ControllerDigital::R1);
+	ControllerButton clawFrontCloseButton(ControllerId::partner, ControllerDigital::R2);
+	ControllerButton clawBackOpenButton(ControllerId::partner, ControllerDigital::L1);
+	ControllerButton clawBackCloseButton(ControllerId::partner, ControllerDigital::L2);
+	ControllerButton backArmUpButton(ControllerId::partner, ControllerDigital::X);
+	ControllerButton backArmDownButton(ControllerId::partner, ControllerDigital::B);
 
 	bool isTank = true;
 	bool isBackward = false;
@@ -161,14 +161,6 @@ void opcontrol() {
 			isBackward = true;
 		}
 
-		if (clawRegularButton.changedToPressed()) {
-			controllerPartner.rumble("..");
-			clawSpeed = 1;
-		} else if (clawSlowButton.changedToPressed()) {
-			controllerPartner.rumble("-");
-			clawSpeed = 0.5;
-		}
-
 		if (isTank) {
 			if (isBackward) {
 				double tempRightYAxis = rightYAxis;
@@ -183,31 +175,34 @@ void opcontrol() {
 		}
 
 		if(liftUpButton.isPressed()){
-			liftBoost.set_value(true);
 			lift.moveVoltage(12000.0);
 		} else if(liftDownButton.isPressed()){
-			liftBoost.set_value(false);
 			lift.moveVoltage(-12000.0);
 		} else {
-			liftBoost.set_value(false);
 			lift.moveVoltage(0.0);
 		}
 
 		if (controllerPartner.isConnected()) {
-			if(clawFrontUpButton.isPressed()) clawFront.set_value(false);
-			else if(clawFrontDownButton.isPressed()) clawFront.set_value(true);
+			if(clawFrontOpenButton.isPressed()) clawFront.set_value(false);
+			else if(clawFrontCloseButton.isPressed()) clawFront.set_value(true);
 
-			if(clawBackUpButton.isPressed()) clawBack.moveVoltage(12000.0 * clawSpeed);
-			else if(clawBackDownButton.isPressed()) clawBack.moveVoltage(-12000.0 * clawSpeed);
-			else clawBack.moveVoltage(0);
+			if(clawBackOpenButton.isPressed()) clawBack.set_value(false);
+			else if(clawBackCloseButton.isPressed()) clawBack.set_value(true);
+
+			if(backArmUpButton.isPressed()) backArm.moveVoltage(12000.0);
+			else if(backArmDownButton.isPressed()) backArm.moveVoltage(-12000.0);
+			else backArm.moveVoltage(0);
 		}
 		else {
-			if(singleClawFrontUpButton.isPressed()) clawFront.set_value(false);
-			else if(singleClawFrontDownButton.isPressed()) clawFront.set_value(true);
+			if(singleClawFrontOpenButton.isPressed()) clawFront.set_value(false);
+			else if(singleClawFrontCloseButton.isPressed()) clawFront.set_value(true);
 
-			if(singleClawBackUpButton.isPressed()) clawBack.moveVoltage(12000.0);
-			else if(singleClawBackDownButton.isPressed()) clawBack.moveVoltage(-12000.0);
-			else clawBack.moveVoltage(0);
+			if(singleClawBackOpenButton.isPressed()) clawBack.set_value(false);
+			else if(singleClawBackCloseButton.isPressed()) clawBack.set_value(true);
+
+			if(singleBackArmUpButton.isPressed()) backArm.moveVoltage(12000.0);
+			else if(singleBackArmDownButton.isPressed()) backArm.moveVoltage(-12000.0);
+			else backArm.moveVoltage(0);
 		}
 
 		if (debugButton.changedToPressed()) {

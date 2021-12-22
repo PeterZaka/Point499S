@@ -16,10 +16,10 @@ extern Motor leftLift;
 extern Motor rightLift;
 extern MotorGroup lift;
 
-extern MotorGroup clawBack;
+extern MotorGroup backArm;
 
 extern pros::ADIDigitalOut clawFront;
-extern pros::ADIDigitalOut liftBoost;
+extern pros::ADIDigitalOut clawBack;
 
 
 extern ADIEncoder leftEncoder;

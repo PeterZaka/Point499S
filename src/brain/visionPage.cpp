@@ -45,7 +45,7 @@ static void update_vision(){
 pros::Task visionUpdateTask([]{
   while (true) {
     update_vision();
-    pros::delay(20);
+    pros::delay(50);
   }
 });
 
