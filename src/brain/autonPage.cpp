@@ -19,6 +19,7 @@ void initalize_auton_page(lv_obj_t* autonPage){
 
 std::function<void()> changeAutonFunc(std::string auton){
   return [&]{
+    std::cout << auton << std::endl;
     lv_label_set_text(autonLabel, auton.c_str());
     autonFunc = autonSelectionMap[auton];
   };

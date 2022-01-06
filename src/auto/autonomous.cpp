@@ -4,8 +4,11 @@
 #define r(x) []{return x;}
 
 void testAuton(){
-  driveForward(5000);
-  driveForward(-24);
+  xPos = 24+14.5/2;
+	yPos = 17.25/2;
+
+  driveToPoint(24, 24);
+  driveToPoint(3 *24, 4 *24, forward);
 
   while (true) Wait(1);
 }

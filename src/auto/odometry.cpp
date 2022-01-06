@@ -1,9 +1,10 @@
 #include "auto/odometry.hpp"
 
 double wheelDiameter = 2.75;
-double wheelTrack = 4.8888;
+double wheelTrack = 5;
 double backDistance = 5;
 
+// 4.8888
 // 4 and 3
 // increase track
 
@@ -37,7 +38,6 @@ void calculateOdom(){
 
   rot = iSensor.get_rotation() * (pi / 180);
   double deltaTheta = rot - prevRot;
-  prevRot = rot;
 
   // printf("%.2lf\n", deltaTheta);
   // printf("%.2lf\n\n", (deltaL - deltaR) / wheelTrack);
@@ -55,9 +55,11 @@ void calculateOdom(){
   }
 
   // average rotation, same as (rot + prevRot) / 2
-  double avgA = rot - (deltaTheta / 2);
+  double avgA = (rot + prevRot) / 2.0;
   xPos += localX * cos(avgA) + localY * sin(avgA);
   yPos += -localX * sin(avgA) + localY * cos(avgA);
+
+  prevRot = rot;
   rot = iSensor.get_rotation();
   //rot += deltaTheta;
 }

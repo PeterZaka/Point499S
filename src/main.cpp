@@ -80,19 +80,19 @@ void opcontrol() {
 			// pros::delay(50);
 			// controller.setText(2, 0, "Boost Enabled: " + std::to_string(isLiftBoostEnabled));
 
-			// pros::delay(50);
-			// controller.setText(0, 0, "x: " + std::to_string(xPos));
-			// pros::delay(50);
-			// controller.setText(1, 0, "y: " + std::to_string(yPos));
-			// pros::delay(50);
-			// controller.setText(2, 0, "rot: " + std::to_string(rot));
+			pros::delay(50);
+			controller.setText(0, 0, "x: " + std::to_string(xPos));
+			pros::delay(50);
+			controller.setText(1, 0, "y: " + std::to_string(yPos));
+			pros::delay(50);
+			controller.setText(2, 0, "rot: " + std::to_string(rot));
 
-			pros::delay(50);
-			controller.setText(0, 0, "l: " + std::to_string(leftEncoder.get()));
-			pros::delay(50);
-			controller.setText(1, 0, "r: " + std::to_string(rightEncoder.get()));
-			pros::delay(50);
-			controller.setText(2, 0, "b: " + std::to_string(backEncoder.get()));
+			// pros::delay(50);
+			// controller.setText(0, 0, "l: " + std::to_string(leftEncoder.get()));
+			// pros::delay(50);
+			// controller.setText(1, 0, "r: " + std::to_string(rightEncoder.get()));
+			// pros::delay(50);
+			// controller.setText(2, 0, "b: " + std::to_string(backEncoder.get()));
 			// controller.setText(2, 0, "rot: " + std::to_string(calculatedRot * (180/pi)));
 
 			// pros::delay(50);

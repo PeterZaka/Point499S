@@ -16,8 +16,8 @@ MotorGroup backArm({12});
 pros::ADIDigitalOut clawFront({1, 'A'}, false);
 pros::ADIDigitalOut clawBack({1, 'B'}, false);
 
-ADIEncoder leftEncoder('G', 'H');
-ADIEncoder rightEncoder('E', 'F', true);
+ADIEncoder leftEncoder('E', 'F', true);
+ADIEncoder rightEncoder('G', 'H');
 ADIEncoder backEncoder('A', 'B');
 
 Potentiometer liftPot({1, 'C'});
