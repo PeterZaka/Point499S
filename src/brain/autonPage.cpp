@@ -9,7 +9,7 @@ lv_obj_t* autonLabel;
 
 void initalize_auton_page(lv_obj_t* autonPage){
   autonLabel = lv_label_create(autonPage, NULL);
-  lv_obj_align(autonLabel, NULL, LV_ALIGN_CENTER, SCREENWIDTH / 2.0, SCREENHEIGHT - 50);
+  lv_obj_align(autonLabel, NULL, LV_ALIGN_IN_TOP_LEFT, SCREENWIDTH / 2.0, SCREENHEIGHT - 50);
 
   autonSelectionMap["Left Auton"] = leftAuton;
   autonSelectionMap["Right Auton"] = rightAuton;
@@ -18,7 +18,7 @@ void initalize_auton_page(lv_obj_t* autonPage){
 }
 
 std::function<void()> changeAutonFunc(std::string auton){
-  return [&]{
+  return [=](){
     std::cout << auton << std::endl;
     lv_label_set_text(autonLabel, auton.c_str());
     autonFunc = autonSelectionMap[auton];
