@@ -11,23 +11,23 @@ Motor leftLift(-8);
 Motor rightLift(10);
 MotorGroup lift({leftLift, rightLift});
 
-MotorGroup backArm({12});
+MotorGroup backArm({-18});
 
-pros::ADIDigitalOut clawFront({1, 'A'}, false);
-pros::ADIDigitalOut clawBack({1, 'B'}, false);
+pros::ADIDigitalOut clawFront({13, 'A'}, false);
+pros::ADIDigitalOut clawBack({13, 'B'}, false);
 
 ADIEncoder leftEncoder('E', 'F', true);
 ADIEncoder rightEncoder('G', 'H');
 ADIEncoder backEncoder('A', 'B');
 
-Potentiometer liftPot({1, 'C'});
+//Potentiometer liftPot();
 
 ADIButton clawFrontButton('D');
 ADIButton clawBackButton('C');
 
 pros::Imu iSensor(7);
 
-pros::Vision vision(13);
+pros::Vision vision(19);
 pros::vision_signature SIG_YELLOW = pros::Vision::signature_from_utility(1, 1579, 2173, 1876, -3589, -3319, -3454, 3.000, 0);
 pros::vision_signature SIG_RED = pros::Vision::signature_from_utility(2, 4207, 5017, 4612, -411, 1, -204, 4.800, 0);
 

@@ -1,16 +1,30 @@
 #include "auto/autonomous.hpp"
 
-#define t(x) []{x;}
-#define r(x) []{return x;}
+#define t(x) [&]{x;}
+#define r(x) [&]{return x;}
 
 void testAuton(){
-  xPos = 24+14.5/2;
-	yPos = 17.25/2;
+  // xPos = 24+14.5/2;
+	// yPos = 17.25/2;
+  //
+  // driveToPoint(24, 24);
+  // driveToPoint(3 *24, 4 *24, forward);
 
-  driveToPoint(24, 24);
-  driveToPoint(3 *24, 4 *24, forward);
+  xPos = 24;
+  yPos = 24;
 
-  while (true) Wait(1);
+  iSensor.set_rotation(0);
+  rot = 0;
+  prevRot = 0;
+
+  clawFront.set_value(true);
+  Wait(1);
+  clawFront.set_value(false);
+  Wait(1);
+  clawFront.set_value(true);
+  Wait(1);
+  clawFront.set_value(false);
+
 }
 
 void rightAuton(){
@@ -75,15 +89,12 @@ void leftAuton(){
 
 void skills(){
 
-  pros::Task liftTask(groupMoveTo(lift, 1000, 0, PID(0.1, 0.001, 0, 10000, -1), -1));
-  liftTask.suspend();
-
   xPos = 24+14.5/2.0;
 	yPos = 17.25/2.0;
 
-  iSensor.set_rotation(90);
-  rot = 90;
-  prevRot = 90 * (pi / 180);
+  iSensor.set_rotation(-90);
+  rot = -90;
+  prevRot = -90;
 
   driveTargetTime = 0;
 
@@ -94,66 +105,58 @@ void skills(){
   // 4: Score middle neutral
 
   // 1: Get left red
-  driveForward(5);
-  clawFront.set_value(true);
-  liftTask.resume();
+  driveForward(-12);
+  clawBack.set_value(true);
 
   // 2: Score left red
   driveToPoint(1 *24, 1 *24);
-  driveToPoint(2 *24, 2 *24, forward);
-  driveToPoint(2.5 *24, 4 *24, forward);
-  liftTask.suspend();
-  lift.moveVoltage(12000);
-  driveToPoint((2.5+3)/2.0 *24, (4+5)/2.0 *24, forward); // drive to middle point
+  driveToPoint(2 *24, 2 *24, backward);
+  driveToPoint(2.5 *24, 4 *24, backward);
+  driveToPoint((2.5+3)/2.0 *24, (4+5)/2.0 *24, backward); // drive to middle point
   // wait until lift is ready
   // while (liftPot.get() < 90) pros::delay(20);
-  driveToPoint(3 *24, 5 *24, forward);
+  driveToPoint(3 *24, 5 *24, backward);
 
-  lift.moveVoltage(-12000);
   // wait until lift is ready
   Wait(1);
-  clawFront.set_value(false);
+  clawBack.set_value(false);
 
   // 3: Get middle neutral
-  lift.moveVoltage(12000);
   Wait(0.25);
 
-  driveForward(-5);
-  lift.moveVoltage(-12000);
-  doUntil(t(driveToPoint(3 *24, 3 *24, forward)), r(clawFrontButton.isPressed()));
+  driveForward(5);
+  doUntil(t(driveToPoint(3 *24, 3 *24, backward)), r(clawBackButton.isPressed()));
   clawFront.set_value(true);
 
   // 4: Score middle neutral
-  lift.moveVoltage(12000);
   driveToPoint(3 *24, 4 *24, forward);
   // wait until lift is ready
   // while (liftPot.get() < 90) pros::delay(20);
+  std::cout << "A" << std::endl;
   driveToPoint(3 *24, 5 *24, forward);
+  std::cout << "B" << std::endl;
   clawFront.set_value(false);
+  std::cout << "C" << std::endl;
 
 
   // --------------------- SLIDE 2 ---------------------
   // Get left blue
 
   driveForward(-5);
-  lift.moveVoltage(-12000);
+  std::cout << "D" << std::endl;
   driveToPoint(3 *24, 4 *24);
   driveToPoint(5 *24, 4 *24, forward);
-  lift.moveVoltage(0);
   doUntil(t(driveToPoint(4.5 *24, 5.5 *24, forward)), r(clawFrontButton.isPressed()));
   clawFront.set_value(true);
-  liftTask.resume();
 
   // --------------------- SLIDE 3 ---------------------
   // Get right blue with back side
 
   driveToPoint(5 *24, 4 *24);
   driveToPoint(1.5 *24, 4.5 *24, backward);
-  liftTask.suspend();
   lift.moveVoltage(-12000);
   doUntil(t(driveToPoint(0.5 *24, 4.5 *24, backward)), r(clawBackButton.isPressed()));
   // Back claw
-  liftTask.resume();
 
 
   // --------------------- SLIDE 4 ---------------------
@@ -175,7 +178,7 @@ void skills(){
 
   // 3: Score blue
   driveToPoint(3 *24, 1.5 *24);
-  liftTask.suspend();
+  //liftTask.suspend();
   lift.moveVoltage(12000);
   turnToAngle(180);
   // wait until lift
@@ -233,14 +236,14 @@ void skills(){
   // 2: Get right neutral
   doUntil(t(driveToPoint(4.5 *24, 3 *24, forward)), r(clawFrontButton.isPressed()));
   clawFront.set_value(true);
-  liftTask.resume();
+  //liftTask.resume();
 
   // 3: Drop red in ready
   driveToPoint(2.5 *24, 1.5 *24, backward);
   // release back
 
   // 4: Score neutral
-  liftTask.suspend();
+  //liftTask.suspend();
   lift.moveVoltage(12000);
   turnToPoint(3 *24, 1 *24);
   // wait until lift
@@ -261,9 +264,9 @@ void skills(){
   clawFront.set_value(true);
 
   // 2: Score red
-  liftTask.resume();
+  //liftTask.resume();
   driveToPoint((xPos+3 *24)/2.0, 3 *24, forward);
-  liftTask.suspend();
+  //liftTask.suspend();
   lift.moveVoltage(12000);
   driveToPoint((xPos+3 *24)/2.0, 4.5 *24, forward);
   // wait until lift

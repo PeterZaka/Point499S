@@ -83,7 +83,7 @@ void opcontrol() {
 			pros::delay(50);
 			controller.setText(0, 0, "x: " + std::to_string(xPos));
 			pros::delay(50);
-			controller.setText(1, 0, "y: " + std::to_string(yPos));
+			controller.setText(1, 0, "y: " + std::to_string(calculatedRot * (180/pi)));
 			pros::delay(50);
 			controller.setText(2, 0, "rot: " + std::to_string(rot));
 
@@ -114,12 +114,12 @@ void opcontrol() {
 	ControllerButton testButton(ControllerId::master, ControllerDigital::A);
 	ControllerButton debugButton(ControllerId::master, ControllerDigital::Y);
 	// 1 controller only
-	ControllerButton singleClawFrontOpenButton(ControllerId::master, ControllerDigital::right);
-	ControllerButton singleClawFrontCloseButton(ControllerId::master, ControllerDigital::left);
+	ControllerButton singleClawFrontOpenButton(ControllerId::master, ControllerDigital::left);
+	ControllerButton singleClawFrontCloseButton(ControllerId::master, ControllerDigital::right);
 	ControllerButton singleClawBackOpenButton(ControllerId::master, ControllerDigital::X);
 	ControllerButton singleClawBackCloseButton(ControllerId::master, ControllerDigital::B);
-	ControllerButton singleBackArmUpButton(ControllerId::partner, ControllerDigital::L1);
-	ControllerButton singleBackArmDownButton(ControllerId::partner, ControllerDigital::L2);
+	ControllerButton singleBackArmUpButton(ControllerId::master, ControllerDigital::L1);
+	ControllerButton singleBackArmDownButton(ControllerId::master, ControllerDigital::L2);
 
 	// ------- Partner -------
 	ControllerButton clawFrontOpenButton(ControllerId::partner, ControllerDigital::R1);
