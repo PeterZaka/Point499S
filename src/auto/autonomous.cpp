@@ -1,7 +1,7 @@
 #include "auto/autonomous.hpp"
 
-#define t(x) [&]{x;}
-#define r(x) [&]{return x;}
+#define t(x) [=]{x;}
+#define r(x) [=]{return x;}
 
 void testAuton(){
   // xPos = 24+14.5/2;
@@ -58,30 +58,30 @@ void rightAuton(){
 
 void leftAuton(){
 
-  xPos = 29.5;
+  xPos = 24;
 	yPos = 24 - 17.25/2.0;
+
+  iSensor.set_rotation(180);
+  rot = 180;
+  prevRot = 180;
 
   driveTargetTime = 0; // Don't stop
 
-  doUntil(t(driveToPoint(1.5 *24, 3 *24, forward)), r(clawFrontButton.isPressed()));
-  clawFront.set_value(true);
+  backArm.moveVoltage(-12000.0);
+  doUntil(t(driveToPoint(1.5 *24, 3 *24, backward)), r(clawBackButton.isPressed()));
+  clawBack.set_value(true);
+  backArm.moveVoltage(12000.0);;
 
   driveStopError = 0; // Disable stop detection
 
-  doUntil(t(driveToPoint(3 *24, 3 *24, backward)), r(clawBackButton.isPressed()));
-  clawBack.set_value(true);
+  doUntil(t(driveToPoint(3 *24, 3 *24, forward)), r(clawFrontButton.isPressed()));
+  clawFront.set_value(true);
 
-  driveToPoint((xPos+1.5 *24)/2.0, (yPos+1.5 *24)/2.0);
-  pros::Task moveTowerToTop([]{
-    backArm.moveVoltage(12000.0);
-    Wait(3);
-    clawBack.set_value(false);
-    backArm.moveVoltage(-12000.0);
-  });
-
+//  driveToPoint((xPos+1.5 *24)/2.0, (yPos+1.5 *24)/2.0);
   driveToPoint(1.5 *24, 1.5 *24);
-  driveToPoint(1 *24, 0.5 *24);
+  driveToPoint(24-17.25/2.0, 0.5 *24);
 
+  backArm.moveVoltage(-12000.0);
   turnToPoint(1.75 *24, 0.5 *24, backward);
   doUntil(t(driveToPoint(1.75 *24, 0.5 *24, backward)), r(clawBackButton.isPressed()));
   clawBack.set_value(true);
@@ -89,8 +89,8 @@ void leftAuton(){
 
 void skills(){
 
-  xPos = 24+14.5/2.0;
-	yPos = 17.25/2.0;
+  xPos = 24-17.25/2.0;
+	yPos = 24/2.0;
 
   iSensor.set_rotation(-90);
   rot = -90;
@@ -105,38 +105,37 @@ void skills(){
   // 4: Score middle neutral
 
   // 1: Get left red
-  driveForward(-12);
+  backArm.moveVoltage(-12000.0);
+  Wait(1);
+  doUntil(t(driveForward(-12)), r(clawBackButton.isPressed()));
   clawBack.set_value(true);
+  backArm.moveVoltage(12000.0);
 
   // 2: Score left red
   driveToPoint(1 *24, 1 *24);
   driveToPoint(2 *24, 2 *24, backward);
   driveToPoint(2.5 *24, 4 *24, backward);
   driveToPoint((2.5+3)/2.0 *24, (4+5)/2.0 *24, backward); // drive to middle point
-  // wait until lift is ready
-  // while (liftPot.get() < 90) pros::delay(20);
   driveToPoint(3 *24, 5 *24, backward);
 
-  // wait until lift is ready
+  driveForward(3);
+  backArm.moveVoltage(-12000.0);
   Wait(1);
   clawBack.set_value(false);
 
   // 3: Get middle neutral
-  Wait(0.25);
-
   driveForward(5);
   doUntil(t(driveToPoint(3 *24, 3 *24, backward)), r(clawBackButton.isPressed()));
-  clawFront.set_value(true);
+  clawBack.set_value(true);
+  backArm.moveVoltage(12000.0);
 
   // 4: Score middle neutral
-  driveToPoint(3 *24, 4 *24, forward);
-  // wait until lift is ready
-  // while (liftPot.get() < 90) pros::delay(20);
-  std::cout << "A" << std::endl;
-  driveToPoint(3 *24, 5 *24, forward);
-  std::cout << "B" << std::endl;
-  clawFront.set_value(false);
-  std::cout << "C" << std::endl;
+  driveToPoint(3 *24, 5 *24, backward);
+
+  driveForward(3);
+  backArm.moveVoltage(-12000.0);
+  Wait(1);
+  clawBack.set_value(false);
 
 
   // --------------------- SLIDE 2 ---------------------

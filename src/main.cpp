@@ -83,7 +83,7 @@ void opcontrol() {
 			pros::delay(50);
 			controller.setText(0, 0, "x: " + std::to_string(xPos));
 			pros::delay(50);
-			controller.setText(1, 0, "y: " + std::to_string(calculatedRot * (180/pi)));
+			controller.setText(1, 0, "y: " + std::to_string(yPos));
 			pros::delay(50);
 			controller.setText(2, 0, "rot: " + std::to_string(rot));
 
@@ -130,7 +130,7 @@ void opcontrol() {
 	ControllerButton backArmDownButton(ControllerId::partner, ControllerDigital::B);
 
 	bool isTank = true;
-	bool isBackward = false;
+	bool isBackward = true;
 
 	double clawSpeed = 1;
 

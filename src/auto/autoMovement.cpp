@@ -299,7 +299,6 @@ void doUntil(std::function<void()> Do, std::function<bool()> Until){
     if (Until()) doTask.remove();
     pros::delay(20);
   }
-  doTask.remove();
 }
 
 // ----- helper functions -----
