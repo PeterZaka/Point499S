@@ -85,7 +85,8 @@ void opcontrol() {
 			pros::delay(50);
 			controller.setText(1, 0, "y: " + std::to_string(yPos));
 			pros::delay(50);
-			controller.setText(2, 0, "rot: " + std::to_string(rot));
+			controller.setText(2, 0, "rot: " + std::to_string(iSensor.get_rotation()));
+			// controller.setText(2, 0, "rot: " + std::to_string(calculatedRot * (180/pi)));
 
 			// pros::delay(50);
 			// controller.setText(0, 0, "l: " + std::to_string(leftEncoder.get()));

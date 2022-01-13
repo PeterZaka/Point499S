@@ -12,6 +12,7 @@ Motor rightLift(10);
 MotorGroup lift({leftLift, rightLift});
 
 MotorGroup backArm({-18});
+// actually 18
 
 pros::ADIDigitalOut clawFront({13, 'A'}, false);
 pros::ADIDigitalOut clawBack({13, 'B'}, false);

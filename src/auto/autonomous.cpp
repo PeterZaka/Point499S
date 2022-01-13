@@ -89,14 +89,14 @@ void leftAuton(){
 
 void skills(){
 
-  xPos = 24-17.25/2.0;
+  xPos = 24 - 17.25/2.0;
 	yPos = 24/2.0;
 
   iSensor.set_rotation(-90);
   rot = -90;
   prevRot = -90;
 
-  driveTargetTime = 0;
+  // driveTargetTime = 0;
 
   // --------------------- SLIDE 1 ---------------------
   // 1: Get left red
@@ -106,9 +106,20 @@ void skills(){
 
   // 1: Get left red
   backArm.moveVoltage(-12000.0);
-  Wait(1);
-  doUntil(t(driveForward(-12)), r(clawBackButton.isPressed()));
+
+  std::cout << "A" << std::endl;
+  pros::delay(1000.0);
+  std::cout << "B" << std::endl;
+  pros::delay(1000.0);
+  std::cout << "C" << std::endl;
+  driveForward(-12);
+
+  return;
+  driveForward(-12);
+//  doUntil(t(driveForward(-12)), r(clawBackButton.isPressed()));
+  std::cout << 4 << std::endl;
   clawBack.set_value(true);
+  std::cout << 5 << std::endl;
   backArm.moveVoltage(12000.0);
 
   // 2: Score left red

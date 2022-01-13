@@ -48,7 +48,7 @@ void driveForward(double distance, double rotation){
 
     drivePID.update(distanceFromStart);
     anglePID.update(rot);
-    leftSide.moveVoltage( (drivePID.value() + anglePID.value()) * 120.0 * driveStrength);
+    leftSide.moveVoltage( 12000.0 );
     rightSide.moveVoltage( (drivePID.value() - anglePID.value()) * 120.0 * driveStrength);
 
     if (abs(drivePID.error) < driveTargetError)
