@@ -108,10 +108,8 @@ void skills(){
   backArm.moveVoltage(-12000.0);
 
   std::cout << "A" << std::endl;
-  pros::delay(1000.0);
+  pros::delay(1000);
   std::cout << "B" << std::endl;
-  pros::delay(1000.0);
-  std::cout << "C" << std::endl;
   driveForward(-12);
 
   return;

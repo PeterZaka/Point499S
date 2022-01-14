@@ -20,5 +20,5 @@ void PrintPosition(std::string tag) {
 }
 
 void Wait(double seconds){
-  pros::delay(seconds * 1000);
+  pros::delay((int)(seconds * 1000));
 }

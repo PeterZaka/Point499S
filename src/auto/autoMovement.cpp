@@ -48,8 +48,8 @@ void driveForward(double distance, double rotation){
 
     drivePID.update(distanceFromStart);
     anglePID.update(rot);
-    leftSide.moveVoltage( 12000.0 );
-    rightSide.moveVoltage( (drivePID.value() - anglePID.value()) * 120.0 * driveStrength);
+    leftSide.moveVoltage( (drivePID.value() + anglePID.value()) * 120 * driveStrength );
+    rightSide.moveVoltage( (drivePID.value() - anglePID.value()) * 120 * driveStrength);
 
     if (abs(drivePID.error) < driveTargetError)
       timeOnTarget += 0.02;
@@ -121,12 +121,12 @@ void driveToPoint(double x, double y, movement Movement, double strength, double
       strengthValue = std::clamp(strengthValue, -angleClamp, angleClamp);
       if (abs(distance) <= slowDownRotationError) strengthValue *= 0.1;
 
-      leftSide.moveVoltage( std::clamp( (drivePID.value() + strengthValue) * 120.0, -12000.0, 12000.0)  * driveStrength);
-      rightSide.moveVoltage( std::clamp( (drivePID.value() - strengthValue) * 120.0, -12000.0, 12000.0)  * driveStrength);
+      leftSide.moveVoltage( std::clamp( (drivePID.value() + strengthValue) * 120, -12000.0, 12000.0)  * driveStrength);
+      rightSide.moveVoltage( std::clamp( (drivePID.value() - strengthValue) * 120, -12000.0, 12000.0)  * driveStrength);
 
     } else {
-      leftSide.moveVoltage( std::clamp( (drivePID.value()) * 120.0, -12000.0, 12000.0)  * driveStrength);
-      rightSide.moveVoltage( std::clamp( (drivePID.value()) * 120.0, -12000.0, 12000.0)  * driveStrength);
+      leftSide.moveVoltage( std::clamp( (drivePID.value()) * 120, -12000.0, 12000.0)  * driveStrength);
+      rightSide.moveVoltage( std::clamp( (drivePID.value()) * 120, -12000.0, 12000.0)  * driveStrength);
     }
 
     if (abs(drivePID.error) < driveTargetError)
@@ -170,8 +170,8 @@ void turnToAngle(double angle){
   double timePassed = 0;
   while (timeOnTarget <= turnTargetTime && timeStopped <= turnStopTime){
     turnPID.update(rot);
-    leftSide.moveVoltage(turnPID.value() * 120.0);
-    rightSide.moveVoltage(-turnPID.value() * 120.0);
+    leftSide.moveVoltage(turnPID.value() * 120);
+    rightSide.moveVoltage(-turnPID.value() * 120);
 
     if (abs(turnPID.error) < turnTargetError)
       timeOnTarget += 0.02;
@@ -203,12 +203,12 @@ void turnToAngle(double angle){
 void turnToAngle(double angle, double power){
   angle = findShortestRotation(rot, angle);
   if (rot > angle) {
-    leftSide.moveVoltage(-12000.0 * power);
-    rightSide.moveVoltage(12000.0 * power);
+    leftSide.moveVoltage(-12000 * power);
+    rightSide.moveVoltage(12000 * power);
     while (rot > angle) pros::delay(20);
   } else {
-    leftSide.moveVoltage(12000.0 * power);
-    rightSide.moveVoltage(-12000.0 * power);
+    leftSide.moveVoltage(12000 * power);
+    rightSide.moveVoltage(-12000 * power);
     while (rot < angle) pros::delay(20);
   }
   leftSide.moveVoltage(0);
@@ -236,7 +236,7 @@ void groupMoveTo(MotorGroup group, double pos, PID groupPID, double targetError,
   }
   while (timeOnTarget <= targetTime){
     groupPID.update(group.getPosition());
-    group.moveVoltage(groupPID.value() * 120.0);
+    group.moveVoltage(groupPID.value() * 120);
 
     if (abs(groupPID.error) < targetError)
       timeOnTarget += 0.02;
@@ -268,8 +268,8 @@ void balance(PID balancePID){
     balancePID.update(iSensor.get_pitch());
 
     if (abs(balancePID.value()) > 5) {
-      leftSide.moveVoltage( balancePID.value() * 120.0);
-      rightSide.moveVoltage( balancePID.value() * 120.0);
+      leftSide.moveVoltage( balancePID.value() * 120);
+      rightSide.moveVoltage( balancePID.value() * 120);
     } else {
       leftSide.moveVoltage(0);
       rightSide.moveVoltage(0);
