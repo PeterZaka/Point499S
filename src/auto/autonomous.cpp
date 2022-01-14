@@ -106,18 +106,9 @@ void skills(){
 
   // 1: Get left red
   backArm.moveVoltage(-12000.0);
-
-  std::cout << "A" << std::endl;
-  pros::delay(1000);
-  std::cout << "B" << std::endl;
-  driveForward(-12);
-
-  return;
-  driveForward(-12);
-//  doUntil(t(driveForward(-12)), r(clawBackButton.isPressed()));
-  std::cout << 4 << std::endl;
+  Wait(1);
+  doUntil(t(driveForward(-12)), r(clawBackButton.isPressed()));
   clawBack.set_value(true);
-  std::cout << 5 << std::endl;
   backArm.moveVoltage(12000.0);
 
   // 2: Score left red
@@ -151,7 +142,6 @@ void skills(){
   // Get left blue
 
   driveForward(-5);
-  std::cout << "D" << std::endl;
   driveToPoint(3 *24, 4 *24);
   driveToPoint(5 *24, 4 *24, forward);
   doUntil(t(driveToPoint(4.5 *24, 5.5 *24, forward)), r(clawFrontButton.isPressed()));

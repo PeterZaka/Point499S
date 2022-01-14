@@ -215,19 +215,21 @@ void opcontrol() {
 		if (testButton.changedToPressed()) {
 			controller.rumble(".");
 			StartDebugTime("Y Pressed: ");
-			pros::Task testingTask(autonFunc);
-			while (testingTask.get_state() == pros::E_TASK_STATE_READY){
-				if (clawFrontButton.changedToPressed()) controller.rumble("..");
-				if (clawBackButton.changedToPressed()) controller.rumble("..");
-				if (debugButton.changedToPressed()) {
-					printf("\n");
-					PrintDebugTime("Y Pressed: ");
-					PrintPosition();
-				}
-				if (testButton.changedToPressed()) testingTask.remove();
-				pros::delay(20);
-			}
-			controller.rumble(".");
+			autonFunc();
+
+			// pros::Task testingTask(autonFunc);
+			// while (testingTask.get_state() == pros::E_TASK_STATE_READY){
+			// 	if (clawFrontButton.changedToPressed()) controller.rumble("..");
+			// 	if (clawBackButton.changedToPressed()) controller.rumble("..");
+			// 	if (debugButton.changedToPressed()) {
+			// 		printf("\n");
+			// 		PrintDebugTime("Y Pressed: ");
+			// 		PrintPosition();
+			// 	}
+			// 	if (testButton.changedToPressed()) testingTask.remove();
+			// 	pros::delay(20);
+			// }
+			// controller.rumble(".");
 		}
 
 		pros::delay(10);
