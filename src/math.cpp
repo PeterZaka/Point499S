@@ -1,5 +1,7 @@
 #include "math.hpp"
 
+#define PI 3.141592653589793
+
 double posMod(double x, double y){
 	double answer = fmod(x, y);
 	if (answer < 0)
@@ -34,7 +36,7 @@ double findRotationTo(double startX, double startY, double endX, double endY){
 	double angle = atan2f(
     ( endY - startY ),
     ( endX - startX )
-  ) * (180 / 3.141592653589793);
+  ) * (180 / PI);
   // convert counterclockwise to clockwise
   angle = -angle + 90;
 	return angle;
@@ -51,8 +53,7 @@ point findOffsetTarget(point start, point target, point offset, double extraDist
 	double d = sqrt(
 		pow ( offset.x, 2.0 ) +
 		pow ( offset.y, 2.0 ) ) + extraDistance;
-	double dt = atan2(offset.y, offset.x) - (
-		3.141592653589793 / 2.0 );
+	double dt = atan2(offset.y, offset.x) - ( PI / 2.0 );
 	double t = atan2( target.y - start.y, target.x - start.x ) + dt;
 	point newTarget;
 	newTarget.x = target.x + ( d * cos(t) );
