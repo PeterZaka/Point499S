@@ -16,6 +16,14 @@ static void placeBackOnPlatform(){
 
 void testAuton(){
 
+  doUntil(t(driveForward(-24)), r(clawBackButton.isPressed()));
+  clawBack.set_value(true);
+  Wait(0.25);
+  backArm.moveVoltage(12000.0);;
+  driveForward(24);
+
+  return;
+
   driveForward(-500);
   placeBackOnPlatform();
   driveForward(24);
@@ -64,12 +72,14 @@ void leftAuton(){
 
   backArm.moveVoltage(-12000.0);
   doUntil(t(driveToPoint(1.5 *24, 3 *24, backward)), r(clawBackButton.isPressed()));
+  Wait(0.25);
   clawBack.set_value(true);
   backArm.moveVoltage(12000.0);;
 
   driveStopError = 0; // Disable stop detection
 
   doUntil(t(driveToPoint(3 *24, 3 *24, forward)), r(clawFrontButton.isPressed()));
+  Wait(0.25);
   clawFront.set_value(true);
 
 //  driveToPoint((xPos+1.5 *24)/2.0, (yPos+1.5 *24)/2.0);

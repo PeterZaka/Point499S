@@ -83,7 +83,7 @@ void opcontrol() {
 			pros::delay(50);
 			controller.setText(0, 0, "x: " + std::to_string(xPos));
 			pros::delay(50);
-			controller.setText(1, 0, "y: " + std::to_string(yPos));
+			controller.setText(1, 0, "y: " + std::to_string(clawBackButton.isPressed()));
 			pros::delay(50);
 			controller.setText(2, 0, "rot: " + std::to_string(iSensor.get_rotation()));
 			// controller.setText(2, 0, "rot: " + std::to_string(calculatedRot * (180/pi)));
