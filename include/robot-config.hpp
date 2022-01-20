@@ -16,6 +16,7 @@ extern Motor leftLift;
 extern Motor rightLift;
 extern MotorGroup lift;
 
+extern MotorGroup frontArm;
 extern MotorGroup backArm;
 
 extern pros::ADIDigitalOut clawFront;

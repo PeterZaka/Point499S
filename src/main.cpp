@@ -83,9 +83,9 @@ void opcontrol() {
 			pros::delay(50);
 			controller.setText(0, 0, "x: " + std::to_string(xPos));
 			pros::delay(50);
-			controller.setText(1, 0, "y: " + std::to_string(clawBackButton.isPressed()));
-			pros::delay(50);
-			controller.setText(2, 0, "rot: " + std::to_string(iSensor.get_rotation()));
+			controller.setText(1, 0, "y: " + std::to_string(yPos));
+			// pros::delay(50);
+			// controller.setText(2, 0, "rot: " + std::to_string(iSensor.get_rotation()));
 			// controller.setText(2, 0, "rot: " + std::to_string(calculatedRot * (180/pi)));
 
 			// pros::delay(50);
@@ -100,8 +100,8 @@ void opcontrol() {
 			// controller.setText(0, 0, "r - p: " + std::to_string(rot - prevRot));
 			// pros::delay(50);
 			// controller.setText(1, 0, "c: " + std::to_string((deltaL - deltaR) / wheelTrack));
-			// pros::delay(50);
-			// controller.setText(2, 0, "liftP: " + std::to_string(liftPot.get()));
+			pros::delay(50);
+			controller.setText(2, 0, "liftP: " + std::to_string(liftPot.get()));
 
 			pros::delay(500);
 		}
@@ -176,11 +176,11 @@ void opcontrol() {
 		}
 
 		if(liftUpButton.isPressed()){
-			lift.moveVoltage(12000.0);
+			frontArm.moveVoltage(12000.0);
 		} else if(liftDownButton.isPressed()){
-			lift.moveVoltage(-12000.0);
+			frontArm.moveVoltage(-12000.0);
 		} else {
-			lift.moveVoltage(0.0);
+			frontArm.moveVoltage(0.0);
 		}
 
 		if (controllerPartner.isConnected()) {

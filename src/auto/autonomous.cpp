@@ -18,7 +18,7 @@ void testAuton(){
 
   doUntil(t(driveForward(-24)), r(clawBackButton.isPressed()));
   clawBack.set_value(true);
-  Wait(0.25);
+  Wait(0.5);
   backArm.moveVoltage(12000.0);;
   driveForward(24);
 
@@ -70,17 +70,19 @@ void leftAuton(){
 
   driveTargetTime = 0; // Don't stop
 
-  backArm.moveVoltage(-12000.0);
+  backArm.moveVoltage(-12000);
+  frontArm.moveVoltage(-12000);
   doUntil(t(driveToPoint(1.5 *24, 3 *24, backward)), r(clawBackButton.isPressed()));
-  Wait(0.25);
   clawBack.set_value(true);
-  backArm.moveVoltage(12000.0);;
+  Wait(0.25);
+  backArm.moveVoltage(12000);
 
   driveStopError = 0; // Disable stop detection
 
   doUntil(t(driveToPoint(3 *24, 3 *24, forward)), r(clawFrontButton.isPressed()));
-  Wait(0.25);
   clawFront.set_value(true);
+  Wait(0.25);
+  frontArm.moveVoltage(12000);
 
 //  driveToPoint((xPos+1.5 *24)/2.0, (yPos+1.5 *24)/2.0);
   driveToPoint(1.5 *24, 1.5 *24);
@@ -154,6 +156,7 @@ void skills(){
   // Get right blue with back side
 
   driveToPoint(5 *24, 4 *24);
+  frontArm.moveVoltage(-12000);
   driveToPoint(1.5 *24, 4 *24, forward);
   doUntil(t(driveToPoint(0.5 *24, 4.5 *24, forward)), r(clawFrontButton.isPressed()));
   clawFront.set_value(true);
@@ -165,6 +168,7 @@ void skills(){
 
   // 1: Score left blue
   driveToPoint(2 *24, 4 *24, backward);
+  frontArm.moveVoltage(12000);
   driveToPoint((1.5+3)/2.0 *24, 3 *24, backward);
   driveToPoint(2.5 *24, 2 *24, backward);
   driveToPoint(3 *24, 1 *24, backward);
@@ -172,12 +176,10 @@ void skills(){
 
   // 2: Score right blue
   driveForward(10);
-  lift.moveVoltage(12000);
   turnToPoint(3 *24, 1 *24);
   driveToPoint(3 *24, 1 *24, forward);
   clawFront.set_value(false);
   driveToPoint(2.5 *24, 2 *24, backward);
-  lift.moveVoltage(-12000);
 
   // --------------------- SLIDE 5 ---------------------
   // 1: Get left neutral
@@ -185,7 +187,7 @@ void skills(){
 
   // 1: Get left neutral
   backArm.moveVoltage(-12000);
-  doUntil(t(driveToPoint(4.5 *24, 5.5 *24, backward)), r(clawBackButton.isPressed()));
+  doUntil(t(driveToPoint(1.5 *24, 3 *24, backward)), r(clawBackButton.isPressed()));
   clawBack.set_value(true);
 
   // 2: Score left neutral

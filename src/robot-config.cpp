@@ -11,7 +11,8 @@ Motor leftLift(-8);
 Motor rightLift(10);
 MotorGroup lift({leftLift, rightLift});
 
-MotorGroup backArm({-18});
+MotorGroup frontArm({-9});
+MotorGroup backArm({-19});
 // actually 18
 
 pros::ADIDigitalOut clawFront({13, 'A'}, false);
@@ -21,7 +22,7 @@ ADIEncoder leftEncoder('E', 'F', true);
 ADIEncoder rightEncoder('G', 'H');
 ADIEncoder backEncoder('A', 'B');
 
-//Potentiometer liftPot();
+Potentiometer liftPot({13, 'C'});
 
 ADIButton clawFrontButton('D');
 ADIButton clawBackButton('C');
