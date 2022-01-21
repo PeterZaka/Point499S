@@ -12,7 +12,7 @@ Motor rightLift(10);
 MotorGroup lift({leftLift, rightLift});
 
 MotorGroup frontArm({-9});
-MotorGroup backArm({-19});
+MotorGroup backArm({-18});
 // actually 18
 
 pros::ADIDigitalOut clawFront({13, 'A'}, false);
