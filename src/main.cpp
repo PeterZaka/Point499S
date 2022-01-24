@@ -82,11 +82,12 @@ void opcontrol() {
 
 			pros::delay(50);
 			controller.setText(0, 0, "x: " + std::to_string(xPos));
-			pros::delay(50);
-			controller.setText(1, 0, "y: " + std::to_string(yPos));
+			// pros::delay(50);
+			// controller.setText(1, 0, "y: " + std::to_string(yPos));
 			// pros::delay(50);
 			// controller.setText(2, 0, "rot: " + std::to_string(iSensor.get_rotation()));
-			// controller.setText(2, 0, "rot: " + std::to_string(calculatedRot * (180/pi)));
+			pros::delay(50);
+			controller.setText(1, 0, "cal rot: " + std::to_string(calculatedRot * (180/pi)));
 
 			// pros::delay(50);
 			// controller.setText(0, 0, "l: " + std::to_string(leftEncoder.get()));
@@ -131,11 +132,13 @@ void opcontrol() {
 	ControllerButton frontArmDownButton(ControllerId::partner, ControllerDigital::L2);
 	ControllerButton backArmUpButton(ControllerId::partner, ControllerDigital::R1);
 	ControllerButton backArmDownButton(ControllerId::partner, ControllerDigital::R2);
+	ControllerButton autoArmButton(ControllerId::partner, ControllerDigital::Y);
 
 	bool isTank = true;
 	bool isBackward = true;
 
 	double clawSpeed = 1;
+	bool isAutoArmRunning = false;
 	bool usingBackClaw = true;
 
 	xPos = 24+14.5/2;
@@ -186,6 +189,20 @@ void opcontrol() {
 			lift.moveVoltage(0.0);
 		}
 
+		if (autoArmButton.isPressed()) {
+			isAutoArmRunning = !isAutoArmRunning;
+		}
+		if (isAutoArmRunning){
+			if (liftPot.get() < 100) {
+				backArm.moveVoltage(12000);
+			}
+			else {
+				clawBack.set_value(false);
+				isAutoArmRunning = false;
+				controllerPartner.rumble(".");
+			}
+		}
+
 		if (controllerPartner.isConnected()) {
 			if(clawFrontOpenButton.isPressed()) clawFront.set_value(false);
 			else if(clawFrontCloseButton.isPressed()) clawFront.set_value(true);
@@ -193,9 +210,11 @@ void opcontrol() {
 			if(clawBackOpenButton.isPressed()) clawBack.set_value(false);
 			else if(clawBackCloseButton.isPressed()) clawBack.set_value(true);
 
-			if(backArmUpButton.isPressed()) backArm.moveVoltage(12000);
-			else if(backArmDownButton.isPressed()) backArm.moveVoltage(-12000);
-			else backArm.moveVoltage(0);
+			if (!isAutoArmRunning){
+				if(backArmUpButton.isPressed()) backArm.moveVoltage(12000);
+				else if(backArmDownButton.isPressed()) backArm.moveVoltage(-12000);
+				else backArm.moveVoltage(0);
+		}
 
 			if(frontArmUpButton.isPressed()) frontArm.moveVoltage(12000);
 			else if(frontArmDownButton.isPressed()) frontArm.moveVoltage(-12000);
@@ -215,9 +234,11 @@ void opcontrol() {
 			else if(singleFrontArmDownButton.isPressed()) frontArm.moveVoltage(-12000);
 			else frontArm.moveVoltage(0);
 
-			if(singleBackArmUpButton.isPressed()) backArm.moveVoltage(12000);
-			else if(singleBackArmDownButton.isPressed()) backArm.moveVoltage(-12000);
-			else backArm.moveVoltage(0);
+			if (!isAutoArmRunning){
+				if(singleBackArmUpButton.isPressed()) backArm.moveVoltage(12000);
+				else if(singleBackArmDownButton.isPressed()) backArm.moveVoltage(-12000);
+				else backArm.moveVoltage(0);
+			}
 		}
 
 		if (debugButton.changedToPressed()) {

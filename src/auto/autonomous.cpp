@@ -6,26 +6,24 @@
 static void placeBackOnPlatform(){
   double beforeFunctionError = driveTargetError;
   driveTargetError = 1;
-  driveForward(5);
+  driveForward(6);
   driveTargetError = beforeFunctionError;
   backArm.moveVoltage(-12000);
-  Wait(1);
+  Wait(1); // USE Potentiometer here!
   backArm.moveVoltage(0);
   clawBack.set_value(false);
 }
 
 void testAuton(){
 
-  doUntil(t(driveForward(-24)), r(clawBackButton.isPressed()));
-  clawBack.set_value(true);
-  Wait(0.5);
-  backArm.moveVoltage(12000.0);;
-  driveForward(24);
+  skills();
 
   return;
 
-  driveForward(-500);
-  placeBackOnPlatform();
+  doUntil(t(driveForward(-24)), r(clawBackButton.isPressed()));
+  clawBack.set_value(true);
+  Wait(0.5);
+  backArm.moveVoltage(12000.0);
   driveForward(24);
 
 }
@@ -114,16 +112,16 @@ void skills(){
   // 4: Score middle neutral
 
   // 1: Get left red
-  backArm.moveVoltage(-12000.0);
+  backArm.moveVoltage(-12000);
   Wait(1);
   doUntil(t(driveForward(-12)), r(clawBackButton.isPressed()));
   clawBack.set_value(true);
-  backArm.moveVoltage(12000.0);
+  backArm.moveVoltage(12000);
 
   // 2: Score left red
   driveToPoint(1 *24, 1 *24);
   driveToPoint(2 *24, 2 *24, backward);
-  driveToPoint((1.5+3)/2.0 *24, 3 *24, backward);
+  driveToPoint(50, 3 *24, backward);
   driveToPoint(2.5 *24, 4 *24, backward);
 
   driveToPoint(3 *24, 5 *24, backward);
@@ -169,17 +167,20 @@ void skills(){
   // 1: Score left blue
   driveToPoint(2 *24, 4 *24, backward);
   frontArm.moveVoltage(12000);
-  driveToPoint((1.5+3)/2.0 *24, 3 *24, backward);
+  driveToPoint(50, 3 *24, backward);
   driveToPoint(2.5 *24, 2 *24, backward);
   driveToPoint(3 *24, 1 *24, backward);
   placeBackOnPlatform();
 
   // 2: Score right blue
   driveForward(10);
+  lift.moveVoltage(12000);
   turnToPoint(3 *24, 1 *24);
+  frontArm.moveVoltage(-12000);
   driveToPoint(3 *24, 1 *24, forward);
   clawFront.set_value(false);
   driveToPoint(2.5 *24, 2 *24, backward);
+  lift.moveVoltage(-12000);
 
   // --------------------- SLIDE 5 ---------------------
   // 1: Get left neutral
@@ -191,6 +192,7 @@ void skills(){
   clawBack.set_value(true);
 
   // 2: Score left neutral
+  lift.moveVoltage(0);
   turnToPoint(3 *24, 1 *24, backward);
   driveToPoint(3 *24, 1 *24, backward);
   placeBackOnPlatform();
@@ -210,10 +212,12 @@ void skills(){
 
   // 2: Get right neutral
   doUntil(t(driveToPoint(4.5 *24, 3 *24, backward)), r(clawBackButton.isPressed()));
+  frontArm.moveVoltage(12000);
   clawBack.set_value(true);
 
   // 3: Score right neutral
   driveToPoint(3.5 *24, 2 *24, backward);
+  backArm.moveVoltage(12000);
   driveToPoint(3 *24, 1 *24, backward);
   placeBackOnPlatform();
 
@@ -224,6 +228,7 @@ void skills(){
   // 1: Score right red
   driveToPoint(3 *24, 3 *24, forward);
   lift.moveVoltage(12000);
+  frontArm.moveVoltage(-12000 * 0.5);
   driveToPoint(3 *24, 5 *24, forward);
   clawFront.set_value(false);
 

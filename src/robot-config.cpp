@@ -15,14 +15,14 @@ MotorGroup frontArm({-9});
 MotorGroup backArm({-18});
 // actually 18
 
-pros::ADIDigitalOut clawFront({13, 'A'}, false);
-pros::ADIDigitalOut clawBack({13, 'B'}, false);
+pros::ADIDigitalOut clawFront({13, 'B'}, false);
+pros::ADIDigitalOut clawBack({13, 'A'}, false);
 
 ADIEncoder leftEncoder('E', 'F', true);
 ADIEncoder rightEncoder('G', 'H');
 ADIEncoder backEncoder('A', 'B');
 
-Potentiometer liftPot({13, 'C'});
+Potentiometer liftPot({13, 'H'});
 
 ADIButton clawFrontButton('D');
 ADIButton clawBackButton('C');
