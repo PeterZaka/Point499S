@@ -7,13 +7,13 @@ Motor backRightMotor(3);
 MotorGroup leftSide({topLeftMotor, backLeftMotor});
 MotorGroup rightSide({topRightMotor, backRightMotor});
 
-Motor leftLift(-8);
-Motor rightLift(10);
+Motor leftLift(8);
+Motor rightLift(-9);
 MotorGroup lift({leftLift, rightLift});
 
-MotorGroup frontArm({-9});
+MotorGroup frontArm({-10});
 MotorGroup backArm({-18});
-// actually 18
+// actually 10
 
 pros::ADIDigitalOut clawFront({13, 'B'}, false);
 pros::ADIDigitalOut clawBack({13, 'A'}, false);

@@ -113,7 +113,7 @@ void skills(){
 
   // 1: Get left red
   backArm.moveVoltage(-12000);
-  Wait(1);
+  Wait(1); // wait until Potentiometer
   doUntil(t(driveForward(-12)), r(clawBackButton.isPressed()));
   clawBack.set_value(true);
   backArm.moveVoltage(12000);
