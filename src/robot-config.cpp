@@ -13,19 +13,19 @@ MotorGroup lift({leftLift, rightLift});
 
 MotorGroup frontArm({-10});
 MotorGroup backArm({-18});
-// actually 10
+// actually 18
 
-pros::ADIDigitalOut clawFront({13, 'B'}, false);
-pros::ADIDigitalOut clawBack({13, 'A'}, false);
+pros::ADIDigitalOut clawFront({15, 'B'}, false);
+pros::ADIDigitalOut clawBack({15, 'A'}, !false);
 
 ADIEncoder leftEncoder('E', 'F', true);
 ADIEncoder rightEncoder('G', 'H');
 ADIEncoder backEncoder('A', 'B');
 
-Potentiometer liftPot({13, 'H'});
+Potentiometer backArmPot({15, 'H'});
 
-ADIButton clawFrontButton('D');
-ADIButton clawBackButton('C');
+ADIButton clawFrontButton('C');
+ADIButton clawBackButton('D');
 
 pros::Imu iSensor(7);
 

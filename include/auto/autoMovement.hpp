@@ -50,6 +50,7 @@ void balance(PID balancePID);
 void grabTower(point tower, movement Movement=forward, point offset={7, -9});
 
 void doUntil(std::function<void()> Do, std::function<bool()> Until);
+void waitUntil(std::function<bool()> Until);
 
 // ----- helper functions -----
 

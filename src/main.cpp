@@ -102,7 +102,7 @@ void opcontrol() {
 			// pros::delay(50);
 			// controller.setText(1, 0, "c: " + std::to_string((deltaL - deltaR) / wheelTrack));
 			pros::delay(50);
-			controller.setText(2, 0, "liftP: " + std::to_string(liftPot.get()));
+			controller.setText(2, 0, "liftP: " + std::to_string(backArmPot.get()));
 
 			pros::delay(500);
 		}
@@ -116,8 +116,8 @@ void opcontrol() {
 	ControllerButton testButton(ControllerId::master, ControllerDigital::A);
 	ControllerButton debugButton(ControllerId::master, ControllerDigital::Y);
 	// 1 controller only
-	ControllerButton singleClawOpenButton(ControllerId::master, ControllerDigital::left);
-	ControllerButton singleClawCloseButton(ControllerId::master, ControllerDigital::right);
+	ControllerButton singleFrontClawButton(ControllerId::master, ControllerDigital::left);
+	ControllerButton singleBackClawButton(ControllerId::master, ControllerDigital::right);
 	ControllerButton singleFrontArmUpButton(ControllerId::master, ControllerDigital::X);
 	ControllerButton singleFrontArmDownButton(ControllerId::master, ControllerDigital::B);
 	ControllerButton singleBackArmUpButton(ControllerId::master, ControllerDigital::L1);
@@ -139,7 +139,9 @@ void opcontrol() {
 
 	double clawSpeed = 1;
 	bool isAutoArmRunning = false;
-	bool usingBackClaw = true;
+
+	bool isBackClawDown = false;
+	bool isFrontClawDown = false;
 
 	xPos = 24+14.5/2;
 	yPos = 17.25/2;
@@ -149,13 +151,13 @@ void opcontrol() {
 		double leftYAxis = controller.getAnalog(ControllerAnalog::leftY);
 		double rightYAxis = controller.getAnalog(ControllerAnalog::rightY);
 		double rightXAxis = controller.getAnalog(ControllerAnalog::rightX);
-		if (isTank) {
-			if(abs(leftYAxis) < 0.1) leftYAxis = -controllerPartner.getAnalog(ControllerAnalog::rightY);
-			if(abs(rightYAxis) < 0.1) rightYAxis = -controllerPartner.getAnalog(ControllerAnalog::leftY);
-		} else {
-			if(abs(leftYAxis) < 0.1) leftYAxis = -controllerPartner.getAnalog(ControllerAnalog::leftY);
-			if(abs(rightXAxis) < 0.1) rightXAxis = -controllerPartner.getAnalog(ControllerAnalog::rightX);
-		}
+		// if (isTank) {
+		// 	if(abs(leftYAxis) < 0.1) leftYAxis = -controllerPartner.getAnalog(ControllerAnalog::rightY);
+		// 	if(abs(rightYAxis) < 0.1) rightYAxis = -controllerPartner.getAnalog(ControllerAnalog::leftY);
+		// } else {
+		// 	if(abs(leftYAxis) < 0.1) leftYAxis = -controllerPartner.getAnalog(ControllerAnalog::leftY);
+		// 	if(abs(rightXAxis) < 0.1) rightXAxis = -controllerPartner.getAnalog(ControllerAnalog::rightX);
+		// }
 		if(abs(leftYAxis) < 0.1) leftYAxis = 0;
 		if(abs(rightYAxis) < 0.1) rightYAxis = 0;
 		if(abs(rightXAxis) < 0.1) rightXAxis = 0;
@@ -189,15 +191,16 @@ void opcontrol() {
 			lift.moveVoltage(0.0);
 		}
 
-		if (autoArmButton.isPressed()) {
+		if (autoArmButton.changedToPressed()) {
 			isAutoArmRunning = !isAutoArmRunning;
+			if (!isAutoArmRunning) controllerPartner.rumble(".");
 		}
-		if (isAutoArmRunning){
-			if (liftPot.get() < 100) {
+		if (isAutoArmRunning) {
+			if (backArmPot.get() < 2500) {
 				backArm.moveVoltage(12000);
 			}
 			else {
-				clawBack.set_value(false);
+				clawBack.set_value(!false);
 				isAutoArmRunning = false;
 				controllerPartner.rumble(".");
 			}
@@ -207,8 +210,8 @@ void opcontrol() {
 			if(clawFrontOpenButton.isPressed()) clawFront.set_value(false);
 			else if(clawFrontCloseButton.isPressed()) clawFront.set_value(true);
 
-			if(clawBackOpenButton.isPressed()) clawBack.set_value(false);
-			else if(clawBackCloseButton.isPressed()) clawBack.set_value(true);
+			if(clawBackOpenButton.isPressed()) clawBack.set_value(!false);
+			else if(clawBackCloseButton.isPressed()) clawBack.set_value(!true);
 
 			if (!isAutoArmRunning){
 				if(backArmUpButton.isPressed()) backArm.moveVoltage(12000);
@@ -221,13 +224,14 @@ void opcontrol() {
 			else frontArm.moveVoltage(0);
 		}
 		else {
-			if(singleClawOpenButton.isPressed()){
-				if (usingBackClaw) clawBack.set_value(false);
-				else clawFront.set_value(false);
+			if (singleBackClawButton.changedToPressed()){
+				isBackClawDown = !isBackClawDown;
+				clawBack.set_value(!isBackClawDown);
 			}
-			else if(singleClawCloseButton.isPressed()){
-				if (usingBackClaw) clawBack.set_value(true);
-				else clawFront.set_value(true);
+
+			if (singleFrontClawButton.changedToPressed()){
+				isFrontClawDown = !isFrontClawDown;
+				clawFront.set_value(isFrontClawDown);
 			}
 
 			if(singleFrontArmUpButton.isPressed()) frontArm.moveVoltage(12000);
@@ -245,7 +249,6 @@ void opcontrol() {
 			printf("\n");
 			PrintDebugTime("Y Pressed: ");
 			PrintPosition();
-			usingBackClaw = !usingBackClaw;
 		}
 
 		if (testButton.changedToPressed()) {

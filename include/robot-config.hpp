@@ -27,7 +27,7 @@ extern ADIEncoder leftEncoder;
 extern ADIEncoder rightEncoder;
 extern ADIEncoder backEncoder;
 
-extern Potentiometer liftPot;
+extern Potentiometer backArmPot;
 
 extern ADIButton clawFrontButton;
 extern ADIButton clawBackButton;

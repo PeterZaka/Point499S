@@ -301,6 +301,10 @@ void doUntil(std::function<void()> Do, std::function<bool()> Until){
   }
 }
 
+void waitUntil(std::function<bool()> Until){
+  while (!Until()) pros::delay(20);
+}
+
 // ----- helper functions -----
 
 void findBestRotation(double& angle, movement& Movement){
