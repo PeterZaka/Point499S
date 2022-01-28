@@ -52,6 +52,9 @@ void grabTower(point tower, movement Movement=forward, point offset={7, -9});
 void doUntil(std::function<void()> Do, std::function<bool()> Until);
 void waitUntil(std::function<bool()> Until);
 
+// move to new file
+void adjustToTower(movement Movement);
+
 // ----- helper functions -----
 
 void findBestRotation(double& angle, movement& Movement);

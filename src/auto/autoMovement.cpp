@@ -305,6 +305,41 @@ void waitUntil(std::function<bool()> Until){
   while (!Until()) pros::delay(20);
 }
 
+void adjustToTower(movement Movement){
+  if (Movement == forward) {
+    if (clawFrontLeftButton.isPressed() && clawFrontRightButton.isPressed()) return;
+    while (!(clawFrontLeftButton.isPressed() && clawFrontRightButton.isPressed())) {
+      if (!clawFrontLeftButton.isPressed()) {
+        while (!clawFrontLeftButton.isPressed()) {
+          leftSide.moveVoltage(12000 * 0.3);
+          rightSide.moveVoltage(-12000 * 0.1);
+        }
+      } else {
+        while (!clawFrontRightButton.isPressed()) {
+          leftSide.moveVoltage(-12000 * 0.1);
+          rightSide.moveVoltage(12000 * 0.3);
+        }
+      }
+    }
+  } else if (Movement == backward) {
+    if (clawBackLeftButton.isPressed() && clawBackRightButton.isPressed()) return;
+    while (!(clawBackLeftButton.isPressed() && clawBackRightButton.isPressed())) {
+      leftSide.moveVoltage(-12000 * 0.5);
+      rightSide.moveVoltage(-12000 * 0.5);
+    }
+    while (!clawBackLeftButton.isPressed()) {
+      leftSide.moveVoltage(-12000 * 0.5);
+      rightSide.moveVoltage(12000 * 0.25);
+    }
+    while (!clawBackRightButton.isPressed()) {
+      leftSide.moveVoltage(12000 * 0.25);
+      rightSide.moveVoltage(-12000 * 0.5);
+    }
+  }
+  leftSide.moveVoltage(0);
+  rightSide.moveVoltage(0);
+}
+
 // ----- helper functions -----
 
 void findBestRotation(double& angle, movement& Movement){

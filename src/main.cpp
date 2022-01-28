@@ -81,13 +81,13 @@ void opcontrol() {
 			// controller.setText(2, 0, "Boost Enabled: " + std::to_string(isLiftBoostEnabled));
 
 			pros::delay(50);
-			controller.setText(0, 0, "x: " + std::to_string(xPos));
+			controller.setText(0, 0, "x: " + std::to_string(clawFrontLeftButton.isPressed()));
 			// pros::delay(50);
 			// controller.setText(1, 0, "y: " + std::to_string(yPos));
 			// pros::delay(50);
 			// controller.setText(2, 0, "rot: " + std::to_string(iSensor.get_rotation()));
 			pros::delay(50);
-			controller.setText(1, 0, "cal rot: " + std::to_string(calculatedRot * (180/pi)));
+			controller.setText(1, 0, "cal rot: " + std::to_string(clawFrontRightButton.isPressed()));
 
 			// pros::delay(50);
 			// controller.setText(0, 0, "l: " + std::to_string(leftEncoder.get()));
@@ -111,23 +111,20 @@ void opcontrol() {
 	// ------- Main -------
 	ControllerButton liftUpButton(ControllerId::master, ControllerDigital::R1);
 	ControllerButton liftDownButton(ControllerId::master, ControllerDigital::R2);
-	ControllerButton setForwardButton(ControllerId::master, ControllerDigital::up);
-	ControllerButton setBackwardButton(ControllerId::master, ControllerDigital::down);
+	ControllerButton toggleDirectionButton(ControllerId::master, ControllerDigital::down);
 	ControllerButton testButton(ControllerId::master, ControllerDigital::A);
 	ControllerButton debugButton(ControllerId::master, ControllerDigital::Y);
 	// 1 controller only
-	ControllerButton singleFrontClawButton(ControllerId::master, ControllerDigital::left);
-	ControllerButton singleBackClawButton(ControllerId::master, ControllerDigital::right);
+	ControllerButton singleClawFrontButton(ControllerId::master, ControllerDigital::left);
+	ControllerButton singleClawBackButton(ControllerId::master, ControllerDigital::right);
 	ControllerButton singleFrontArmUpButton(ControllerId::master, ControllerDigital::X);
 	ControllerButton singleFrontArmDownButton(ControllerId::master, ControllerDigital::B);
 	ControllerButton singleBackArmUpButton(ControllerId::master, ControllerDigital::L1);
 	ControllerButton singleBackArmDownButton(ControllerId::master, ControllerDigital::L2);
 
 	// ------- Partner -------
-	ControllerButton clawFrontOpenButton(ControllerId::partner, ControllerDigital::left);
-	ControllerButton clawFrontCloseButton(ControllerId::partner, ControllerDigital::down);
-	ControllerButton clawBackOpenButton(ControllerId::partner, ControllerDigital::A);
-	ControllerButton clawBackCloseButton(ControllerId::partner, ControllerDigital::B);
+	ControllerButton clawFrontButton(ControllerId::partner, ControllerDigital::left);
+	ControllerButton clawBackButton(ControllerId::partner, ControllerDigital::A);
 	ControllerButton frontArmUpButton(ControllerId::partner, ControllerDigital::L1);
 	ControllerButton frontArmDownButton(ControllerId::partner, ControllerDigital::L2);
 	ControllerButton backArmUpButton(ControllerId::partner, ControllerDigital::R1);
@@ -162,12 +159,9 @@ void opcontrol() {
 		if(abs(rightYAxis) < 0.1) rightYAxis = 0;
 		if(abs(rightXAxis) < 0.1) rightXAxis = 0;
 
-		if (setForwardButton.changedToPressed()) {
-			controller.rumble("..");
-			isBackward = false;
-		} else if (setBackwardButton.changedToPressed()) {
-			controller.rumble("-");
-			isBackward = true;
+		if (toggleDirectionButton.changedToPressed()) {
+			controller.rumble(".");
+			isBackward = !isBackward;
 		}
 
 		if (isTank) {
@@ -196,7 +190,7 @@ void opcontrol() {
 			if (!isAutoArmRunning) controllerPartner.rumble(".");
 		}
 		if (isAutoArmRunning) {
-			if (backArmPot.get() < 2500) {
+			if (backArmPot.get() < 2200) {
 				backArm.moveVoltage(12000);
 			}
 			else {
@@ -207,11 +201,15 @@ void opcontrol() {
 		}
 
 		if (controllerPartner.isConnected()) {
-			if(clawFrontOpenButton.isPressed()) clawFront.set_value(false);
-			else if(clawFrontCloseButton.isPressed()) clawFront.set_value(true);
+			if (clawBackButton.changedToPressed()){
+				isBackClawDown = !isBackClawDown;
+				clawBack.set_value(!isBackClawDown);
+			}
 
-			if(clawBackOpenButton.isPressed()) clawBack.set_value(!false);
-			else if(clawBackCloseButton.isPressed()) clawBack.set_value(!true);
+			if (clawFrontButton.changedToPressed()){
+				isFrontClawDown = !isFrontClawDown;
+				clawFront.set_value(isFrontClawDown);
+			}
 
 			if (!isAutoArmRunning){
 				if(backArmUpButton.isPressed()) backArm.moveVoltage(12000);
@@ -224,12 +222,12 @@ void opcontrol() {
 			else frontArm.moveVoltage(0);
 		}
 		else {
-			if (singleBackClawButton.changedToPressed()){
+			if (singleClawBackButton.changedToPressed()){
 				isBackClawDown = !isBackClawDown;
 				clawBack.set_value(!isBackClawDown);
 			}
 
-			if (singleFrontClawButton.changedToPressed()){
+			if (singleClawFrontButton.changedToPressed()){
 				isFrontClawDown = !isFrontClawDown;
 				clawFront.set_value(isFrontClawDown);
 			}

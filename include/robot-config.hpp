@@ -29,8 +29,10 @@ extern ADIEncoder backEncoder;
 
 extern Potentiometer backArmPot;
 
-extern ADIButton clawFrontButton;
-extern ADIButton clawBackButton;
+extern ADIButton clawFrontLeftButton;
+extern ADIButton clawFrontRightButton;
+extern ADIButton clawBackLeftButton;
+extern ADIButton clawBackRightButton;
 
 extern pros::Imu iSensor;
 

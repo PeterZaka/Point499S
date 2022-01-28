@@ -24,9 +24,10 @@ ADIEncoder backEncoder('A', 'B');
 
 Potentiometer backArmPot({15, 'H'});
 
-ADIButton clawFrontButton('C');
-ADIButton clawBackButton('D');
-
+ADIButton clawFrontLeftButton('C');
+ADIButton clawFrontRightButton({15, 'G'}, false);
+ADIButton clawBackLeftButton('D');
+ADIButton clawBackRightButton('D');
 pros::Imu iSensor(7);
 
 pros::Vision vision(19);
