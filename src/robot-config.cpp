@@ -16,7 +16,7 @@ MotorGroup backArm({-18});
 // actually 18
 
 pros::ADIDigitalOut clawFront({15, 'B'}, false);
-pros::ADIDigitalOut clawBack({15, 'A'}, !false);
+pros::ADIDigitalOut clawBack({15, 'A'}, false);
 
 ADIEncoder leftEncoder('E', 'F', true);
 ADIEncoder rightEncoder('G', 'H');

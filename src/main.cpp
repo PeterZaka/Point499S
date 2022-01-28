@@ -194,7 +194,7 @@ void opcontrol() {
 				backArm.moveVoltage(12000);
 			}
 			else {
-				clawBack.set_value(!false);
+				clawBack.set_value(false);
 				isAutoArmRunning = false;
 				controllerPartner.rumble(".");
 			}
@@ -203,7 +203,7 @@ void opcontrol() {
 		if (controllerPartner.isConnected()) {
 			if (clawBackButton.changedToPressed()){
 				isBackClawDown = !isBackClawDown;
-				clawBack.set_value(!isBackClawDown);
+				clawBack.set_value(isBackClawDown);
 			}
 
 			if (clawFrontButton.changedToPressed()){
@@ -224,7 +224,7 @@ void opcontrol() {
 		else {
 			if (singleClawBackButton.changedToPressed()){
 				isBackClawDown = !isBackClawDown;
-				clawBack.set_value(!isBackClawDown);
+				clawBack.set_value(isBackClawDown);
 			}
 
 			if (singleClawFrontButton.changedToPressed()){

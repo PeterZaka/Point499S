@@ -16,19 +16,25 @@ static void placeBackOnPlatform(){
 
 void testAuton(){
 
-  frontArm.moveVoltage(-12000);
-  doUntil(t(driveForward(24)), r(clawFrontLeftButton.isPressed() || clawFrontRightButton.isPressed()));
-  adjustToTower(forward);
-  clawFront.set_value(true);
-  Wait(1);
+  // frontArm.moveVoltage(-12000);
+  // doUntil(t(driveForward(24)), r(clawFrontLeftButton.isPressed() || clawFrontRightButton.isPressed()));
+  // // adjustToTower(forward);
+  // clawFront.set_value(true);
+  // Wait(1);
 
-  // while(true){
-  //   if (backArmPot.get() < 1700) backArm.moveVoltage(
-  //     std::clamp(120 * (1700 - backArmPot.get()), 0.0, 12000.0));
-  //   else backArm.moveVoltage(0);
-  // }
+  // pros::Task backArmHoldTask([]{
+  //   while(true){
+  //     if (backArmPot.get() < 1700) backArm.moveVoltage(
+  //       std::clamp(120 * (1700 - backArmPot.get()), 0.0, 12000.0));
+  //     else backArm.moveVoltage(0);
+  //   }
+  // });
+  //
+  // driveTargetTime = 0;
+  // driveForward(-24);
+  // driveForward(24);
 
-  // leftAuton();
+  leftAuton();
 
   // return;
   //
@@ -83,12 +89,14 @@ void leftAuton(){
   backArm.moveVoltage(-12000);
   frontArm.moveVoltage(-12000);
   doUntil(t(driveToPoint(1.5 *24, 3 *24, backward)), r(clawBackLeftButton.isPressed() || clawBackRightButton.isPressed()));
-  clawBack.set_value(!true);
+  clawBack.set_value(true);
   Wait(0.5);
   backArm.moveVoltage(12000);
 
   driveStopError = 0; // Disable stop detection
+  //turnTargetTime = 0;
 
+  turnToPoint(3 *24, 3 *24, forward);
   doUntil(t(driveToPoint(3 *24, 3 *24, forward)), r(clawFrontLeftButton.isPressed() || clawFrontRightButton.isPressed()));
   clawFront.set_value(true);
   Wait(0.25);
@@ -98,13 +106,13 @@ void leftAuton(){
   driveToPoint(1.5 *24, 1.5 *24);
   driveToPoint(24-17.25/2.0, 0.5 *24);
 
-  clawBack.set_value(!false);
+  clawBack.set_value(false);
   backArm.moveVoltage(-12000.0);
   turnToPoint(1.75 *24, 0.5 *24, backward);
   waitUntil(r(backArmPot.get() < 300));
   backArm.moveVoltage(0);
   doUntil(t(driveToPoint(1.75 *24, 0.5 *24, backward)), r(clawBackLeftButton.isPressed() || clawBackRightButton.isPressed()));
-  clawBack.set_value(!true);
+  clawBack.set_value(true);
 }
 
 void skills(){
