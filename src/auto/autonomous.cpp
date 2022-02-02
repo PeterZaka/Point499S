@@ -99,12 +99,17 @@ void leftAuton(){
 
   driveTargetTime = 0; // Don't stop
 
+  lift.moveVoltage(-12000);
   backArm.moveVoltage(-12000);
   frontArm.moveVoltage(-12000);
-  doUntil(t(driveToPoint(1.5 *24, 3 *24, backward)), r(clawBackLeftButton.isPressed() || clawBackRightButton.isPressed() || yPos > 2.5*24));
-  gotLeftNeutral = (clawBackLeftButton.isPressed() || clawBackRightButton.isPressed());
+
+  gotLeftNeutral = doUntil(t(driveToPoint(1.5 *24, 3 *24, backward)), r(clawBackLeftButton.isPressed() || clawBackRightButton.isPressed()));
+  std::cout << gotLeftNeutral << std::endl;
+  std::cout << clawBackLeftButton.isPressed() << std::endl;
+
   clawBack.set_value(true);
   Wait(0.05); // move forward while claw is going down
+  lift.moveVoltage(0);
   leftSide.moveVoltage(0); rightSide.moveVoltage(0);
   Wait(0.1); // ensure claw is in tower
 
@@ -112,6 +117,43 @@ void leftAuton(){
   // 1 = 1st stage of tug of war
   // 2 = 2nd stage of tug of war
   int tugOfWar = 1;
+
+  pros::Task disableBackArmIfTugging([&]{
+    Wait(1.5);
+    if (tugOfWar == 1) {
+      backArm.moveVoltage(0);
+      tugOfWar = 2;
+    }
+  });
+
+  // if backArm doesn't move then keep moving
+  while (backArmPot.get() < 800 && tugOfWar == 1) {
+    backArm.moveVoltage(12000);
+    leftSide.moveVoltage(12000);
+    rightSide.moveVoltage(12000);
+    pros::delay(20);
+  }
+
+  if (tugOfWar == 2) {
+    pros::Task checkBack([&]{
+      double startYPos = yPos;
+      while (startYPos > yPos + 6) pros::delay(20);
+      backArm.moveVoltage(12000);
+      Wait(1);
+      backArm.moveVoltage(0);
+    });
+    while (backArmPot.get() < 800) {
+      leftSide.moveVoltage(12000);
+      rightSide.moveVoltage(12000);
+      pros::delay(20);
+    }
+    checkBack.remove();
+    backArm.moveVoltage(12000);
+  }
+
+  tugOfWar = 0;
+
+  driveStopError = 0; // Disable stop detection
 
   pros::Task backArmHoldTask([]{
     while(true){
@@ -122,34 +164,8 @@ void leftAuton(){
     }
   });
 
-  pros::Task disableBackArmIfTugging([&]{
-    Wait(3);
-    if (tugOfWar == 1) {
-      backArmHoldTask.suspend();
-      tugOfWar = 2;
-    }
-  });
+  gotMiddleNeutral = doUntil(t(driveToPoint(3 *24, 3 *24, forward, 2.5)), r(clawFrontLeftButton.isPressed() || clawFrontRightButton.isPressed()));
 
-  // double startYPos = yPos;
-
-  // yPos - startYPos > -6
-  // if backArm doesn't move then keep moving
-  while (backArmPot.get() < 800 && tugOfWar == 1) {
-    leftSide.moveVoltage(12000);
-    rightSide.moveVoltage(12000);
-    pros::delay(20);
-  }
-
-  if (tugOfWar == 2) {
-    // implement
-  }
-
-  tugOfWar = 0;
-
-  driveStopError = 0; // Disable stop detection
-
-  doUntil(t(driveToPoint(3 *24, 3 *24, forward, 2)), r(clawFrontLeftButton.isPressed() || clawFrontRightButton.isPressed()));
-  gotMiddleNeutral = (clawFrontLeftButton.isPressed() || clawFrontRightButton.isPressed());
   clawFront.set_value(true);
   Wait(0.05); // move forward while claw is going down
   leftSide.moveVoltage(0); rightSide.moveVoltage(0);
@@ -160,9 +176,11 @@ void leftAuton(){
   {
     std::cout << "miss both" << std::endl;
 
+    clawBack.set_value(false);
     backArmHoldTask.suspend();
     backArm.moveVoltage(-12000);
-    driveToPoint(1.5 *24, 1.5 *24, backward);
+    driveToPoint(1 *24, 1.5 *24, backward);
+    frontArm.moveVoltage(-12000);
 
     driveStopError = prevDriveStopError; // Enable stop detection
 
@@ -173,7 +191,7 @@ void leftAuton(){
     Wait(0.1); // ensure claw is in tower
 
     pros::Task putTowerInTop([]{
-      while (backArmPot.get() < 2200) {
+      while (backArmPot.get() < 2800) {
 				backArm.moveVoltage(12000);
         pros::delay(20);
 			}
@@ -181,10 +199,10 @@ void leftAuton(){
       backArm.moveVoltage(-12000);
     });
 
-    driveToPoint(1.5 *24, 1.5 *24);
+    driveToPoint(1 *24, 1.5 *24);
 
     // double check middle tower
-    doUntil(t(driveToPoint(3 *24, 3 *24, forward, 2)), r(clawFrontLeftButton.isPressed() || clawFrontRightButton.isPressed()));
+    doUntil(t(driveToPoint(3 *24, 3 *24, forward, 3)), r(clawFrontLeftButton.isPressed() || clawFrontRightButton.isPressed()));
     gotMiddleNeutral = (clawFrontLeftButton.isPressed() || clawFrontRightButton.isPressed());
     if (gotMiddleNeutral) {
       clawFront.set_value(true);
@@ -198,13 +216,14 @@ void leftAuton(){
     }
     else {
       driveToPoint(3 *24, 3.5 *24, backward);
-      turnToAngle(0);
+      turnToAngle(-180);
     }
   }
   else if (!gotLeftNeutral && gotMiddleNeutral) // got mid, miss left
   {
     std::cout << "got mid, miss left" << std::endl;
 
+    clawBack.set_value(false);
     backArmHoldTask.suspend();
     backArm.moveVoltage(-12000);
     driveToPoint(1.5 *24, 1.5 *24, backward);
@@ -219,7 +238,7 @@ void leftAuton(){
     Wait(0.1); // ensure claw is in tower
 
     pros::Task putTowerInTop([]{
-      while (backArmPot.get() < 2200) {
+      while (backArmPot.get() < 2800) {
 				backArm.moveVoltage(12000);
         pros::delay(20);
 			}
@@ -228,7 +247,7 @@ void leftAuton(){
       backArm.moveVoltage(-12000);
     });
 
-    driveToPoint(1.5 *24, 1.5 *24);
+    driveToPoint(1.5 *24, 1 *24);
     turnToPoint(1.5 *24, 4.5 *24, backward);
 
   }
@@ -238,7 +257,7 @@ void leftAuton(){
 
     backArmHoldTask.suspend();
     pros::Task putTowerInTop([]{
-      while (backArmPot.get() < 2200) {
+      while (backArmPot.get() < 2800) {
 				backArm.moveVoltage(12000);
         pros::delay(20);
 			}
@@ -257,14 +276,23 @@ void leftAuton(){
     leftSide.moveVoltage(0); rightSide.moveVoltage(0);
     Wait(0.1); // ensure claw is in tower
 
-    driveToPoint(1.5 *24, 1.5 *24);
+    driveToPoint(1.5 *24, 1 *24);
     turnToPoint(3 *24, 3 *24, backward);
   }
   else // got both
   {
     std::cout << "got both" << std::endl;
 
-    driveToPoint(1.5 *24, 1.5 *24);
+    backArmHoldTask.suspend();
+    pros::Task putTowerInTop([]{
+      while (backArmPot.get() < 2800) {
+				backArm.moveVoltage(12000);
+        pros::delay(20);
+			}
+      backArm.moveVoltage(0);
+    });
+
+    driveToPoint(1.5 *24, 1 *24);
   }
 }
 

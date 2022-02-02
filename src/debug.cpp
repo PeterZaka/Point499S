@@ -1,7 +1,7 @@
 #include "debug.hpp"
 
-bool DebugDriveForward = true;
-bool DebugDriveToPoint = true;
+bool DebugDriveForward = false;
+bool DebugDriveToPoint = false;
 bool DebugTurn = false;
 bool DebugGroupMoveTo = false;
 

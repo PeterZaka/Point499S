@@ -49,7 +49,7 @@ void balance(PID balancePID);
 
 void grabTower(point tower, movement Movement=forward, point offset={7, -9});
 
-void doUntil(std::function<void()> Do, std::function<bool()> Until);
+bool doUntil(std::function<void()> Do, std::function<bool()> Until);
 void waitUntil(std::function<bool()> Until);
 
 // move to new file

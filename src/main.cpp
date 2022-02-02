@@ -81,13 +81,13 @@ void opcontrol() {
 			// controller.setText(2, 0, "Boost Enabled: " + std::to_string(isLiftBoostEnabled));
 
 			pros::delay(50);
-			controller.setText(0, 0, "x: " + std::to_string(clawFrontLeftButton.isPressed()));
+			controller.setText(0, 0, "x: " + std::to_string(clawBackLeftButton.isPressed()));
 			// pros::delay(50);
 			// controller.setText(1, 0, "y: " + std::to_string(yPos));
 			// pros::delay(50);
 			// controller.setText(2, 0, "rot: " + std::to_string(iSensor.get_rotation()));
 			pros::delay(50);
-			controller.setText(1, 0, "cal rot: " + std::to_string(clawFrontRightButton.isPressed()));
+			controller.setText(1, 0, "cal rot: " + std::to_string(clawBackRightButton.isPressed()));
 
 			// pros::delay(50);
 			// controller.setText(0, 0, "l: " + std::to_string(leftEncoder.get()));
@@ -123,8 +123,8 @@ void opcontrol() {
 	ControllerButton singleBackArmDownButton(ControllerId::master, ControllerDigital::L2);
 
 	// ------- Partner -------
-	ControllerButton clawFrontButton(ControllerId::partner, ControllerDigital::left);
-	ControllerButton clawBackButton(ControllerId::partner, ControllerDigital::A);
+	ControllerButton clawFrontButton(ControllerId::partner, ControllerDigital::up);
+	ControllerButton clawBackButton(ControllerId::partner, ControllerDigital::X);
 	ControllerButton frontArmUpButton(ControllerId::partner, ControllerDigital::L1);
 	ControllerButton frontArmDownButton(ControllerId::partner, ControllerDigital::L2);
 	ControllerButton backArmUpButton(ControllerId::partner, ControllerDigital::R1);

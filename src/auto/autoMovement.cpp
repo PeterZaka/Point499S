@@ -293,12 +293,16 @@ void grabTower(point tower, movement Movement, point offset){
   driveTargetTime = prevDriveTargetTime;
 }
 
-void doUntil(std::function<void()> Do, std::function<bool()> Until){
+bool doUntil(std::function<void()> Do, std::function<bool()> Until){
   pros::Task doTask(Do);
   while (doTask.get_state() == pros::E_TASK_STATE_READY){
-    if (Until()) doTask.remove();
+    if (Until()) {
+      doTask.remove();
+      return true;
+    }
     pros::delay(20);
   }
+  return false;
 }
 
 void waitUntil(std::function<bool()> Until){
