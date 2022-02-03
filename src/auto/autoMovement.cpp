@@ -282,15 +282,8 @@ void balance(PID balancePID){
 }
 
 void grabTower(point tower, movement Movement, point offset){
-  driveTargetTime = 0;
   point point1 = findOffsetTarget({xPos, yPos}, tower, offset);
   driveToPoint(point1.x, point1.y, Movement);
-  // point tower1 = findOffsetTarget({xPos, yPos}, tower, {7, 0});
-  // double angle = findRotationTo(xPos, yPos, tower1.x, tower1.y);
-  // angle = findShortestRotation(rot, angle);
-  // if (Movement == forward) turnToAngle(angle);
-  // if (Movement == backward) turnToAngle(angle + 180);
-  driveTargetTime = prevDriveTargetTime;
 }
 
 bool doUntil(std::function<void()> Do, std::function<bool()> Until){

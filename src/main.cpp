@@ -81,13 +81,13 @@ void opcontrol() {
 			// controller.setText(2, 0, "Boost Enabled: " + std::to_string(isLiftBoostEnabled));
 
 			pros::delay(50);
-			controller.setText(0, 0, "x: " + std::to_string(clawBackLeftButton.isPressed()));
-			// pros::delay(50);
-			// controller.setText(1, 0, "y: " + std::to_string(yPos));
+			controller.setText(0, 0, "x: " + std::to_string(clawBackRightButton.isPressed()));
+			pros::delay(50);
+			controller.setText(1, 0, "y: " + std::to_string(clawFrontRightButton.isPressed()));
 			// pros::delay(50);
 			// controller.setText(2, 0, "rot: " + std::to_string(iSensor.get_rotation()));
-			pros::delay(50);
-			controller.setText(1, 0, "cal rot: " + std::to_string(clawBackRightButton.isPressed()));
+			// pros::delay(50);
+			// controller.setText(1, 0, "cal rot: " + std::to_string(clawBackRightButton.isPressed()));
 
 			// pros::delay(50);
 			// controller.setText(0, 0, "l: " + std::to_string(leftEncoder.get()));
@@ -111,7 +111,8 @@ void opcontrol() {
 	// ------- Main -------
 	ControllerButton liftUpButton(ControllerId::master, ControllerDigital::R1);
 	ControllerButton liftDownButton(ControllerId::master, ControllerDigital::R2);
-	ControllerButton toggleDirectionButton(ControllerId::master, ControllerDigital::down);
+	ControllerButton pointToMainDirectionButton(ControllerId::master, ControllerDigital::up);
+	ControllerButton pointToSecondaryDirectionButton(ControllerId::master, ControllerDigital::down);
 	ControllerButton testButton(ControllerId::master, ControllerDigital::A);
 	ControllerButton debugButton(ControllerId::master, ControllerDigital::Y);
 	// 1 controller only
@@ -140,8 +141,15 @@ void opcontrol() {
 	bool isBackClawDown = false;
 	bool isFrontClawDown = false;
 
-	xPos = 24+14.5/2;
-	yPos = 17.25/2;
+	// xPos = 24+14.5/2;
+	// yPos = 17.25/2;
+
+	xPos = 24;
+	yPos = 24 - 17.25/2.0;
+
+  iSensor.set_rotation(180);
+  rot = 180;
+  prevRot = 180;
 
 	StartDebugTime("Y Pressed: ");
 	while (true) {
@@ -159,9 +167,13 @@ void opcontrol() {
 		if(abs(rightYAxis) < 0.1) rightYAxis = 0;
 		if(abs(rightXAxis) < 0.1) rightXAxis = 0;
 
-		if (toggleDirectionButton.changedToPressed()) {
+		if (pointToMainDirectionButton.changedToPressed()) {
 			controller.rumble(".");
-			isBackward = !isBackward;
+			isBackward = true;
+		}
+		if (pointToSecondaryDirectionButton.changedToPressed()) {
+			controller.rumble(".");
+			isBackward = false;
 		}
 
 		if (isTank) {
@@ -190,11 +202,12 @@ void opcontrol() {
 			if (!isAutoArmRunning) controllerPartner.rumble(".");
 		}
 		if (isAutoArmRunning) {
-			if (backArmPot.get() < 2200) {
+			if (backArmPot.get() < 2500) {
 				backArm.moveVoltage(12000);
 			}
 			else {
 				clawBack.set_value(false);
+				isBackClawDown = false;
 				isAutoArmRunning = false;
 				controllerPartner.rumble(".");
 			}
