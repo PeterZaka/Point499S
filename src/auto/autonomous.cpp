@@ -164,7 +164,7 @@ void leftAuton(){
   // });
   backArm.moveVoltage(12000);
 
-  gotMiddleNeutral = doUntil(t(driveToPoint(3 *24, 3 *24, forward, 2.75)), r(clawFrontLeftButton.isPressed() || clawFrontRightButton.isPressed()));
+  gotMiddleNeutral = doUntil(t(driveToPoint(3 *24, 3 *24, forward, 3)), r(clawFrontLeftButton.isPressed() || clawFrontRightButton.isPressed()));
 
   clawFront.set_value(true);
   Wait(0.05); // move forward while claw is going down
@@ -176,7 +176,7 @@ void leftAuton(){
   {
     std::cout << "miss both" << std::endl;
 
-    clawBack.set_value(false);
+    clawFront.set_value(false);
     // backArmHoldTask.suspend();
     backArm.moveVoltage(-12000);
     driveToPoint(1 *24, 1.5 *24, forward);
@@ -195,6 +195,7 @@ void leftAuton(){
     driveToPoint(1 *24, 1.5 *24);
 
     // double check middle tower
+    clawBack.set_value(false);
     gotMiddleNeutral = doUntil(t(driveToPoint(3 *24, 3 *24, backward, 3)), r(clawBackLeftButton.isPressed() || clawBackRightButton.isPressed()));
     if (gotMiddleNeutral) {
       clawBack.set_value(true);
@@ -204,6 +205,8 @@ void leftAuton(){
       backArm.moveVoltage(12000);
 
       // drive back without care
+      driveToPoint(xPos, 1.5 *24);
+      driveToPoint(1 *24, 1.5 *24);
       driveToPoint(xPos, 0);
     }
     else {
