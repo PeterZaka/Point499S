@@ -3,6 +3,8 @@
 #define t(x) [&]{x;}
 #define r(x) [&]{return x;}
 
+bool isAuton = false;
+
 static void placeBackOnPlatform(){
   double beforeFunctionError = driveTargetError;
   driveTargetError = 1;
@@ -16,24 +18,7 @@ static void placeBackOnPlatform(){
 
 void testAuton(){
 
-  // frontArm.moveVoltage(-12000);
-  // doUntil(t(driveForward(24)), r(clawFrontLeftButton.isPressed() || clawFrontRightButton.isPressed()));
-  // // adjustToTower(forward);
-  // clawFront.set_value(true);
-  // Wait(1);
-
-  // pros::Task backArmHoldTask([]{
-  //   while(true){
-  //     if (backArmPot.get() < 1700) backArm.moveVoltage(
-  //       std::clamp(120 * (1700 - backArmPot.get()), 0.0, 12000.0));
-  //     else backArm.moveVoltage(0);
-  //     pros::delay(20);
-  //   }
-  // });
-  //
-  // driveTargetTime = 0;
-  // driveForward(-24);
-  // driveForward(24);
+  // doUntil(t(driveForward(10000)), r(false));
 
   leftAuton();
 
@@ -63,7 +48,7 @@ void rightAuton(){
   // clawBack.set_value(true);
   //
   // driveToPoint((xPos+4 *24)/2.0, (yPos+1.5 *24)/2.0);
-  // pros::Task moveTowerToTop([]{
+  // pros::Task moveTowerToTop([&]{
   //   backArm.moveVoltage(12000.0);
   //   Wait(3);
   //   clawBack.set_value(false);
@@ -78,7 +63,7 @@ void rightAuton(){
 
 void leftAuton(){
 
-  xPos = 24;
+  xPos = 26;
 	yPos = 24 - 17.25/2.0;
 
   iSensor.set_rotation(180);
@@ -119,6 +104,7 @@ void leftAuton(){
 
   pros::Task disableBackArmIfTugging([&]{
     Wait(1.5);
+    if (!isAuton) return;
     if (tugOfWar == 1) {
       backArm.moveVoltage(0);
       tugOfWar = 2;
@@ -137,8 +123,10 @@ void leftAuton(){
     pros::Task checkBack([&]{
       double startYPos = yPos;
       while (startYPos > yPos + 6) pros::delay(20);
+      if (!isAuton) return;
       backArm.moveVoltage(12000);
       Wait(1);
+      if (!isAuton) return;
       backArm.moveVoltage(0);
     });
     while (backArmPot.get() < 800) {
@@ -154,7 +142,7 @@ void leftAuton(){
 
   driveStopError = 0; // Disable stop detection
 
-  // pros::Task backArmHoldTask([]{
+  // pros::Task backArmHoldTask([&]{
   //   while(true){
   //     if (backArmPot.get() < 1700) backArm.moveVoltage(
   //       std::clamp(120 * (1700 - backArmPot.get()), 0.0, 12000.0));
@@ -164,7 +152,14 @@ void leftAuton(){
   // });
   backArm.moveVoltage(12000);
 
+  // grabTower({3 *24, 3 *24}, forward)
+  // driveToPoint(3 *24, 3 *24, forward, 3)
   gotMiddleNeutral = doUntil(t(driveToPoint(3 *24, 3 *24, forward, 3)), r(clawFrontLeftButton.isPressed() || clawFrontRightButton.isPressed()));
+  if (!gotMiddleNeutral) {
+    driveForward(-12);
+    turnToAngle(rot - 20);
+    gotMiddleNeutral = doUntil(t(driveForward(12)), r(clawFrontLeftButton.isPressed() || clawFrontRightButton.isPressed()));
+  }
 
   clawFront.set_value(true);
   Wait(0.05); // move forward while claw is going down
@@ -231,8 +226,9 @@ void leftAuton(){
     leftSide.moveVoltage(0); rightSide.moveVoltage(0);
     Wait(0.1); // ensure claw is in tower
 
-    pros::Task putTowerInTop([]{
+    pros::Task putTowerInTop([&]{
       while (backArmPot.get() < 2800) {
+        if (!isAuton) return;
 				backArm.moveVoltage(12000);
         pros::delay(20);
 			}
@@ -250,8 +246,9 @@ void leftAuton(){
     std::cout << "got left, miss mid" << std::endl;
 
     // backArmHoldTask.suspend();
-    pros::Task putTowerInTop([]{
+    pros::Task putTowerInTop([&]{
       while (backArmPot.get() < 2800) {
+        if (!isAuton) return;
 				backArm.moveVoltage(12000);
         pros::delay(20);
 			}
@@ -278,8 +275,9 @@ void leftAuton(){
     std::cout << "got both" << std::endl;
 
     // backArmHoldTask.suspend();
-    pros::Task putTowerInTop([]{
+    pros::Task putTowerInTop([&]{
       while (backArmPot.get() < 2800) {
+        if (!isAuton) return;
 				backArm.moveVoltage(12000);
         pros::delay(20);
 			}
@@ -302,7 +300,7 @@ void skills(){
   driveTargetTime = 0;
   turnTargetTime = 0;
 
-  pros::Task backArmHoldTask([]{
+  pros::Task backArmHoldTask([&]{
     while(true){
       if (backArmPot.get() < 1700) backArm.moveVoltage(
         std::clamp(120 * (1700 - backArmPot.get()), 0.0, 12000.0));

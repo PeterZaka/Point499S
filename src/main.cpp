@@ -37,6 +37,8 @@ void competition_initialize() {}
 
 void autonomous() {
 
+	isAuton = true;
+
 	pros::Task calculateOdomTask([](){
 		while(1){
 			calculateOdom();
@@ -57,6 +59,8 @@ void autonomous() {
 }
 
 void opcontrol() {
+
+	isAuton = false;
 
 	pros::Task calculateOdomTask([](){
 		while(1){
@@ -81,9 +85,9 @@ void opcontrol() {
 			// controller.setText(2, 0, "Boost Enabled: " + std::to_string(isLiftBoostEnabled));
 
 			pros::delay(50);
-			controller.setText(0, 0, "x: " + std::to_string(clawBackRightButton.isPressed()));
+			controller.setText(0, 0, "x: " + std::to_string(xPos));
 			pros::delay(50);
-			controller.setText(1, 0, "y: " + std::to_string(clawFrontRightButton.isPressed()));
+			controller.setText(1, 0, "y: " + std::to_string(yPos));
 			// pros::delay(50);
 			// controller.setText(2, 0, "rot: " + std::to_string(iSensor.get_rotation()));
 			// pros::delay(50);
@@ -144,7 +148,7 @@ void opcontrol() {
 	// xPos = 24+14.5/2;
 	// yPos = 17.25/2;
 
-	xPos = 24;
+	xPos = 25;
 	yPos = 24 - 17.25/2.0;
 
   iSensor.set_rotation(180);
