@@ -72,7 +72,7 @@ void opcontrol() {
 	// Master controller by default
 	Controller controller(ControllerId::master);
 	Controller controllerPartner(ControllerId::partner);
- 
+
 	pros::Task controllerPrintTask([&](){
 		while(1){
 			controller.clear();
@@ -149,7 +149,7 @@ void opcontrol() {
 	// xPos = 24+14.5/2;
 	// yPos = 17.25/2;
 
-	xPos = 25;
+	xPos = 24 + 1.25;
 	yPos = 24 - 17.25/2.0;
 
   iSensor.set_rotation(180);
