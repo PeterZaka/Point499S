@@ -63,7 +63,7 @@ void rightAuton(){
 
 void leftAuton(){
 
-  xPos = 26;
+  xPos = 24 + 2.75;
 	yPos = 24 - 17.25/2.0;
 
   iSensor.set_rotation(180);
@@ -88,7 +88,7 @@ void leftAuton(){
   frontArm.moveVoltage(-12000);
 
   //gotLeftNeutral = doUntil(t(driveToPoint(1.5 *24, 3 *24, backward)), r(clawBackLeftButton.isPressed() || clawBackRightButton.isPressed()));
-  gotLeftNeutral = doUntil(t(grabTower({1.5 *24, 3 *24}, backward)), r(clawBackLeftButton.isPressed() || clawBackRightButton.isPressed()));
+  gotLeftNeutral = doUntil(t(grabTower({1.5 *24, 3 *24}, backward, {-1, 0})), r(clawBackLeftButton.isPressed() || clawBackRightButton.isPressed()));
   std::cout << gotLeftNeutral << std::endl;
   std::cout << clawBackLeftButton.isPressed() << std::endl;
 
@@ -165,7 +165,7 @@ void leftAuton(){
   Wait(0.05); // move forward while claw is going down
   leftSide.moveVoltage(0); rightSide.moveVoltage(0);
   Wait(0.1); // ensure claw is in tower
-  frontArm.moveVoltage(12000);
+  frontArm.moveVoltage(0);
 
   if (!gotLeftNeutral && !gotMiddleNeutral) // miss both
   {

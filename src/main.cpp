@@ -72,7 +72,7 @@ void opcontrol() {
 	// Master controller by default
 	Controller controller(ControllerId::master);
 	Controller controllerPartner(ControllerId::partner);
-
+ 
 	pros::Task controllerPrintTask([&](){
 		while(1){
 			controller.clear();
@@ -87,7 +87,8 @@ void opcontrol() {
 			pros::delay(50);
 			controller.setText(0, 0, "x: " + std::to_string(xPos));
 			pros::delay(50);
-			controller.setText(1, 0, "y: " + std::to_string(yPos));
+			//(clawBackLeftButton.isPressed() || clawBackRightButton.isPressed())
+			controller.setText(1, 0, "y: " + std::to_string((clawBackLeftButton.isPressed() || clawBackRightButton.isPressed())));
 			// pros::delay(50);
 			// controller.setText(2, 0, "rot: " + std::to_string(iSensor.get_rotation()));
 			// pros::delay(50);
