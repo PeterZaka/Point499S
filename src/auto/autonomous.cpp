@@ -87,16 +87,7 @@ void leftAuton(){
   backArm.moveVoltage(-12000);
   frontArm.moveVoltage(-12000);
 
-  // gotLeftNeutral = doUntil(t(driveToPoint(1.5 *24, 3 *24, backward)), r(clawBackLeftButton.isPressed() || clawBackRightButton.isPressed()));
   gotLeftNeutral = doUntil(t(grabTower({1.5 *24, 3 *24}, backward, {0, 0})), r(clawBackLeftButton.isPressed() || clawBackRightButton.isPressed()));
-  if (!gotLeftNeutral) {
-    driveForward(12);
-    turnTargetError = 3;
-    turnToAngle(rot - 10);
-    turnTargetError = prevTurnTargetError;
-    gotLeftNeutral = doUntil(t(driveForward(-18)), r(clawBackLeftButton.isPressed() || clawBackRightButton.isPressed()));
-  }
-
   clawBack.set_value(true);
   Wait(0.05); // move forward while claw is going down
   leftSide.moveVoltage(0); rightSide.moveVoltage(0);
@@ -112,11 +103,13 @@ void leftAuton(){
     backArm.moveVoltage(-12000);
     while (true) {
       double startYPos = yPos;
-      while (yPos > startYPos - 12) {
+      startTime = pros::millis() / 1000.0;
+      while ((pros::millis() / 1000.0) - startTime < 3 && yPos > startYPos - 12) {
         if (!isAuton) return;
         pros::delay(20);
       }
       backArm.moveVoltage(12000);
+      startTime = pros::millis() / 1000.0;
       while ((pros::millis() / 1000.0) - startTime < 1.5 && fabs(iSensor.get_pitch()) < 15) {
         if (!isAuton) return;
         pros::delay(20);
@@ -127,30 +120,16 @@ void leftAuton(){
 
   double startTugTime = pros::millis() / 1000.0;
   while (backArmPot.get() < 800) {
-    if (yPos < 24  && (pros::millis() / 1000.0) - startTugTime < 3) break;
     leftSide.moveVoltage(12000);
     rightSide.moveVoltage(12000);
     pros::delay(20);
   }
 
   checkBack.remove();
-
-  driveStopError = 0; // Disable stop detection
-
-  // pros::Task backArmHoldTask([&]{
-  //   while(true){
-  //     if (backArmPot.get() < 1700) backArm.moveVoltage(
-  //       std::clamp(120 * (1700 - backArmPot.get()), 0.0, 12000.0));
-  //     else backArm.moveVoltage(0);
-  //     pros::delay(20);
-  //   }
-  // });
   backArm.moveVoltage(12000);
-
+  driveStopError = 0; // Disable stop detection
   if (yPos < 1.5 *24) driveToPoint(xPos, 2 *24);
 
-  // grabTower({3 *24, 3 *24}, forward)
-  // driveToPoint(3 *24, 3 *24, forward, 3)
   pros::Task frontArmAboveRings([&]{
     frontArm.moveVoltage(12000 * 0.2);
     Wait(0.1);
@@ -174,7 +153,7 @@ void leftAuton(){
     if (!gotMiddleNeutral) {
       driveForward(-18);
       turnTargetError = 3;
-      turnToAngle(rot + 20);
+      turnToAngle(rot + 25);
       turnTargetError = prevTurnTargetError;
       gotMiddleNeutral = doUntil(t(driveForward(18)), r(clawFrontLeftButton.isPressed() || clawFrontRightButton.isPressed()));
     }
@@ -191,25 +170,8 @@ void leftAuton(){
     std::cout << "miss both" << std::endl;
 
     backArm.moveVoltage(-12000);
-    driveToPoint(2 *24, 2 *24);
-
-    // double check middle tower
-    clawBack.set_value(false);
-    gotMiddleNeutral = doUntil(t(driveToPoint(3 *24, 3 *24, backward, 3)), r(clawBackLeftButton.isPressed() || clawBackRightButton.isPressed()));
-    if (gotMiddleNeutral) {
-      clawBack.set_value(true);
-      Wait(0.05); // move forward while claw is going down
-      leftSide.moveVoltage(0); rightSide.moveVoltage(0);
-      Wait(0.1); // ensure claw is in tower
-      backArm.moveVoltage(12000);
-
-      // drive back without care
-      driveToPoint(1 *24, 1 *24);
-    }
-    else {
-      driveToPoint(2 *24, 2.75 *24);
-      turnToAngle(180);
-    }
+    driveToPoint(2 *24, 2.75 *24);
+    turnToAngle(180);
   }
   else if (!gotLeftNeutral && gotMiddleNeutral) // got mid, miss left
   {
