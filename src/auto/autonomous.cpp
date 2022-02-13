@@ -128,6 +128,7 @@ void leftAuton(){
   checkBack.remove();
   backArm.moveVoltage(12000);
   driveStopError = 0; // Disable stop detection
+  driveTargetError = 6;
   if (yPos < 1.5 *24) driveToPoint(xPos, 2 *24);
 
   pros::Task frontArmAboveRings([&]{
@@ -140,10 +141,9 @@ void leftAuton(){
     frontArm.moveVoltage(-12000);
   });
 
-  driveTargetError = 6;
-  point midTower = findOffsetTarget({xPos, yPos}, {3 *24, 3 *24}, {1, 0});
+  point midTower = findOffsetTarget({xPos, yPos}, {3 *24, 3 *24}, {2, 0});
   gotMiddleNeutral = doUntil(t(driveToPoint(midTower.x, midTower.y, forward, 4)), r(clawFrontLeftButton.isPressed() || clawFrontRightButton.isPressed()));
-  driveTargetError = prevDriveTargetError;
+  //driveTargetError = prevDriveTargetError;
   if (!gotMiddleNeutral) {
     driveForward(-12);
     turnTargetError = 3;
@@ -153,7 +153,7 @@ void leftAuton(){
     if (!gotMiddleNeutral) {
       driveForward(-18);
       turnTargetError = 3;
-      turnToAngle(rot + 25);
+      turnToAngle(rot + 22);
       turnTargetError = prevTurnTargetError;
       gotMiddleNeutral = doUntil(t(driveForward(18)), r(clawFrontLeftButton.isPressed() || clawFrontRightButton.isPressed()));
     }
