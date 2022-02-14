@@ -16,6 +16,12 @@ static void placeBackOnPlatform(){
   clawBack.set_value(false);
 }
 
+static void waitForClaw(){
+  Wait(0.05); // move forward while claw is going down
+  leftSide.moveVoltage(0); rightSide.moveVoltage(0);
+  Wait(0.1); // ensure claw is in tower
+}
+
 void testAuton(){
 
   // doUntil(t(driveForward(10000)), r(false));
@@ -231,14 +237,14 @@ void skills(){
   backArm.moveVoltage(0);
   doUntil(t(driveForward(-12)), r(clawBackLeftButton.isPressed() || clawBackRightButton.isPressed()));
   clawBack.set_value(true);
+  waitForClaw();
   backArmHoldTask.resume();
 
   // 2: Score left red
   driveToPoint(1 *24, 1 *24);
   driveToPoint(2 *24, 2 *24, backward);
-  driveToPoint(50, 3 *24, backward);
+  driveToPoint((1.5+3)/2 *24, 3 *24, backward);
   driveToPoint(2.5 *24, 4 *24, backward);
-
   driveToPoint(3 *24, 5 *24, backward);
   backArmHoldTask.suspend();
   placeBackOnPlatform();
@@ -246,11 +252,12 @@ void skills(){
   // 3: Get middle neutral
   driveToPoint(3 *24, 4 *24);
   backArm.moveVoltage(-12000);
+  turnToPoint(3 *24, 3 *24, backward);
   waitUntil(r(backArmPot.get() < 500));
   backArm.moveVoltage(0);
-  turnToPoint(3 *24, 3 *24, backward);
   doUntil(t(driveToPoint(3 *24, 3 *24, backward)), r(clawBackLeftButton.isPressed() || clawBackRightButton.isPressed()));
   clawBack.set_value(true);
+  waitForClaw();
   backArmHoldTask.resume();
 
   // 4: Score middle neutral
@@ -267,7 +274,8 @@ void skills(){
   driveToPoint(5 *24, 4 *24, forward);
   doUntil(t(driveToPoint(4.5 *24, 5.5 *24, backward)), r(clawBackLeftButton.isPressed() || clawBackRightButton.isPressed()));
   clawBack.set_value(true);
-  backArm.moveVoltage(12000);
+  waitForClaw();
+  backArmHoldTask.resume();
 
   // --------------------- SLIDE 3 ---------------------
   // Get right blue with back side
@@ -277,6 +285,7 @@ void skills(){
   driveToPoint(1.5 *24, 4 *24, forward);
   doUntil(t(driveToPoint(0.5 *24, 4.5 *24, forward)), r(clawFrontLeftButton.isPressed() || clawFrontRightButton.isPressed()));
   clawFront.set_value(true);
+  waitForClaw();
 
 
   // --------------------- SLIDE 4 ---------------------
@@ -285,13 +294,14 @@ void skills(){
 
   // 1: Score left blue
   driveToPoint(2 *24, 4 *24, backward);
-  frontArm.moveVoltage(12000);
-  driveToPoint(50, 3 *24, backward);
+  driveToPoint((1.5+3)/2 *24, 3 *24, backward);
   driveToPoint(2.5 *24, 2 *24, backward);
   driveToPoint(3 *24, 1 *24, backward);
+  backArmHoldTask.suspend();
   placeBackOnPlatform();
 
   // 2: Score right blue
+  frontArm.moveVoltage(12000);
   driveForward(10);
   lift.moveVoltage(12000);
   turnToPoint(3 *24, 1 *24);
@@ -309,11 +319,13 @@ void skills(){
   backArm.moveVoltage(-12000);
   doUntil(t(driveToPoint(1.5 *24, 3 *24, backward)), r(clawBackLeftButton.isPressed() || clawBackRightButton.isPressed()));
   clawBack.set_value(true);
+  waitForClaw();
+  backArmHoldTask.resume();
 
   // 2: Score left neutral
   lift.moveVoltage(0);
-  turnToPoint(3 *24, 1 *24, backward);
   driveToPoint(3 *24, 1 *24, backward);
+  backArmHoldTask.suspend();
   placeBackOnPlatform();
 
 
@@ -328,16 +340,18 @@ void skills(){
   backArm.moveVoltage(-12000);
   doUntil(t(driveToPoint(5.5 *24, 1.5 *24, forward)), r(clawFrontLeftButton.isPressed() || clawFrontRightButton.isPressed()));
   clawFront.set_value(true);
+  waitForClaw();
 
   // 2: Get right neutral
   doUntil(t(driveToPoint(4.5 *24, 3 *24, backward)), r(clawBackLeftButton.isPressed() || clawBackRightButton.isPressed()));
-  frontArm.moveVoltage(12000);
   clawBack.set_value(true);
+  waitForClaw();
+  backArmHoldTask.resume();
 
   // 3: Score right neutral
   driveToPoint(3.5 *24, 2 *24, backward);
-  backArm.moveVoltage(12000);
   driveToPoint(3 *24, 1 *24, backward);
+  backArmHoldTask.suspend();
   placeBackOnPlatform();
 
 
