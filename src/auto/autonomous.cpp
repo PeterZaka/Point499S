@@ -11,7 +11,10 @@ static void placeBackOnPlatform(){
   driveForward(6);
   driveTargetError = beforeFunctionError;
   backArm.moveVoltage(-12000);
-  waitUntil(r(backArmPot.get() < 1500));
+  lift.moveVoltage(12000);
+  waitUntil(r(backArmPot.get() < 1000));
+  lift.moveVoltage(0);
+  waitUntil(r(backArmPot.get() < 200));
   backArm.moveVoltage(0);
   clawBack.set_value(false);
 }
@@ -147,7 +150,7 @@ void leftAuton(){
     frontArm.moveVoltage(-12000);
   });
 
-  point midTower = findOffsetTarget({xPos, yPos}, {3 *24, 3 *24}, {2, 0});
+  point midTower = findOffsetTarget({xPos, yPos}, {3 *24, 3 *24}, {0, 0});
   gotMiddleNeutral = doUntil(t(driveToPoint(midTower.x, midTower.y, forward, 4)), r(clawFrontLeftButton.isPressed() || clawFrontRightButton.isPressed()));
   //driveTargetError = prevDriveTargetError;
   if (!gotMiddleNeutral) {
@@ -233,14 +236,16 @@ void skills(){
 
   // 1: Get left red
   backArm.moveVoltage(-12000);
-  waitUntil(r(backArmPot.get() < 500));
-  backArm.moveVoltage(0);
+  waitUntil(r(backArmPot.get() < 100));
+  driveStrength = 0.75;
   doUntil(t(driveForward(-12)), r(clawBackLeftButton.isPressed() || clawBackRightButton.isPressed()));
+  driveStrength = 1;
   clawBack.set_value(true);
   waitForClaw();
   backArmHoldTask.resume();
+  Wait(1);
 
-  // 2: Score left red
+  frontArm.moveVoltage(-12000);
   driveToPoint(1 *24, 1 *24);
   driveToPoint(2 *24, 2 *24, backward);
   driveToPoint((1.5+3)/2 *24, 3 *24, backward);
@@ -249,12 +254,19 @@ void skills(){
   backArmHoldTask.suspend();
   placeBackOnPlatform();
 
+  driveForward(12);
+  doUntil(t(driveToPoint(3 *24, 3 *24, forward)), r(clawFrontLeftButton.isPressed() || clawFrontRightButton.isPressed()));
+  clawFront.set_value(true);
+  waitForClaw();
+  frontArm.moveVoltage(12000);
+  Wait(2);
+
+  return;
+
   // 3: Get middle neutral
-  driveToPoint(3 *24, 4 *24);
+  driveForward(12);
   backArm.moveVoltage(-12000);
   turnToPoint(3 *24, 3 *24, backward);
-  waitUntil(r(backArmPot.get() < 500));
-  backArm.moveVoltage(0);
   doUntil(t(driveToPoint(3 *24, 3 *24, backward)), r(clawBackLeftButton.isPressed() || clawBackRightButton.isPressed()));
   clawBack.set_value(true);
   waitForClaw();

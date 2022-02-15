@@ -15,7 +15,7 @@ double driveTargetError = 3;
 double driveStopTime = 1;
 
 // Drive Stop Error - Be within distance (in inches) after driveStopInterval seconds to be stopped
-double driveStopError = 6;
+double driveStopError = 3;
 
 // Drive Stop Interval - Time interval to measure if stopped
 double driveStopInterval = 0.25;

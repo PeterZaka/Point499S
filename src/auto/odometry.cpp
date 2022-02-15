@@ -2,7 +2,7 @@
 
 double wheelDiameter = 2.75;
 double wheelTrack = 4.8888;
-double backDistance = 3;
+double backDistance = 4.2;
 
 // 4.8888
 // 4 and 3

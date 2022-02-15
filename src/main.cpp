@@ -87,12 +87,12 @@ void opcontrol() {
 			pros::delay(50);
 			controller.setText(0, 0, "x: " + std::to_string(xPos));
 			pros::delay(50);
-			//(clawBackLeftButton.isPressed() || clawBackRightButton.isPressed())
-			controller.setText(1, 0, "y: " + std::to_string(iSensor.get_pitch()));
+			// (clawBackLeftButton.isPressed() || clawBackRightButton.isPressed())
+			controller.setText(1, 0, "y: " + std::to_string(yPos));
+			pros::delay(50);
+			controller.setText(2, 0, "rot: " + std::to_string(iSensor.get_rotation()));
 			// pros::delay(50);
-			// controller.setText(2, 0, "rot: " + std::to_string(iSensor.get_rotation()));
-			// pros::delay(50);
-			// controller.setText(1, 0, "cal rot: " + std::to_string(clawBackRightButton.isPressed()));
+			// controller.setText(2, 0, "cal rot: " + std::to_string(calculatedRot * (180/pi)));
 
 			// pros::delay(50);
 			// controller.setText(0, 0, "l: " + std::to_string(leftEncoder.get()));
@@ -106,8 +106,8 @@ void opcontrol() {
 			// controller.setText(0, 0, "r - p: " + std::to_string(rot - prevRot));
 			// pros::delay(50);
 			// controller.setText(1, 0, "c: " + std::to_string((deltaL - deltaR) / wheelTrack));
-			pros::delay(50);
-			controller.setText(2, 0, "liftP: " + std::to_string(backArmPot.get()));
+			// pros::delay(50);
+			// controller.setText(2, 0, "liftP: " + std::to_string(backArmPot.get()));
 
 			pros::delay(500);
 		}
