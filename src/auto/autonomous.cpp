@@ -10,13 +10,49 @@ static void placeBackOnPlatform(){
   driveTargetError = 1;
   driveForward(6);
   driveTargetError = beforeFunctionError;
+
   backArm.moveVoltage(-12000);
   lift.moveVoltage(12000);
-  waitUntil(r(backArmPot.get() < 1000));
-  lift.moveVoltage(0);
   waitUntil(r(backArmPot.get() < 200));
+  lift.moveVoltage(0);
   backArm.moveVoltage(0);
+
+  leftSide.moveVoltage(-12000 * 0.8);
+  rightSide.moveVoltage(-12000 * 0.8);
+  Wait(0.5);
   clawBack.set_value(false);
+  lift.moveVoltage(12000);
+  leftSide.moveVoltage(12000 * 0.8);
+  rightSide.moveVoltage(12000 * 0.8);
+  Wait(0.5);
+  lift.moveVoltage(0);
+  leftSide.moveVoltage(0);
+  rightSide.moveVoltage(0);
+}
+
+static void placeFrontOnPlatform(){
+  double beforeFunctionError = driveTargetError;
+  driveTargetError = 1;
+  driveForward(-6);
+  driveTargetError = beforeFunctionError;
+
+  frontArm.moveVoltage(-12000);
+  lift.moveVoltage(12000);
+  Wait(1);
+  lift.moveVoltage(0);
+  frontArm.moveVoltage(0);
+
+  leftSide.moveVoltage(12000 * 0.8);
+  rightSide.moveVoltage(12000 * 0.8);
+  Wait(0.5);
+  clawFront.set_value(false);
+  lift.moveVoltage(12000);
+  leftSide.moveVoltage(-12000 * 0.8);
+  rightSide.moveVoltage(-12000 * 0.8);
+  Wait(0.5);
+  lift.moveVoltage(0);
+  leftSide.moveVoltage(0);
+  rightSide.moveVoltage(0);
 }
 
 static void waitForClaw(){
@@ -224,13 +260,11 @@ void skills(){
       pros::delay(20);
     }
   });
-
   backArmHoldTask.suspend();
 
   // --------------------- SLIDE 1 --------------------- Option 1
   // 1: Get left red
   // 2: Score left red
-  // score middle neutral with front arm
   // 3: Get middle neutral
   // 4: Score middle neutral
 
@@ -245,15 +279,19 @@ void skills(){
   backArmHoldTask.resume();
   Wait(1);
 
+  // 2: Score left red
   frontArm.moveVoltage(-12000);
   driveToPoint(1 *24, 1 *24);
   driveToPoint(2 *24, 2 *24, backward);
   driveToPoint((1.5+3)/2 *24, 3 *24, backward);
   driveToPoint(2.5 *24, 4 *24, backward);
+  driveStopTime = 0;
   driveToPoint(3 *24, 5 *24, backward);
+  driveStopTime = prevDriveStopTime;
   backArmHoldTask.suspend();
   placeBackOnPlatform();
 
+  // 3: Get middle neutral
   driveForward(12);
   doUntil(t(driveToPoint(3 *24, 3 *24, forward)), r(clawFrontLeftButton.isPressed() || clawFrontRightButton.isPressed()));
   clawFront.set_value(true);
@@ -261,21 +299,11 @@ void skills(){
   frontArm.moveVoltage(12000);
   Wait(2);
 
-  return;
-
-  // 3: Get middle neutral
-  driveForward(12);
-  backArm.moveVoltage(-12000);
-  turnToPoint(3 *24, 3 *24, backward);
-  doUntil(t(driveToPoint(3 *24, 3 *24, backward)), r(clawBackLeftButton.isPressed() || clawBackRightButton.isPressed()));
-  clawBack.set_value(true);
-  waitForClaw();
-  backArmHoldTask.resume();
-
   // 4: Score middle neutral
-  driveToPoint(3 *24, 5 *24, backward);
-  backArmHoldTask.suspend();
-  placeBackOnPlatform();
+  driveStopTime = 0;
+  driveToPoint(3 *24, 5 *24, forward);
+  driveStopTime = prevDriveStopTime;
+  placeFrontOnPlatform();
 
 
   // --------------------- SLIDE 2 ---------------------
