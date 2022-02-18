@@ -8,7 +8,7 @@ bool isAuton = false;
 static void placeBackOnPlatform(double turning=0){
   double beforeFunctionError = driveTargetError;
   driveTargetError = 1;
-  driveForward(6);
+  driveForward(3);
   driveTargetError = beforeFunctionError;
 
   backArm.moveVoltage(-12000);
@@ -37,7 +37,7 @@ static void placeBackOnPlatform(double turning=0){
 static void placeFrontOnPlatform(){
   double beforeFunctionError = driveTargetError;
   driveTargetError = 1;
-  driveForward(-6);
+  driveForward(-3);
   driveTargetError = beforeFunctionError;
 
   frontArm.moveVoltage(-12000);
@@ -307,6 +307,8 @@ void skills(){
   driveTargetTime = 0;
   turnTargetTime = 0;
 
+  drivePID.Kp = 20;
+
   pros::Task backArmHoldTask([&]{
     while(true){
       if (backArmPot.get() < 1700) backArm.moveVoltage(
@@ -333,23 +335,24 @@ void skills(){
   waitUntil(r(backArmPot.get() > 750));
 
   // 2: Score left red
-  driveToPoint(1 *24, 1 *24);
+  driveToPoint(1 *24, 1 *24, backward);
   driveToPoint(2 *24, 2 *24, backward);
   driveToPoint((1.5+3)/2 *24, 3 *24, backward);
   driveToPoint(2.5 *24, 4 *24, backward);
   driveStopTime = 0;
-  driveToPoint(2.75 *24, 5 *24, backward);
+  driveToPoint(2.85 *24, 5 *24, backward);
   driveStopTime = prevDriveStopTime;
   backArmHoldTask.suspend();
   placeBackOnPlatform(-1);
   driveForward(6);
+  backArm.moveVoltage(-12000 * 0.5);
 
 
   // --------------------- SLIDE 2 ---------------------
   // Get left blue
 
   driveToPoint(5 *24, 4 *24, forward);
-  doUntil(t(driveToPoint(4.2 *24, 5.5 *24, backward)), r(clawBackLeftButton.isPressed() || clawBackRightButton.isPressed()));
+  doUntil(t(driveToPoint(4.15 *24, 5.5 *24, backward)), r(clawBackLeftButton.isPressed() || clawBackRightButton.isPressed()));
   lift.moveVoltage(0);
   clawBack.set_value(true);
   waitForClaw();
@@ -375,7 +378,7 @@ void skills(){
   // 1: Score left blue
   driveToPoint(2 *24, 4 *24, backward);
   driveToPoint((1.5+3)/2 *24, 3 *24, backward);
-  driveToPoint(2.5 *24, 2 *24, backward);
+  driveToPoint(3 *24, 2 *24, backward);
   driveStopTime = 0;
   driveToPoint(3 *24, 1 *24, backward);
   driveStopTime = prevDriveStopTime;
@@ -390,11 +393,9 @@ void skills(){
   driveToPoint(3 *24, 1 *24, forward);
   driveStopTime = prevDriveStopTime;
   placeFrontOnPlatform();
-  driveForward(-6);
-  Wait(1);
+  driveForward(-3);
   backArm.moveVoltage(-12000);
-  waitUntil(r(backArmPot.get() < 50));
-  backArm.moveVoltage(0);
+  Wait(2);
 
   // --------------------- SLIDE 5 ---------------------
   // 1: Get left neutral
@@ -409,6 +410,7 @@ void skills(){
 
   // 2: Score left neutral
   lift.moveVoltage(0);
+  driveToPoint(2.75 *24, 2 *24, backward);
   driveToPoint(2.75 *24, 1 *24, backward);
   backArmHoldTask.suspend();
   placeBackOnPlatform();
@@ -419,7 +421,8 @@ void skills(){
   // 3: Score right neutral
 
   // 1: Get right red
-  driveToPoint(4 *24, 2 *24, forward);
+  driveToPoint(4 *24, 1.5 *24, forward);
+  turnToPoint(5.5 *24, 1.5 *24, forward);
   doUntil(t(driveToPoint(5.5 *24, 1.5 *24, forward)), r(clawFrontLeftButton.isPressed() || clawFrontRightButton.isPressed()));
   clawFront.set_value(true);
   waitForClaw();
@@ -427,14 +430,14 @@ void skills(){
   Wait(0.25);
 
   // 2: Get right neutral
+  turnToPoint(4.5 * 24, 3 *24, backward);
   doUntil(t(driveToPoint(4.5 *24, 3 *24, backward)), r(clawBackLeftButton.isPressed() || clawBackRightButton.isPressed()));
   clawBack.set_value(true);
   waitForClaw();
   backArmHoldTask.resume();
 
   // 3: Score right neutral
-  driveToPoint(3.5 *24, 2 *24, backward);
-  driveToPoint(3 *24, 1 *24, backward);
+  driveToPoint(3 *24, 5 *24, backward);
   backArmHoldTask.suspend();
   placeBackOnPlatform();
   backArm.moveVoltage(0);
@@ -444,11 +447,13 @@ void skills(){
   // 1: Score right red
 
   // 1: Score right red
-  driveToPoint(2 *24, 2 *24);
-  driveToPoint(4 *24, 4 *24);
-  driveToPoint(3 *24, 4 *24);
+  turnToPoint(3 *24, 5 *24, forward);
+  driveForward(6);
+  driveStopTime = 0;
   driveToPoint(3 *24, 5 *24, forward);
+  driveStopTime = prevDriveStopTime;
   placeFrontOnPlatform();
 
-  driveToPoint(3 *24, 3 *24);
+  driveToPoint(5 *24, 5 *24);
+  driveToPoint(2 *24, 2 *24);
 }
