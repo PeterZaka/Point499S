@@ -300,9 +300,9 @@ void skills(){
   xPos = 24 - 17.25/2.0;
   yPos = 24/2.0;
 
-  iSensor.set_rotation(-90);
-  rot = -90;
-  prevRot = -90;
+  iSensor.set_rotation(90);
+  rot = 90;
+  prevRot = 90;
 
   driveTargetTime = 0;
   turnTargetTime = 0;
@@ -321,31 +321,46 @@ void skills(){
 
   // --------------------- SLIDE 1 ---------------------
   // 1: Get left red
-  // 2: Score left red
+  // 2: Get left neutral
+  // 3: Score left neutral
+  // 4: Score left red
 
   // 1: Get left red
-  backArm.moveVoltage(-12000);
-  waitUntil(r(backArmPot.get() < 100));
+  frontArm.moveVoltage(-12000);
+  Wait(1);
   driveStrength = 0.75;
-  doUntil(t(driveForward(-12)), r(clawBackLeftButton.isPressed() || clawBackRightButton.isPressed()));
+  doUntil(t(driveForward(12)), r(clawFrontLeftButton.isPressed() || clawFrontRightButton.isPressed()));
   driveStrength = 1;
+  clawFront.set_value(true);
+  waitForClaw();
+
+  // 2: Get left neutral
+  backArm.moveVoltage(-12000);
+  driveToPoint(1 *24, 1 *24, backward);
+  driveToPoint((1+1.5)/2 *24, 2 *24, backward);
+  doUntil(t(driveToPoint(1.5 *24, 3 *24, backward)), r(clawBackLeftButton.isPressed() || clawBackRightButton.isPressed()));
   clawBack.set_value(true);
   waitForClaw();
   backArmHoldTask.resume();
-  waitUntil(r(backArmPot.get() > 750));
 
-  // 2: Score left red
-  driveToPoint(1 *24, 1 *24, backward);
-  driveToPoint(2 *24, 2 *24, backward);
-  driveToPoint((1.5+3)/2 *24, 3 *24, backward);
+  // 3: Score left neutral
   driveToPoint(2.5 *24, 4 *24, backward);
   driveStopTime = 0;
   driveToPoint(2.85 *24, 5 *24, backward);
   driveStopTime = prevDriveStopTime;
   backArmHoldTask.suspend();
   placeBackOnPlatform(-1);
+  backArm.moveVoltage(0);
+
+  // 4: Score left red
+  turnToPoint(3 *24, 5 *24, forward);
   driveForward(6);
-  backArm.moveVoltage(-12000 * 0.5);
+  driveStopTime = 0;
+  driveToPoint(3 *24, 1 *24, forward);
+  driveStopTime = prevDriveStopTime;
+  placeFrontOnPlatform();
+  driveForward(-3);
+  backArm.moveVoltage(-12000);
 
 
   // --------------------- SLIDE 2 ---------------------
@@ -359,7 +374,7 @@ void skills(){
   backArmHoldTask.resume();
 
   // --------------------- SLIDE 3 ---------------------
-  // Get right blue with back side
+  // Get right blue
 
   driveToPoint(5 *24, 4 *24);
   frontArm.moveVoltage(-12000);
@@ -376,8 +391,6 @@ void skills(){
   // 2: Score right blue
 
   // 1: Score left blue
-  driveToPoint(2 *24, 4 *24, backward);
-  driveToPoint((1.5+3)/2 *24, 3 *24, backward);
   driveToPoint(3 *24, 2 *24, backward);
   driveStopTime = 0;
   driveToPoint(3 *24, 1 *24, backward);
@@ -398,27 +411,10 @@ void skills(){
   Wait(2);
 
   // --------------------- SLIDE 5 ---------------------
-  // 1: Get left neutral
-  // 2: Score left neutral
-
-  // 1: Get left neutral
-  turnToPoint(1.5 *24, 3 *24, backward);
-  doUntil(t(driveToPoint(1.5 *24, 3 *24, backward)), r(clawBackLeftButton.isPressed() || clawBackRightButton.isPressed()));
-  clawBack.set_value(true);
-  waitForClaw();
-  backArmHoldTask.resume();
-
-  // 2: Score left neutral
-  lift.moveVoltage(0);
-  driveToPoint(2.75 *24, 2 *24, backward);
-  driveToPoint(2.75 *24, 1 *24, backward);
-  backArmHoldTask.suspend();
-  placeBackOnPlatform();
-
-  // --------------------- SLIDE 6 ---------------------
   // 1: Get right red
   // 2: Get right neutral
   // 3: Score right neutral
+  // 3: Score right red
 
   // 1: Get right red
   driveToPoint(4 *24, 1.5 *24, forward);
@@ -437,23 +433,28 @@ void skills(){
   backArmHoldTask.resume();
 
   // 3: Score right neutral
-  driveToPoint(3 *24, 5 *24, backward);
+  driveToPoint(3.15 *24, 4 *24, backward);
+  driveToPoint(3.15 *24, 5 *24, backward);
   backArmHoldTask.suspend();
   placeBackOnPlatform();
   backArm.moveVoltage(0);
 
-
-  // --------------------- SLIDE 7 ---------------------
-  // 1: Score right red
-
-  // 1: Score right red
+  // 3: Score right red
   turnToPoint(3 *24, 5 *24, forward);
   driveForward(6);
   driveStopTime = 0;
-  driveToPoint(3 *24, 5 *24, forward);
+  driveToPoint(3 *24, 1 *24, forward);
   driveStopTime = prevDriveStopTime;
   placeFrontOnPlatform();
+  backArm.moveVoltage(12000);
+  frontArm.moveVoltage(12000);
+  driveForward(-3);
 
+
+  // --------------------- SLIDE 6 ---------------------
+  // 1: Push middle neutral
+
+  // 1: Push middle neutral
   driveToPoint(5 *24, 5 *24);
   driveToPoint(2 *24, 2 *24);
 }
