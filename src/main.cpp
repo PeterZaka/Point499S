@@ -116,8 +116,8 @@ void opcontrol() {
 	// ------- Main -------
 	ControllerButton liftUpButton(ControllerId::master, ControllerDigital::R1);
 	ControllerButton liftDownButton(ControllerId::master, ControllerDigital::R2);
-	ControllerButton pointToMainDirectionButton(ControllerId::master, ControllerDigital::up);
-	ControllerButton pointToSecondaryDirectionButton(ControllerId::master, ControllerDigital::down);
+	ControllerButton pointToMainDirectionButton(ControllerId::master, ControllerDigital::L2);
+	ControllerButton pointToSecondaryDirectionButton(ControllerId::master, ControllerDigital::L1);
 	ControllerButton testButton(ControllerId::master, ControllerDigital::A);
 	ControllerButton debugButton(ControllerId::master, ControllerDigital::Y);
 	// 1 controller only
@@ -125,8 +125,8 @@ void opcontrol() {
 	ControllerButton singleClawBackButton(ControllerId::master, ControllerDigital::right);
 	ControllerButton singleFrontArmUpButton(ControllerId::master, ControllerDigital::X);
 	ControllerButton singleFrontArmDownButton(ControllerId::master, ControllerDigital::B);
-	ControllerButton singleBackArmUpButton(ControllerId::master, ControllerDigital::L1);
-	ControllerButton singleBackArmDownButton(ControllerId::master, ControllerDigital::L2);
+	ControllerButton singleBackArmUpButton(ControllerId::master, ControllerDigital::up);
+	ControllerButton singleBackArmDownButton(ControllerId::master, ControllerDigital::down);
 
 	// ------- Partner -------
 	ControllerButton clawFrontButton(ControllerId::partner, ControllerDigital::up);

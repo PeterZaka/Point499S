@@ -36,7 +36,7 @@ enum movement{
 void goToPoint(double x, double y, movement Movement=forward);
 
 void driveForward(double distance, double rotation=rot);
-void driveToPoint(double x, double y, movement Movement=best, double strength=3, double angleClamp=200);
+void driveToPoint(double x, double y, movement Movement=best, double strength=3.5, double angleClamp=200);
 
 void turnToAngle(double angle);
 void turnToAngle(double angle, double power);
