@@ -194,7 +194,7 @@ void leftAuton(){
   backArm.moveVoltage(-12000);
   frontArm.moveVoltage(-12000);
 
-  gotLeftNeutral = doUntil(t(grabTower({1.5 *24, 3 *24}, backward, {0, 0})), r(clawBackLeftButton.isPressed() || clawBackRightButton.isPressed()));
+  gotLeftNeutral = doUntil(t(grabTower({1.5 *24, 3 *24}, backward, {-1.5, 0})), r(clawBackLeftButton.isPressed() || clawBackRightButton.isPressed()));
   clawBack.set_value(true);
   Wait(0.05); // move forward while claw is going down
   leftSide.moveVoltage(0); rightSide.moveVoltage(0);
@@ -234,9 +234,27 @@ void leftAuton(){
 
   checkBack.remove();
   backArm.moveVoltage(12000);
+
+  leftSide.moveVoltage(12000 * 0.5);
+  rightSide.moveVoltage(12000 * 0.5);
+  Wait(0.1);
+  leftSide.moveVoltage(12000 * 0.25);
+  rightSide.moveVoltage(12000 * 0.25);
+  Wait(0.1);
+  leftSide.moveVoltage(12000 * 0);
+  rightSide.moveVoltage(12000 * 0);
+  while (backArmPot.get() < 1200) pros::delay(20);
+  Wait(0.25);
+  leftSide.moveVoltage(12000 * -0.25);
+  rightSide.moveVoltage(12000 * -0.25);
+  Wait(0.1);
+  leftSide.moveVoltage(12000 * -0.5);
+  rightSide.moveVoltage(12000 * -0.5);
+  Wait(0.1);
+
   driveStopError = 0; // Disable stop detection
   driveTargetError = 6;
-  if (yPos < 1.5 *24) driveToPoint(xPos, 2 *24);
+  if (yPos < 2.5 *24) driveToPoint(xPos, 2.5 *24);
 
   pros::Task frontArmAboveRings([&]{
     frontArm.moveVoltage(12000 * 0.2);
@@ -248,20 +266,22 @@ void leftAuton(){
     frontArm.moveVoltage(-12000);
   });
 
-  point midTower = findOffsetTarget({xPos, yPos}, {3 *24, 3 *24}, {-0.5, 0});
-  gotMiddleNeutral = doUntil(t(driveToPoint(midTower.x, midTower.y, forward, 4)), r(clawFrontLeftButton.isPressed() || clawFrontRightButton.isPressed()));
+  point midTower = findOffsetTarget({xPos, yPos}, {3 *24, 3 *24}, {-5, 0});
+  gotMiddleNeutral = doUntil(t(driveToPoint(midTower.x, midTower.y, forward)), r(clawFrontLeftButton.isPressed() || clawFrontRightButton.isPressed()));
   //driveTargetError = prevDriveTargetError;
   if (!gotMiddleNeutral) {
     driveForward(-12);
     turnTargetError = 3;
-    turnToAngle(rot - 7);
+    turnToAngle(rot - 16);
     turnTargetError = prevTurnTargetError;
+    Wait(1);
     gotMiddleNeutral = doUntil(t(driveForward(18)), r(clawFrontLeftButton.isPressed() || clawFrontRightButton.isPressed()));
     if (!gotMiddleNeutral) {
       driveForward(-18);
       turnTargetError = 3;
-      turnToAngle(rot + 17);
+      turnToAngle(rot - 13);
       turnTargetError = prevTurnTargetError;
+      Wait(0.5);
       gotMiddleNeutral = doUntil(t(driveForward(18)), r(clawFrontLeftButton.isPressed() || clawFrontRightButton.isPressed()));
     }
   }
@@ -338,7 +358,7 @@ void skills(){
   frontArm.moveVoltage(-12000);
   Wait(0.5);
   driveStrength = 0.3;
-  doUntil(t(driveForward(12)), r(clawFrontLeftButton.isPressed() || clawFrontRightButton.isPressed()));
+  doUntil(t(driveForward(18)), r(clawFrontLeftButton.isPressed() || clawFrontRightButton.isPressed()));
   driveStrength = 1;
   clawFront.set_value(true);
   waitForClaw();
@@ -348,7 +368,7 @@ void skills(){
   Wait(0.5);
   backArm.moveVoltage(-12000);
   driveToPoint(1 *24, 1.25 *24, backward);
-  doUntil(t(grabTower({1.5 *24, 3 *24}, backward, {-1.5, 0})), r(clawBackLeftButton.isPressed() || clawBackRightButton.isPressed()));
+  doUntil(t(grabTower({1.5 *24, 3 *24}, backward, {-2, 0})), r(clawBackLeftButton.isPressed() || clawBackRightButton.isPressed()));
   clawBack.set_value(true);
   waitForClaw();
   backArmHoldTask.resume();

@@ -42,7 +42,7 @@ void autonomous() {
 	pros::Task calculateOdomTask([](){
 		while(1){
 			calculateOdom();
-			pros::delay(10);
+			pros::delay(20);
 		}
 	});
 
@@ -65,7 +65,7 @@ void opcontrol() {
 	pros::Task calculateOdomTask([](){
 		while(1){
 			calculateOdom();
-			pros::delay(10);
+			pros::delay(20);
 		}
 	});
 
@@ -149,7 +149,7 @@ void opcontrol() {
 	// xPos = 24+14.5/2;
 	// yPos = 17.25/2;
 
-	xPos = 24 + 1.25;
+	xPos = 24 + 2.5;
 	yPos = 24 - 17.25/2.0;
 
   iSensor.set_rotation(180);
