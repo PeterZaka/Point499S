@@ -467,8 +467,8 @@ void skills(){
   backArmHoldTask.resume();
 
   // 3: Score right neutral
-  driveToPoint(3.15 *24, 4 *24, backward);
-  driveToPoint(3.15 *24, 5 *24, backward);
+  driveToPoint(3 *24, 4 *24, backward);
+  driveToPoint(3 *24, 5 *24, backward);
   backArmHoldTask.suspend();
   placeBackOnPlatform();
   backArm.moveVoltage(0);

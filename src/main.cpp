@@ -116,8 +116,7 @@ void opcontrol() {
 	// ------- Main -------
 	ControllerButton liftUpButton(ControllerId::master, ControllerDigital::R1);
 	ControllerButton liftDownButton(ControllerId::master, ControllerDigital::R2);
-	ControllerButton pointToMainDirectionButton(ControllerId::master, ControllerDigital::L2);
-	ControllerButton pointToSecondaryDirectionButton(ControllerId::master, ControllerDigital::L1);
+	ControllerButton switchDirectionButton(ControllerId::master, ControllerDigital::L1);
 	ControllerButton testButton(ControllerId::master, ControllerDigital::A);
 	ControllerButton debugButton(ControllerId::master, ControllerDigital::Y);
 	// 1 controller only
@@ -172,13 +171,9 @@ void opcontrol() {
 		if(abs(rightYAxis) < 0.1) rightYAxis = 0;
 		if(abs(rightXAxis) < 0.1) rightXAxis = 0;
 
-		if (pointToMainDirectionButton.changedToPressed()) {
+		if (switchDirectionButton.changedToPressed()) {
 			controller.rumble(".");
-			isBackward = true;
-		}
-		if (pointToSecondaryDirectionButton.changedToPressed()) {
-			controller.rumble(".");
-			isBackward = false;
+			isBackward = !isBackward;
 		}
 
 		if (isTank) {
