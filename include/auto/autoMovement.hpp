@@ -8,6 +8,8 @@
 #include "robot-config.hpp"
 #include "auto/odometry.hpp"
 
+extern bool isAuton;
+
 // ------- Drive -------
 extern double prevDriveStrength;
 extern double prevDriveTargetTime;

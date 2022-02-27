@@ -19,6 +19,8 @@ double prevTurnStopTime = turnStopTime;
 double prevTurnStopError = turnStopError;
 double prevTurnStopInterval = turnStopInterval;
 
+bool isAuton = false;
+
 void goToPoint(double x, double y, movement Movement){
   turnToPoint(x, y, Movement);
   driveToPoint(x, y, Movement);
@@ -289,7 +291,7 @@ void grabTower(point tower, movement Movement, point offset){
 bool doUntil(std::function<void()> Do, std::function<bool()> Until){
   pros::Task doTask(Do);
   while (doTask.get_state() == pros::E_TASK_STATE_READY){
-    if (Until()) {
+    if (Until() || !isAuton) {
       doTask.remove();
       return true;
     }
