@@ -8,6 +8,7 @@
 #include "robot-config.hpp"
 #include "auto/odometry.hpp"
 
+extern double autonTimer;
 extern bool isAuton;
 
 // ------- Drive -------

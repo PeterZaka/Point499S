@@ -19,7 +19,8 @@ double prevTurnStopTime = turnStopTime;
 double prevTurnStopError = turnStopError;
 double prevTurnStopInterval = turnStopInterval;
 
-bool isAuton = false;
+double autonTimer = 0;
+bool isAuton;
 
 void goToPoint(double x, double y, movement Movement){
   turnToPoint(x, y, Movement);

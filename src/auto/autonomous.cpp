@@ -90,6 +90,16 @@ void testAuton(){
 
 void rightAuton(){
 
+  double startTime = pros::millis() / 1000.0;
+  pros::Task autonTimerTask([&]{
+    while (true) {
+      autonTimer = pros::millis() / 1000.0 - startTime;
+      if (autonTimer > 14.5) isAuton = false;
+      pros::delay(20);
+    }
+  });
+
+
   xPos = 4.5 *24;
   yPos = 24 - 17.25/2.0;
 
@@ -203,6 +213,16 @@ void rightAuton(){
 }
 
 void leftAuton(){
+
+  double startTime = pros::millis() / 1000.0;
+  pros::Task autonTimerTask([&]{
+    while (true) {
+      autonTimer = pros::millis() / 1000.0 - startTime;
+      if (autonTimer > 14.5) isAuton = false;
+      pros::delay(20);
+    }
+  });
+
 
   xPos = 24 + 2.5;
 	yPos = 24 - 17.25/2.0;
