@@ -218,7 +218,10 @@ void leftAuton(){
   pros::Task autonTimerTask([&]{
     while (true) {
       autonTimer = pros::millis() / 1000.0 - startTime;
-      if (autonTimer > 14.5) isAuton = false;
+      if (autonTimer > 14.5) {
+        std::cout << "auton ended" << std::endl;
+        isAuton = false;
+      }
       pros::delay(20);
     }
   });
@@ -249,6 +252,7 @@ void leftAuton(){
   frontArm.moveVoltage(-12000);
 
   gotLeftNeutral = doUntil(t(grabTower({1.5 *24, 3 *24}, backward, {0.5, 0})), r(clawBackLeftButton.isPressed() || clawBackRightButton.isPressed()));
+  if (!isAuton) return;
   clawBack.set_value(true);
   Wait(0.05); // move forward while claw is going down
   leftSide.moveVoltage(0); rightSide.moveVoltage(0);
@@ -322,6 +326,7 @@ void leftAuton(){
 
   point midTower = findOffsetTarget({xPos, yPos}, {3 *24, 3 *24}, {-1.5, 0});
   gotMiddleNeutral = doUntil(t(driveToPoint(midTower.x, midTower.y, forward)), r(clawFrontLeftButton.isPressed() || clawFrontRightButton.isPressed()));
+  if (!isAuton) return;
   //driveTargetError = prevDriveTargetError;
   if (!gotMiddleNeutral) {
     driveForward(-12);
@@ -330,6 +335,7 @@ void leftAuton(){
     turnTargetError = prevTurnTargetError;
     Wait(0.5);
     gotMiddleNeutral = doUntil(t(driveForward(18)), r(clawFrontLeftButton.isPressed() || clawFrontRightButton.isPressed()));
+    if (!isAuton) return;
     if (!gotMiddleNeutral) {
       driveForward(-18);
       turnTargetError = 3;
@@ -337,6 +343,7 @@ void leftAuton(){
       turnTargetError = prevTurnTargetError;
       Wait(0.5);
       gotMiddleNeutral = doUntil(t(driveForward(18)), r(clawFrontLeftButton.isPressed() || clawFrontRightButton.isPressed()));
+      if (!isAuton) return;
     }
   }
 

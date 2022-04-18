@@ -9,4 +9,6 @@ void rightAuton();
 
 void leftAuton();
 
+void leftMiddleAuton();
+
 void skills();

@@ -36,7 +36,7 @@ void turnToColor(pros::vision_signature sig, double targetError, double targetTi
 
   colorPID.setTarget(0);
   colorObject object = getLargestObject(SIG_YELLOW, 0.2);
-  while (!clawFrontButton.isPressed() && timeOnTarget <= targetTime) {
+  while (!clawFrontLeftButton.isPressed() && timeOnTarget <= targetTime) {
     colorPID.update((-object.x_cor + VISION_FOV_WIDTH) - (VISION_FOV_WIDTH / 2));
     leftSide.moveVoltage( std::clamp( (colorPID.value() * colorStrength * -120.0), -12000.0, 12000.0));
     rightSide.moveVoltage( std::clamp( (colorPID.value() * colorStrength * 120.0), -12000.0, 12000.0));
@@ -54,7 +54,7 @@ void turnToColor(pros::vision_signature sig, double targetError, double targetTi
 
 void driveToColor(pros::vision_signature sig){
   colorPID.setTarget(0);
-  while (vision.get_object_count() != 0 && !clawFrontButton.isPressed()) {
+  while (vision.get_object_count() != 0 && !clawFrontLeftButton.isPressed()) {
     pros::vision_object_s_t object = vision.get_by_size(0);
     for (int i = 0; i < vision.get_object_count(); i++){
       object = vision.get_by_size(i);
