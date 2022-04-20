@@ -13,7 +13,7 @@ void initalize_auton_page(lv_obj_t* autonPage){
 
   autonSelectionMap["Left Auton"] = leftAuton;
   autonSelectionMap["Right Auton"] = rightAuton;
-  autonSelectionMap["Skills"] = skills;
+  autonSelectionMap["Skills"] = leftMiddleAuton;
   autonSelectionMap["Test"] = testAuton;
 }
 

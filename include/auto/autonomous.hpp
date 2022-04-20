@@ -11,4 +11,6 @@ void leftAuton();
 
 void leftMiddleAuton();
 
+void leftMiddleAuton();
+
 void skills();

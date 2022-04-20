@@ -12,7 +12,7 @@ static void placeBackOnPlatform(double turning=0){
   driveTargetError = beforeFunctionError;
 
   backArm.moveVoltage(-12000);
-  waitUntil(r(backArmPot.get() < 200));
+  waitUntil(r(backArmPot.get() < 350));
   lift.moveVoltage(0);
 
   if (turning == 0) {
@@ -218,11 +218,13 @@ void leftAuton(){
   pros::Task autonTimerTask([&]{
     while (true) {
       autonTimer = pros::millis() / 1000.0 - startTime;
+      std::cout << autonTimer << std::endl;
       if (autonTimer > 14.5) {
         std::cout << "auton ended" << std::endl;
         isAuton = false;
+        return;
       }
-      pros::delay(20);
+      pros::delay(200);
     }
   });
 
@@ -251,7 +253,7 @@ void leftAuton(){
   backArm.moveVoltage(-12000);
   frontArm.moveVoltage(-12000);
 
-  gotLeftNeutral = doUntil(t(grabTower({1.5 *24, 3 *24}, backward, {0.5, 0})), r(clawBackLeftButton.isPressed() || clawBackRightButton.isPressed()));
+  gotLeftNeutral = doUntil(t(grabTower({1.5 *24, 3 *24}, backward, {-1, 0})), r(clawBackLeftButton.isPressed() || clawBackRightButton.isPressed()));
   if (!isAuton) return;
   clawBack.set_value(true);
   Wait(0.05); // move forward while claw is going down
@@ -369,6 +371,170 @@ void leftAuton(){
 
   }
   else if (gotLeftNeutral && !gotMiddleNeutral) // got left, miss mid
+  {
+    std::cout << "got left, miss mid" << std::endl;
+
+    driveToPoint(1 *24, 1 *24);
+    turnToPoint(3 *24, 3 *24, forward);
+  }
+  else // got both
+  {
+    std::cout << "got both" << std::endl;
+
+    driveToPoint(1 *24, 1 *24);
+  }
+}
+
+void leftMiddleAuton(){
+
+  double startTime = pros::millis() / 1000.0;
+  pros::Task autonTimerTask([&]{
+    while (true) {
+      autonTimer = pros::millis() / 1000.0 - startTime;
+      std::cout << autonTimer << std::endl;
+      if (autonTimer > 14.5) {
+        std::cout << "auton ended" << std::endl;
+        isAuton = false;
+        return;
+      }
+      pros::delay(200);
+    }
+  });
+
+
+  xPos = 24 + 2.5;
+	yPos = 24 - 17.25/2.0;
+
+  iSensor.set_rotation(findRotationTo(xPos, yPos, 24 *3, 24 *3));
+  rot = findRotationTo(xPos, yPos, 24 *3, 24 *3);
+  prevRot = findRotationTo(xPos, yPos, 24 *3, 24 *3);
+
+  bool gotLeftNeutral = false;
+  bool gotMiddleNeutral = false;
+
+  driveTargetTime = 0; // Don't stop
+
+  backArm.moveVoltage(-12000);
+  frontArm.moveVoltage(-12000);
+
+  gotLeftNeutral = doUntil(t(grabTower({3 *24, 3 *24}, backward, {0.5, 0})), r(clawBackLeftButton.isPressed() || clawBackRightButton.isPressed()));
+  if (!isAuton) return;
+  clawBack.set_value(true);
+  Wait(0.05); // move forward while claw is going down
+  leftSide.moveVoltage(0); rightSide.moveVoltage(0);
+  Wait(0.1); // ensure claw is in tower
+
+  pros::Task checkBack([&]{
+    backArm.moveVoltage(12000);
+    double startTime = pros::millis() / 1000.0;
+    while ((pros::millis() / 1000.0) - startTime < 1.5 && fabs(iSensor.get_pitch()) < 15) {
+      if (!isAuton) return;
+      pros::delay(20);
+    }
+    backArm.moveVoltage(-12000);
+    while (true) {
+      double startYPos = yPos;
+      startTime = pros::millis() / 1000.0;
+      while ((pros::millis() / 1000.0) - startTime < 3 && yPos > startYPos - 12) {
+        if (!isAuton) return;
+        pros::delay(20);
+      }
+      backArm.moveVoltage(12000);
+      startTime = pros::millis() / 1000.0;
+      while ((pros::millis() / 1000.0) - startTime < 1.5 && fabs(iSensor.get_pitch()) < 15) {
+        if (!isAuton) return;
+        pros::delay(20);
+      }
+      backArm.moveVoltage(-12000);
+    }
+  });
+
+  double startTugTime = pros::millis() / 1000.0;
+  while (backArmPot.get() < 800) {
+    leftSide.moveVoltage(12000);
+    rightSide.moveVoltage(12000);
+    pros::delay(20);
+  }
+
+  checkBack.remove();
+  backArm.moveVoltage(12000);
+
+  leftSide.moveVoltage(12000 * 0.5);
+  rightSide.moveVoltage(12000 * 0.5);
+  Wait(0.1);
+  leftSide.moveVoltage(12000 * 0.25);
+  rightSide.moveVoltage(12000 * 0.25);
+  Wait(0.1);
+  leftSide.moveVoltage(12000 * 0);
+  rightSide.moveVoltage(12000 * 0);
+  while (backArmPot.get() < 1200) pros::delay(20);
+  Wait(0.25);
+  leftSide.moveVoltage(12000 * -0.25);
+  rightSide.moveVoltage(12000 * -0.25);
+  Wait(0.1);
+  leftSide.moveVoltage(12000 * -0.5);
+  rightSide.moveVoltage(12000 * -0.5);
+  Wait(0.1);
+
+  driveStopError = 0; // Disable stop detection
+  driveTargetError = 6;
+  if (yPos < 1 *24) driveToPoint(1.5 *24, 1.5 *24);
+
+  pros::Task frontArmAboveRings([&]{
+    frontArm.moveVoltage(12000 * 0.2);
+    Wait(0.1);
+    while (findDistanceTo(xPos, yPos, 3 *24, 3 *24) > 36) {
+      if (!isAuton) return;
+      pros::delay(20);
+    }
+    frontArm.moveVoltage(-12000);
+  });
+
+  point midTower = findOffsetTarget({xPos, yPos}, {1.5 *24, 3 *24}, {-1.5, 0});
+  gotMiddleNeutral = doUntil(t(driveToPoint(midTower.x, midTower.y, forward)), r(clawFrontLeftButton.isPressed() || clawFrontRightButton.isPressed()));
+  if (!isAuton) return;
+  //driveTargetError = prevDriveTargetError;
+  if (!gotMiddleNeutral) {
+    driveForward(-12);
+    turnTargetError = 3;
+    turnToAngle(rot - 8);
+    turnTargetError = prevTurnTargetError;
+    Wait(0.5);
+    gotMiddleNeutral = doUntil(t(driveForward(18)), r(clawFrontLeftButton.isPressed() || clawFrontRightButton.isPressed()));
+    if (!isAuton) return;
+    if (!gotMiddleNeutral) {
+      driveForward(-18);
+      turnTargetError = 3;
+      turnToAngle(rot + 16);
+      turnTargetError = prevTurnTargetError;
+      Wait(0.5);
+      gotMiddleNeutral = doUntil(t(driveForward(18)), r(clawFrontLeftButton.isPressed() || clawFrontRightButton.isPressed()));
+      if (!isAuton) return;
+    }
+  }
+
+  clawFront.set_value(true);
+  Wait(0.1); // move forward while claw is going down
+  leftSide.moveVoltage(0); rightSide.moveVoltage(0);
+  Wait(0.1); // ensure claw is in tower
+  frontArm.moveVoltage(0);
+
+  if (!gotLeftNeutral && !gotMiddleNeutral) // miss both
+  {
+    std::cout << "miss both" << std::endl;
+
+    backArm.moveVoltage(-12000);
+    driveToPoint(2 *24, 2.75 *24);
+    turnToAngle(180);
+  }
+  else if (gotLeftNeutral && !gotMiddleNeutral) // got mid, miss left
+  {
+    std::cout << "got mid, miss left" << std::endl;
+
+    driveToPoint(1 *24, 1 *24);
+
+  }
+  else if (!gotLeftNeutral && gotMiddleNeutral) // got left, miss mid
   {
     std::cout << "got left, miss mid" << std::endl;
 
