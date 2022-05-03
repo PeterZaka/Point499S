@@ -27,7 +27,7 @@ void autonSelectScreenInitialize(){
 
   initalize_auton_page(AutonPage->lv_page);
 
-  changeAutonFunc("Left Auton")();
+  changeAutonFunc("Skills")();
   Button leftBtn(AutonPage, 100, 0, 150, 80, "Left Auton");
   leftBtn.setFunction(changeAutonFunc("Left Auton"));
   Button rightBtn(AutonPage, 250, 0, 150, 80, "Right Auton");
