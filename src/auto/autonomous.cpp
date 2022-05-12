@@ -253,7 +253,7 @@ void leftAuton(){
   backArm.moveVoltage(-12000);
   frontArm.moveVoltage(-12000);
 
-  gotLeftNeutral = doUntil(t(grabTower({1.5 *24, 3 *24}, backward, {-2.5, 0})), r(clawBackLeftButton.isPressed() || clawBackRightButton.isPressed()));
+  gotLeftNeutral = doUntil(t(grabTower({1.5 *24, 3 *24}, backward, {-3.25, 0})), r(clawBackLeftButton.isPressed() || clawBackRightButton.isPressed()));
   if (!isAuton) return;
   clawBack.set_value(true);
   Wait(0.05); // move forward while claw is going down
@@ -326,14 +326,14 @@ void leftAuton(){
     frontArm.moveVoltage(-12000);
   });
 
-  point midTower = findOffsetTarget({xPos, yPos}, {3 *24, 3 *24}, {-1.5, 0});
+  point midTower = findOffsetTarget({xPos, yPos}, {3 *24, 3 *24}, {-3, 0});
   gotMiddleNeutral = doUntil(t(driveToPoint(midTower.x, midTower.y, forward)), r(clawFrontLeftButton.isPressed() || clawFrontRightButton.isPressed()));
   if (!isAuton) return;
   //driveTargetError = prevDriveTargetError;
   if (!gotMiddleNeutral) {
     driveForward(-12);
     turnTargetError = 3;
-    turnToAngle(rot - 8);
+    turnToAngle(rot - 16);
     turnTargetError = prevTurnTargetError;
     Wait(0.5);
     gotMiddleNeutral = doUntil(t(driveForward(18)), r(clawFrontLeftButton.isPressed() || clawFrontRightButton.isPressed()));
@@ -341,7 +341,7 @@ void leftAuton(){
     if (!gotMiddleNeutral) {
       driveForward(-18);
       turnTargetError = 3;
-      turnToAngle(rot + 16);
+      turnToAngle(rot + 20);
       turnTargetError = prevTurnTargetError;
       Wait(0.5);
       gotMiddleNeutral = doUntil(t(driveForward(18)), r(clawFrontLeftButton.isPressed() || clawFrontRightButton.isPressed()));

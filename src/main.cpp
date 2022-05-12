@@ -76,6 +76,7 @@ void opcontrol() {
 	pros::Task controllerPrintTask([&](){
 		while(1){
 			controller.clear();
+			controllerPartner.clear();
 
 			// pros::delay(50);
 			// controller.setText(0, 0, "Left Lift: " + std::to_string(leftLift.getTemperature()));
@@ -84,30 +85,38 @@ void opcontrol() {
 			// pros::delay(50);
 			// controller.setText(2, 0, "Boost Enabled: " + std::to_string(isLiftBoostEnabled));
 
-			pros::delay(50);
-			controller.setText(0, 0, "x: " + std::to_string(xPos));
-			pros::delay(50);
+			// pros::delay(50);
+			// controller.setText(0, 0, "x: " + std::to_string(xPos));
+			// pros::delay(50);
 			// (clawBackLeftButton.isPressed() || clawBackRightButton.isPressed())
-			controller.setText(1, 0, "y: " + std::to_string(yPos));
+			// controller.setText(1, 0, "y: " + std::to_string(yPos));
 			// pros::delay(50);
 			// controller.setText(2, 0, "rot: " + std::to_string(iSensor.get_rotation()));
 			// pros::delay(50);
 			// controller.setText(2, 0, "cal rot: " + std::to_string(calculatedRot * (180/pi)));
 
-			// pros::delay(50);
-			// controller.setText(0, 0, "l: " + std::to_string(leftEncoder.get()));
-			// pros::delay(50);
-			// controller.setText(1, 0, "r: " + std::to_string(rightEncoder.get()));
-			// pros::delay(50);
-			// controller.setText(2, 0, "b: " + std::to_string(backEncoder.get()));
+			pros::delay(50);
+			controller.setText(0, 0, "l: " + std::to_string(leftEncoder.get()));
+			pros::delay(50);
+			controller.setText(1, 0, "r: " + std::to_string(rightEncoder.get()));
+			pros::delay(50);
+			controller.setText(2, 0, "b: " + std::to_string(backEncoder.get()));
+
+			pros::delay(50);
+			controllerPartner.setText(0, 0, "x: " + std::to_string(xPos));
+			pros::delay(50);
+			controllerPartner.setText(1, 0, "y: " + std::to_string(yPos));
+			pros::delay(50);
+			controllerPartner.setText(2, 0, "rot: " + std::to_string(rot));
+
 			// controller.setText(2, 0, "rot: " + std::to_string(calculatedRot * (180/pi)));
 
 			// pros::delay(50);
 			// controller.setText(0, 0, "r - p: " + std::to_string(rot - prevRot));
 			// pros::delay(50);
 			// controller.setText(1, 0, "c: " + std::to_string((deltaL - deltaR) / wheelTrack));
-			pros::delay(50);
-			controller.setText(2, 0, "liftP: " + std::to_string(backArmPot.get()));
+			// pros::delay(50);
+			// controller.setText(2, 0, "liftP: " + std::to_string(backArmPot.get()));
 
 			pros::delay(500);
 		}

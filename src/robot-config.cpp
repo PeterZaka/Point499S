@@ -22,7 +22,7 @@ ADIEncoder leftEncoder('E', 'F', true);
 ADIEncoder rightEncoder('G', 'H');
 ADIEncoder backEncoder('A', 'B');
 
-Potentiometer backArmPot({15, 'H'});
+Potentiometer backArmPot({15, 'F'});
 
 ADIButton clawFrontLeftButton('C');
 ADIButton clawFrontRightButton({15, 'G'}, false);
